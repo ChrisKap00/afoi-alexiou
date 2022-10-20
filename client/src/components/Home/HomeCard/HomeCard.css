@@ -1,0 +1,53 @@
+.cardContainer {
+  position: relative;
+  border-radius: 0;
+  width: 25%;
+}
+
+.cardContainer:hover .cardInner {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.cardInner {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* backdrop-filter: blur(3px); */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cardInner button {
+  cursor: pointer;
+  background-color: #457edb;
+  color: white;
+  font-size: 1.2rem;
+  padding: 20px 30px;
+  border-radius: 30px;
+  border: none;
+  margin-top: 40px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s ease, background-color 1ms;
+}
+
+.cardInner button:hover {
+  background-color: #5cabff;
+  /* transition: 0s; */
+}
+
+.cardInner button:active {
+  background-color: #366291;
+}
+
+.cardContainer:hover .cardInner button {
+  visibility: visible;
+  opacity: 1;
+}
