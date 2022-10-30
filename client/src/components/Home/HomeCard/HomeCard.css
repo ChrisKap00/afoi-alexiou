@@ -1,9 +1,3 @@
-.cardContainer {
-  position: relative;
-  border-radius: 0;
-  width: 25%;
-}
-
 .cardContainer:hover .cardInner {
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -24,21 +18,7 @@
   flex-direction: column;
 }
 
-.cardInner button {
-  cursor: pointer;
-  background-color: #457edb;
-  color: white;
-  font-size: 1.2rem;
-  padding: 20px 30px;
-  border-radius: 30px;
-  border: none;
-  margin-top: 40px;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.5s ease, background-color 1ms;
-}
-
-.cardInner button:hover {
+.cardInner Button:hover {
   background-color: #5cabff;
   /* transition: 0s; */
 }

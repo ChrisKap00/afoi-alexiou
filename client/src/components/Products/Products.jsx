@@ -131,7 +131,13 @@ const Products = () => {
                       objectFit: "scale-down",
                     }}
                   ></CardMedia>
-                  <hr style={{ width: "90%", opacity: "0.5" }}></hr>
+                  <hr
+                    style={{
+                      width: "90%",
+                      opacity: "0.5",
+                      marginInline: "auto",
+                    }}
+                  ></hr>
                   <CardContent>
                     <Typography variant="h6">{sub.name}</Typography>
                   </CardContent>

@@ -4,9 +4,12 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
-import React from "react";
-import "./Home.css";
+import React, { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 import HomeCard from "./HomeCard/HomeCard";
+import "bootstrap/dist/css/bootstrap.min.css";
+import TypeCard from "./TypeCard/TypeCard";
+import "./Home.css";
 
 const Search = styled("form")(({ theme }) => ({
   position: "relative",
@@ -49,14 +52,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Home = () => {
+  const [categoryCarouselIndex, setCategoryCarouselIndex] = useState(0);
+
+  const handleSelectCategory = (selectedIndex, e) => {
+    setCategoryCarouselIndex(selectedIndex);
+  };
+
+  const [typeCarouselIndex, setTypeCarouselIndex] = useState(0);
+
+  const handleSelectType = (selectedIndex, e) => {
+    setTypeCarouselIndex(selectedIndex);
+  };
+
   return (
-    <Box>
-      <div
-        id="container"
-        style={{
+    <Box
+    // sx={{ backgroundColor: "#ecf0f1" }}
+    >
+      <Box
+        // id="container"
+        sx={{
           position: "relative",
           height: "100%",
           // backgroundColor: "blue",
+          boxShadow: "0 5px 50px black",
         }}
       >
         <img
@@ -68,7 +86,21 @@ const Home = () => {
             objectFit: "cover",
           }}
         ></img>
-        <Box id="blurryInner">
+        <Box
+          sx={{
+            position: "absolute",
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            backdropFilter: "blur(3px)",
+            width: "100%",
+            height: "100%",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Box
             sx={{
               // backgroundColor: "green",
@@ -226,35 +258,84 @@ const Home = () => {
             </Box>
           </Box>
         </Box>
-      </div>
-      <Box
+      </Box>
+      <Container
+        maxWidth="xl"
         sx={{
-          // backgroundColor: "red",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: { xs: "0", md: "40px 50px" },
+          backgroundColor: "red",
+          marginTop: "50px",
         }}
       >
-        <Box sx={{ backgroundColor: "green", display: "flex", width: "100%" }}>
-          <HomeCard
-            name="antallaktika"
-            content="ΑΝΤΑΛΛΑΚΤΙΚΑ"
-            to="antallaktika"
-          />
-          <HomeCard name="biomixanika" content="ΒΙΟΜΗΧΑΝΙΚΑ" to="biomixanika" />
-          <HomeCard
-            name="lipantika"
-            content="ΧΗΜΙΚΑ - ΛΥΠΑΝΤΙΚΑ"
-            to="ximika-lipantika"
-          />
-          <HomeCard
-            name="universal"
-            content="UNIVERSAL"
-            to="diafora-universal"
-          />
+        <Box
+          sx={{
+            display: { xs: "block", sm: "flex" },
+            justifyContent: "space-between",
+          }}
+        >
+          <Card
+            sx={{ width: { xs: "100%", sm: "68.5%" }, borderRadius: "10px" }}
+          >
+            <Carousel
+              style={{
+                width: "100%",
+              }}
+              activeIndex={typeCarouselIndex}
+              onSelect={handleSelectType}
+            >
+              <Carousel.Item>
+                <TypeCard
+                  className="d-bock w-100"
+                  name="plato"
+                  content="ΠΛΑΤΩ"
+                  to="antallaktika/metadosi-kinisis/plato"
+                ></TypeCard>
+              </Carousel.Item>
+            </Carousel>
+          </Card>
+          <Card sx={{ width: { xs: "100%", sm: "30%" }, borderRadius: "10px" }}>
+            <Carousel
+              style={{
+                width: "100%",
+              }}
+              activeIndex={categoryCarouselIndex}
+              onSelect={handleSelectCategory}
+            >
+              <Carousel.Item>
+                <HomeCard
+                  className="d-block w-100"
+                  name="antallaktika"
+                  content="ΑΝΤΑΛΛΑΚΤΙΚΑ"
+                  to="antallaktika"
+                />
+              </Carousel.Item>
+              <Carousel.Item>
+                <HomeCard
+                  className="d-block w-100"
+                  name="biomixanika"
+                  content="ΒΙΟΜΗΧΑΝΙΚΑ"
+                  to="biomixanika"
+                />
+              </Carousel.Item>
+              <Carousel.Item>
+                <HomeCard
+                  className="d-block w-100"
+                  name="lipantika"
+                  content="ΧΗΜΙΚΑ - ΛΥΠΑΝΤΙΚΑ"
+                  to="ximika-lipantika"
+                />
+              </Carousel.Item>
+              <Carousel.Item>
+                <HomeCard
+                  className="d-block w-100"
+                  name="universal"
+                  content="UNIVERSAL"
+                  to="diafora-universal"
+                />
+              </Carousel.Item>
+            </Carousel>
+          </Card>
         </Box>
-      </Box>
+      </Container>
     </Box>
   );
 };

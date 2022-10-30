@@ -71,13 +71,9 @@ const NavBar = () => {
   const [currentPage, setCurrentPage] = useState(
     location.pathname === "/" ? 0 : 1
   );
-  // const [click, setClick] = useState(false);
   const [dropdown, setDropdown] = useState(false);
 
   const { categories } = useSelector((state) => state.products);
-
-  // const handleClick = () => setClick(!click);
-  // const closeMobileMenu = () => setClick(false);
 
   const onMouseEnter = () => {
     if (window.innerWidth < 960) {
@@ -98,9 +94,7 @@ const NavBar = () => {
   };
   useEffect(() => {
     setCurrentPage(location.pathname === "/" ? 0 : 1);
-    // console.log(currentPage);
   }, [location]);
-  // console.log(location);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -116,16 +110,12 @@ const NavBar = () => {
         borderRadius: "0",
         zIndex: "100",
         height: "80px",
-        // justifyContent: "center",
       }}
     >
-      {/* <Container maxWidth="xl"> */}
-      {/* <Toolbar disableGutters> */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          // backgroundColor: "yellow",
           height: "100%",
         }}
       >
@@ -294,27 +284,6 @@ const NavBar = () => {
           ))}
         </Container>
       </Collapse>
-      {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography> */}
-      {/* </Toolbar> */}
-      {/* </Container> */}
     </Box>
   );
 };
