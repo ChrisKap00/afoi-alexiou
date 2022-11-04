@@ -6,11 +6,22 @@ import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
-import { Card, Collapse, IconButton, InputBase } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Collapse,
+  IconButton,
+  InputBase,
+  requirePropFactory,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import "./NavBar.css";
 import { useSelector } from "react-redux";
+import ContactDropdown from "../ContactDropdown/ContactDropdown";
+import ReactTooltip from "react-tooltip";
 
 const pages = ["Αρχική", "Προϊόντα", "Επικοινωνία"];
 
@@ -72,6 +83,7 @@ const NavBar = () => {
     location.pathname === "/" ? 0 : 1
   );
   const [dropdown, setDropdown] = useState(false);
+  const [contactDropdown, setContactDropdown] = useState(false);
 
   const { categories } = useSelector((state) => state.products);
 
@@ -92,6 +104,24 @@ const NavBar = () => {
       setDropdown(false);
     }
   };
+  const onMouseEnterContact = () => {
+    if (window.innerWidth < 960) {
+      setContactDropdown(false);
+    } else {
+      console.log("enter");
+      setContactDropdown(true);
+    }
+  };
+
+  const onMouseLeaveContact = () => {
+    if (window.innerWidth < 960) {
+      setContactDropdown(false);
+    } else {
+      console.log("leave");
+      setContactDropdown(false);
+    }
+  };
+
   useEffect(() => {
     setCurrentPage(location.pathname === "/" ? 0 : 1);
   }, [location]);
@@ -101,24 +131,33 @@ const NavBar = () => {
   };
   return (
     <Box
-      elevation={7}
       sx={{
+        backgroundColor: "#457EdB",
         position: "sticky",
         top: 0,
-        backgroundColor: "#457EdB",
-        padding: { xs: "10px", lg: "0px 200px" },
-        borderRadius: "0",
         zIndex: "100",
-        height: "80px",
       }}
     >
-      <div
+      <Box
+        // elevation={7}
+        sx={{
+          backgroundColor: "#457EdB",
+          padding: { xs: "0 10px", lg: "0px 200px" },
+          borderRadius: "0",
+          zIndex: "100",
+          height: "80px",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {/* <div
         style={{
           display: "flex",
           alignItems: "center",
           height: "100%",
+          backgroundColor: "green",
         }}
-      >
+      > */}
         <Link to="/">
           <img
             src={logo}
@@ -189,34 +228,206 @@ const NavBar = () => {
                 // borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
                 fontSize: "1.2rem",
                 // backgroundColor: "red",
-                height: "100%",
+                height: "99.3%",
               }}
             >
               Προϊόντα
             </div>
             {dropdown && <Dropdown categories={categories} />}
           </div>
-          <label>
+          <div
+            onMouseEnter={onMouseEnterContact}
+            onMouseLeave={onMouseLeaveContact}
+            data-tip
+            data-for="tooltip"
+            style={{
+              position: "relative",
+              // backgroundColor: "blue",
+              height: "100%",
+            }}
+          >
             <div
               id="contact"
               style={{
                 cursor: "pointer",
-                // paddingBlock: "5px",
-                paddingInline: "20px",
-                // marginBlock: "20px",
-                // color: "white",
-                // display: "block",
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 0,
-                borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
-                color: "white",
-                fontSize: "1.2rem",
+                // backgroundColor: "red",
+                height: "100%",
               }}
             >
-              Επικοινωνία
+              <label
+                style={{
+                  paddingInline: "20px",
+                  cursor: "pointer",
+                  borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
+                  color: "white",
+                  fontSize: "1.2rem",
+                }}
+              >
+                Επικοινωνία
+              </label>
             </div>
-          </label>
+            {/* {contactDropdown && <ContactDropdown />} */}
+          </div>
+          <ReactTooltip
+            id="tooltip"
+            place="bottom"
+            effect="solid"
+            clickable={true}
+            // type="dark"
+            backgroundColor="black"
+            // style={{ opacity: 1 }}
+          >
+            <iframe
+              width="552"
+              height="256"
+              id="gmap_canvas"
+              src="https://maps.google.com/maps?q=afoi%20alexiou&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              frameBorder="0"
+              scrolling="no"
+              marginHeight="0"
+              marginWidth="0"
+            ></iframe>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ width: "50%" }}>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  Ωράριο
+                </Typography>
+                <hr style={{ marginBlock: "5px", color: "orange" }}></hr>
+                <Box sx={{ display: "flex" }}>
+                  <Box sx={{ width: "50%" }}>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Δευτέρα
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Τρίτη
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Τετάρτη
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Πέμπτη
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Παρασκευή
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Σάββατο
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "start",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      Κυριακή
+                    </Typography>
+                  </Box>
+                  <Box sx={{ width: "50%" }}>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      8:30 - 16:00
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      8:30 - 16:00
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      8:30 - 16:00
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      8:30 - 16:00
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      8:30 - 16:00
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      Κλειστά
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textAlign: "end",
+                        paddingRight: "30px",
+                      }}
+                    >
+                      Κλειστά
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+              <Box sx={{ width: "50%" }}>hi</Box>
+            </Box>
+          </ReactTooltip>
         </Box>
         <Search
           //   onSubmit={handleSearch}
@@ -236,12 +447,18 @@ const NavBar = () => {
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
-          sx={{ display: { sx: "block", md: "none" }, color: "white" }}
+          sx={{ display: { xs: "block", md: "none" }, color: "white" }}
         >
           <ExpandMoreIcon />
         </ExpandMore>
-      </div>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        {/* </div> */}
+      </Box>
+      <Collapse
+        in={expanded}
+        // timeout="auto"
+        unmountOnExit
+        // sx={{ position: "relative" }}
+      >
         <hr
           style={{
             height: "1px",
@@ -251,38 +468,39 @@ const NavBar = () => {
             padding: 0,
             opacity: "50%",
             marginTop: "4px",
+            marginBottom: "0",
           }}
         ></hr>
-        <Container
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {pages.map((page, idx) => (
-            <Link
-              style={{ textDecoration: "none", color: "inherit" }}
-              key={page}
-            >
+        <CardContent>
+          <Container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {pages.map((page, idx) => (
               <div
+                key={idx}
                 style={{
-                  paddingBlock: "5px",
+                  // paddingBlock: "5px",
                   paddingInline: "25px",
-                  marginBlock: "5px",
+                  // marginBlock: "5px",
+                  marginTop: "5px",
                   color: "white",
                   display: "block",
                   borderRadius: 0,
                   borderLeft:
                     idx !== 0 ? "1px solid rgba(255, 255, 255, 0.3)" : "none",
                 }}
+                data-tip
+                data-for="tooltip"
               >
                 {page}
               </div>
-              {/* {page} */}
-            </Link>
-          ))}
-        </Container>
+            ))}
+          </Container>
+        </CardContent>
       </Collapse>
     </Box>
   );

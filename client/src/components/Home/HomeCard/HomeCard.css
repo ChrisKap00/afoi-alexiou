@@ -19,12 +19,12 @@
 }
 
 .cardInner Button:hover {
-  background-color: #5cabff;
+  background-color: #ff4116;
   /* transition: 0s; */
 }
 
-.cardInner button:active {
-  background-color: #366291;
+.cardInner Button:active {
+  background-color: #ff2f00;
 }
 
 .cardContainer:hover .cardInner button {

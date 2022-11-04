@@ -1,4 +1,11 @@
-import { Box, Container, Typography, InputBase, Card } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  InputBase,
+  Card,
+  Divider,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
@@ -82,7 +89,7 @@ const Home = () => {
           style={{
             width: "100%",
             margin: "0",
-            height: "400px",
+            height: "300px",
             objectFit: "cover",
           }}
         ></img>
@@ -104,7 +111,7 @@ const Home = () => {
           <Box
             sx={{
               // backgroundColor: "green",
-              width: { md: "70%", xl: "60%" },
+              width: { md: "70%", xl: "50%" },
               height: "100%",
               display: { xs: "none", md: "flex" },
               alignItems: "center",
@@ -262,18 +269,19 @@ const Home = () => {
       <Container
         maxWidth="xl"
         sx={{
-          backgroundColor: "red",
+          // backgroundColor: "red",
           marginTop: "50px",
+          marginBottom: "50px",
         }}
       >
         <Box
           sx={{
-            display: { xs: "block", sm: "flex" },
+            display: { xs: "block", md: "flex" },
             justifyContent: "space-between",
           }}
         >
           <Card
-            sx={{ width: { xs: "100%", sm: "68.5%" }, borderRadius: "10px" }}
+            sx={{ width: { xs: "100%", md: "68.5%" }, borderRadius: "10px" }}
           >
             <Carousel
               style={{
@@ -292,7 +300,7 @@ const Home = () => {
               </Carousel.Item>
             </Carousel>
           </Card>
-          <Card sx={{ width: { xs: "100%", sm: "30%" }, borderRadius: "10px" }}>
+          <Card sx={{ width: { xs: "100%", md: "30%" }, borderRadius: "10px" }}>
             <Carousel
               style={{
                 width: "100%",
@@ -336,6 +344,7 @@ const Home = () => {
           </Card>
         </Box>
       </Container>
+      <hr style={{ width: "90%", marginInline: "auto" }}></hr>
     </Box>
   );
 };

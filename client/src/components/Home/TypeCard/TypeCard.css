@@ -1,0 +1,10 @@
+.cardInner2 Button:hover {
+  background-color: #ff4116;
+  /* transition: 0s; */
+  color: white;
+}
+
+.cardInner2 Button:active {
+  background-color: #ff2f00;
+  color: white;
+}

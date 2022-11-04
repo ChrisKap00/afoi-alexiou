@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import "./Dropdown.css";
@@ -12,7 +13,6 @@ function Dropdown({ categories }) {
     <ul
       onClick={handleClick}
       className={click ? "dropdown-menu clicked" : "dropdown-menu"}
-      style={{ backgroundColor: "red" }}
     >
       {categories.map((category, idx) => {
         return (
@@ -22,7 +22,7 @@ function Dropdown({ categories }) {
               to={`/products/${categories[idx].pathname}`}
               onClick={() => setClick(false)}
             >
-              {category.name}
+              <Typography sx={{ color: "white" }}>{category.name}</Typography>
             </Link>
           </li>
         );

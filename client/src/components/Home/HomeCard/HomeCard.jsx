@@ -11,7 +11,7 @@ const HomeCard = ({ name, content, to }) => {
         borderRadius: "0",
         width: "100%",
         height: "100%",
-        // maxHeight: "450px",
+        height: { xs: "300px", md: "100%" },
         aspectRatio: "1",
         // minWidth: "200px",
       }}
@@ -28,7 +28,7 @@ const HomeCard = ({ name, content, to }) => {
       <Box className="cardInner">
         <Typography
           sx={{
-            fontSize: { xs: "16px", lg: "2rem" },
+            fontSize: { xs: "1.5rem", sm: "2rem" },
             color: "white",
             fontWeight: "600",
             textAlign: "center",
@@ -41,16 +41,17 @@ const HomeCard = ({ name, content, to }) => {
           style={{ textDecoration: "none", color: "white" }}
         >
           <Button
+            variant="contained"
             sx={{
               cursor: "pointer",
-              backgroundColor: "#457edb",
+              backgroundColor: "#FC5A34",
               color: "white",
-              fontSize: { xs: "10px", lg: "1.2rem" },
+              fontSize: { xs: "1rem", sm: "1.2rem" },
               borderRadius: "30px",
               border: "none",
               marginTop: "40px",
-              visibility: "hidden",
-              opacity: 0,
+              visibility: { xs: "visible", md: "hidden" },
+              opacity: { xs: 1, md: 0 },
               transition: "all 0.5s ease, background-color 1ms",
             }}
           >
