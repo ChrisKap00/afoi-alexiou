@@ -16,10 +16,11 @@ import {
   requirePropFactory,
   Typography,
 } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useEffect } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import "./NavBar.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ContactDropdown from "../ContactDropdown/ContactDropdown";
 import ReactTooltip from "react-tooltip";
 
@@ -80,12 +81,18 @@ const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(
-    location.pathname === "/" ? 0 : 1
+    location.pathname === "/"
+      ? 0
+      : location.pathname.split("/")[1] === "products"
+      ? 1
+      : 2
   );
   const [dropdown, setDropdown] = useState(false);
   const [contactDropdown, setContactDropdown] = useState(false);
 
   const { categories } = useSelector((state) => state.products);
+  const { admin } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
 
   const onMouseEnter = () => {
     if (window.innerWidth < 960) {
@@ -123,7 +130,13 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    setCurrentPage(location.pathname === "/" ? 0 : 1);
+    setCurrentPage(
+      location.pathname === "/"
+        ? 0
+        : location.pathname.split("/")[1] === "products"
+        ? 1
+        : 2
+    );
   }, [location]);
 
   const handleExpandClick = () => {
@@ -132,7 +145,7 @@ const NavBar = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#457EdB",
+        backgroundColor: "#153E8B",
         position: "sticky",
         top: 0,
         zIndex: "100",
@@ -141,11 +154,11 @@ const NavBar = () => {
       <Box
         // elevation={7}
         sx={{
-          backgroundColor: "#457EdB",
+          backgroundColor: "#153E8B",
           padding: { xs: "0 10px", lg: "0px 200px" },
           borderRadius: "0",
           zIndex: "100",
-          height: "80px",
+          height: "60px",
           display: "flex",
           alignItems: "center",
         }}
@@ -162,7 +175,7 @@ const NavBar = () => {
           <img
             src={logo}
             style={{
-              height: "4.5em",
+              height: "3.5em",
               marginRight: "2rem",
               // backgroundColor: "purple",
             }}
@@ -197,44 +210,39 @@ const NavBar = () => {
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 0,
-                fontSize: "1.2rem",
+                fontSize: "1.1rem",
                 borderRight: "1px solid rgba(255, 255, 255, 0.3)",
               }}
             >
               Αρχική
             </div>
           </Link>
-          <div
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+          <Link
             style={{
-              position: "relative",
-              // backgroundColor: "blue",
-              height: "100%",
+              textDecoration: "none",
+              // color: "white"
+              color: currentPage === 1 ? "#FC5A34" : "white",
             }}
+            to="/products"
           >
             <div
               id="page"
               style={{
-                color: currentPage === 1 ? "#FC5A34" : "white",
-                cursor: "pointer",
                 // paddingBlock: "5px",
                 paddingInline: "20px",
                 // marginBlock: "20px",
                 // color: "white",
+                // display: "block",
                 display: "flex",
                 alignItems: "center",
                 borderRadius: 0,
-                // borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
-                fontSize: "1.2rem",
-                // backgroundColor: "red",
-                height: "99.3%",
+                fontSize: "1.1rem",
+                borderRight: "1px solid rgba(255, 255, 255, 0.3)",
               }}
             >
               Προϊόντα
             </div>
-            {dropdown && <Dropdown categories={categories} />}
-          </div>
+          </Link>
           <div
             onMouseEnter={onMouseEnterContact}
             onMouseLeave={onMouseLeaveContact}
@@ -263,7 +271,6 @@ const NavBar = () => {
                   cursor: "pointer",
                   borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
                   color: "white",
-                  fontSize: "1.2rem",
                 }}
               >
                 Επικοινωνία
@@ -429,6 +436,7 @@ const NavBar = () => {
             </Box>
           </ReactTooltip>
         </Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
         <Search
           //   onSubmit={handleSearch}
           //   onChange={(e) => setSearch(e.target.value)}
@@ -442,6 +450,16 @@ const NavBar = () => {
             inputProps={{ "aria-label": "search" }}
           />
         </Search>
+        {admin && (
+          <IconButton
+            sx={{ color: "white" }}
+            onClick={() => {
+              dispatch({ type: "ADMIN_LOGOUT" });
+            }}
+          >
+            <LogoutIcon />
+          </IconButton>
+        )}
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

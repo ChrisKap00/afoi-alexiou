@@ -1,0 +1,38 @@
+.j {
+  /* background-color: blue; */
+  width: fit-content;
+  position: relative;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.box {
+  background-color: white;
+  width: fit-content;
+  padding: 7px 10px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 3px;
+  box-shadow: 0 0 7px 0 rgb(100, 100, 100);
+}
+
+.box:hover {
+  background-color: rgb(236, 236, 236);
+}
+
+/* .menu {
+  background-color: white;
+  position: absolute;
+  border-radius: 7px;
+  width: 100%;
+  display: none;
+} */
+
+.menu-item:hover {
+  background-color: rgb(236, 236, 236);
+}

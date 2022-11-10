@@ -270,8 +270,9 @@ const Home = () => {
         maxWidth="xl"
         sx={{
           // backgroundColor: "red",
-          marginTop: "50px",
-          marginBottom: "50px",
+          paddingTop: "50px",
+          // paddingBottom: "50px",
+          minHeight: "calc(100vh - 433px)",
         }}
       >
         <Box

@@ -12,3 +12,7 @@ body {
 .carousel-control-next {
   display: none;
 }
+
+::selection {
+  background: #153E8B;
+}
