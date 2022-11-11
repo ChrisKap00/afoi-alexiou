@@ -17,3 +17,4 @@ export const signUp = (formData) => API.post("/admin/signup", formData);
 export const fetchCategories = () => API.get("/products/fetchCategories");
 export const sendCategories = (categories) =>
   API.post("/admin/cat", categories);
+export const deleteById = (item) => API.patch("/products/delete", item);

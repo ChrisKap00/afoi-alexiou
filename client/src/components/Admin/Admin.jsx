@@ -1,10 +1,13 @@
 import {
+  Backdrop,
   Box,
   Button,
   Card,
   Collapse,
   Container,
+  Fade,
   IconButton,
+  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,9 +17,22 @@ import { signin } from "../../store/actions/admin";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
 import LoadingGear from "../LoadingGear/LoadingGear";
-import { ExpandMore } from "@mui/icons-material";
+import { Delete, ExpandMore } from "@mui/icons-material";
 import { useEffect } from "react";
 import { sendCategories } from "../../api";
+import { deleteById } from "../../store/actions/products";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: "90%", sm: 500 },
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  borderRadius: "20px",
+  p: 4,
+};
 
 const Admin = () => {
   const initialState = {
@@ -25,13 +41,21 @@ const Admin = () => {
   };
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
-  // const [expandedCategories, setExpandedCategories] = useState([]);
-  // const [expandedSubCategories, setExpandedSubCategories] = useState([]);
-  // const [expandedTypes, setExpandedTypes] = useState([]);
-  // const [expandedProducts, setExpandedProducts] = useState([]);
   const [categoriesCopy, setCategoriesCopy] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [toDelete, setToDelete] = useState({ id: "", name: "", type: "" });
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (toDeleteObj) => {
+    setToDelete(toDeleteObj);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setToDelete({ id: "", categoryId: "", name: "", type: "" });
+  };
 
   const { isLoading, admin } = useSelector((state) => state.admin);
   const { isLoadingCategories, categories } = useSelector(
@@ -53,42 +77,45 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    // let tempExpandedCategories = [];
-    // for (let i in categories) {
-    //   tempExpandedCategories.push(false);
-    // }
-    // setExpandedCategories(tempExpandedCategories);
-    // let tempExpandedSubCategories = [];
-    // for (let i in categories) {
-    //   tempExpandedSubCategories.push([]);
-    // }
-    // for (let i in categories) {
-    //   for (let j in categories[i].subCategories) {
-    //     tempExpandedSubCategories[i].push(false);
-    //   }
-    // }
-    // setExpandedSubCategories(tempExpandedSubCategories);
     let categoriesCopyTemp = [];
 
     categoriesCopyTemp = [...categories];
-    for (let i in categories) {
-      categoriesCopyTemp[i].expanded = false;
+    for (let i in categoriesCopyTemp) {
+      // categoriesCopyTemp[i].expanded = false;
+      // categoriesCopyTemp[i] = { ...categories[i], expanded: false };
       for (let j in categories[i].subCategories) {
-        categoriesCopyTemp[i].subCategories[j].expanded = false;
-        for (let k in categoriesCopyTemp[i].subCategories[j]?.subs) {
-          categoriesCopyTemp[i].subCategories[j].subs[k].expanded = false;
-          for (let l in categoriesCopyTemp[i].subCategories[j].subs[k].types) {
-            categoriesCopyTemp[i].subCategories[j].subs[k].types[
-              l
-            ].expanded = false;
+        // categoriesCopyTemp[i].subCategories[j].expanded = false;
+        // categoriesCopyTemp[i].subCategories[j] = {
+        //   ...categories[i].subCategories[j],
+        //   expanded: false,
+        // };
+        for (let k in categories[i].subCategories[j]?.subs) {
+          // categoriesCopyTemp[i].subCategories[j].subs[k].expanded = false;
+          // categoriesCopyTemp[i].subCategories[j].subs[k] = {
+          //   ...categories[i].subCategories[j].subs[k],
+          //   expanded: false,
+          // };
+          for (let l in categories[i].subCategories[j].subs[k].types) {
+            // categoriesCopyTemp[i].subCategories[j].subs[k].types[
+            //   l
+            // ].expanded = false;
+            // categoriesCopyTemp[i].subCategories[j].subs[k].types[l] = {
+            //   ...categories[i].subCategories[j].subs[k].types[l],
+            //   expanded: false,
+            // };
           }
         }
-        for (let k in categoriesCopyTemp[i].subCategories[j].types) {
-          categoriesCopyTemp[i].subCategories[j].types[k].expanded = false;
+        for (let k in categories[i].subCategories[j].types) {
+          // categoriesCopyTemp[i].subCategories[j].types[k].expanded = false;
+          // categoriesCopyTemp[i].subCategories[j].types[k] = {
+          //   ...categories[i].subCategories[j].types[k],
+          //   expanded: false,
+          // };
         }
       }
     }
     console.log(categoriesCopyTemp);
+    // console.log(!undefined);
     setCategoriesCopy(categoriesCopyTemp);
   }, [categories]);
 
@@ -225,22 +252,21 @@ const Admin = () => {
                         </div>
                       </Box>
                       <Collapse
+                        sx={{
+                          backgroundColor: "rgb(230, 230, 230)",
+                        }}
                         in={categoriesCopy[idx]?.expanded}
                         // timeout="auto"
                         unmountOnExit
                         // sx={{ position: "relative" }}
                       >
+                        <Box>hello</Box>
                         {category?.subCategories.map((subCategory, idxSub) => (
                           <Box key={idxSub}>
                             <Box
-                              key={idxSub}
                               sx={{
-                                borderTop:
-                                  idxSub !== 0
-                                    ? "1px solid rgba(0, 0, 0, 0.2)"
-                                    : "none",
+                                borderTop: "1px solid rgba(0, 0, 0, 0.2)",
                                 cursor: "pointer",
-                                backgroundColor: "rgb(230, 230, 230)",
                               }}
                             >
                               <div
@@ -275,9 +301,38 @@ const Admin = () => {
                                 }}
                               >
                                 {subCategory.name}
-                                <IconButton>
-                                  <ExpandMore />
-                                </IconButton>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <button
+                                    type="button"
+                                    style={{
+                                      backgroundColor: "red",
+                                      border: "none",
+                                      color: "white",
+                                      borderRadius: "50%",
+                                      aspectRatio: 1,
+                                    }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleOpen({
+                                        id: subCategory._id,
+                                        categoryId: category._id,
+                                        name: subCategory.name,
+                                        type: "subCategory",
+                                      });
+                                    }}
+                                  >
+                                    <Delete />
+                                  </button>
+                                  <IconButton>
+                                    <ExpandMore />
+                                  </IconButton>
+                                </div>
                               </div>
                             </Box>
                             <Collapse
@@ -431,104 +486,72 @@ const Admin = () => {
               </Card>
             </>
           )}
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={style}>
+                <Typography
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  Επιβεβαίωση
+                </Typography>
+                <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                  {`Πρόκειται να διαγραφεί ${
+                    toDelete?.type === "subCategory" ? "η υποκατηγορία" : "--"
+                  } "${toDelete?.name}" και όλα ${
+                    toDelete?.type === "subCategory" || toDelete?.type === "sub"
+                      ? "της"
+                      : "του"
+                  } τα περιεχόμενα.`}
+                </Typography>
+                <Box
+                  sx={{
+                    marginTop: "15px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Button
+                    color="error"
+                    sx={{ marginRight: "10px" }}
+                    onClick={() => {
+                      handleClose();
+                    }}
+                  >
+                    ΑΚΥΡΩΣΗ
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      dispatch(
+                        deleteById({
+                          id: toDelete.id,
+                          categoryId: toDelete.categoryId,
+                          type: toDelete.type,
+                        })
+                      );
+                    }}
+                  >
+                    ΔΙΑΓΡΑΦΗ
+                  </Button>
+                </Box>
+              </Box>
+            </Fade>
+          </Modal>
         </Box>
-        // <>
-        //   <DropdownMenu
-        //     choices={modes}
-        //     modeIndex={modeIndex}
-        //     setModeIndex={setModeIndex}
-        //   />
-        //   <hr style={{ marginBlock: "50px" }}></hr>
-        //   {modeIndex === 0 ? (
-        //     <Box>
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           alignItems: "center",
-        //           marginBottom: "50px",
-        //         }}
-        //       >
-
-        //       </Box>
-        //       {/* <Box
-        //         sx={{
-        //           display: "flex",
-        //           alignItems: "center",
-        //           marginBottom: "50px",
-        //         }}
-        //       >
-        //         <Typography
-        //           sx={{
-        //             fontSize: "1.2rem",
-        //             fontWeight: "600",
-        //             marginRight: "50px",
-        //           }}
-        //         >
-        //           Κατηγορία
-        //         </Typography>
-        //         <DropdownMenu
-        //           choices={categoryChoices}
-        //           modeIndex={categoryIndex}
-        //           setModeIndex={setCategoryIndex}
-        //         />
-        //         <TextField
-        //           sx={{
-        //             backgroundColor: "white",
-        //             borderRadius: "4px",
-        //             marginLeft: "50px",
-        //             display: categoryIndex === 4 ? "block" : "none",
-        //           }}
-        //           id="outlined-basic"
-        //           variant="outlined"
-        //         />
-        //       </Box>
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           alignItems: "center",
-        //           marginBottom: "50px",
-        //         }}
-        //       >
-        //         <Typography
-        //           sx={{
-        //             fontSize: "1.2rem",
-        //             fontWeight: "600",
-        //             marginRight: "50px",
-        //           }}
-        //         >
-        //           Υποκατηγορία
-        //         </Typography>
-        //         <TextField
-        //           sx={{ backgroundColor: "white", borderRadius: "4px" }}
-        //           id="outlined-basic"
-        //           variant="outlined"
-        //         />
-        //       </Box>
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           alignItems: "center",
-        //           marginBottom: "50px",
-        //         }}
-        //       >
-        //         <Typography
-        //           sx={{
-        //             fontSize: "1.2rem",
-        //             fontWeight: "600",
-        //             marginRight: "50px",
-        //           }}
-        //         >
-        //           Κωδικός
-        //         </Typography>
-        //         <TextField
-        //           sx={{ backgroundColor: "white", borderRadius: "4px" }}
-        //           id="outlined-basic"
-        //           variant="outlined"
-        //         />
-        //       </Box> */}
-        //     </Box>
-        //   ) : null}
-        // </>
       )}
     </Container>
   );

@@ -1,6 +1,7 @@
 export default (
   state = {
     isLoadingCategories: false,
+    isLoadingDelete: false,
     isLoadingProducts: false,
     categories: [],
   },
