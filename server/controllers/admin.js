@@ -38,12 +38,32 @@ export const signin = async (req, res) => {
 
 export const postCategories = async (req, res) => {
   // console.log(req.body);
-  // try {
-  //   const result = await Categories.create(req.body);
-  //   res.status(200).json({ result });
-  // } catch (error) {
-  //   res.status(500).json({ message: "Something went wrong." });
-  // }
+  const { categories } = req.body;
+  const result = [];
+  try {
+    // const result = await Categories.create(req.body);
+    for (let category of categories) {
+      const res = await Categories.create(category);
+      result.push(res);
+      console.log(category);
+    }
+    res.status(200).json({ result });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+export const deleteAllCategories = async (req, res) => {
+  try {
+    const categories = await Categories.find();
+    console.log(categories);
+    for (let category of categories) {
+      await Categories.findByIdAndDelete(category._id);
+    }
+    res.status(200).json({ message: "ok" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
 };
 
 // export const signup = async (req, res) => {

@@ -6,8 +6,13 @@ import {
   Collapse,
   Container,
   Fade,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   IconButton,
   Modal,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,10 +22,14 @@ import { signin } from "../../store/actions/admin";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
 import LoadingGear from "../LoadingGear/LoadingGear";
-import { Delete, ExpandMore } from "@mui/icons-material";
+import { Add, Delete, ExpandMore } from "@mui/icons-material";
 import { useEffect } from "react";
-import { sendCategories } from "../../api";
-import { deleteById } from "../../store/actions/products";
+import {
+  addSubCategory,
+  deleteAllCategories,
+  deleteById,
+  sendCategories,
+} from "../../store/actions/products";
 
 const style = {
   position: "absolute",
@@ -34,6 +43,207 @@ const style = {
   p: 4,
 };
 
+const categoriesObj = {
+  categories: [
+    {
+      name: "Ανταλλακτικά",
+      pathname: "antallaktika",
+      subCategories: [
+        {
+          name: "Μετάδοση κίνησης",
+          pathname: "metadosi-kinisis",
+          types: [
+            {
+              name: "Πλατώ",
+              pathname: "plato",
+            },
+            {
+              name: "Δίσκος",
+              pathname: "diskos",
+            },
+            {
+              name: "Ρουλεμάν αμπραγιάζ",
+              pathname: "rouleman-ampragiaz",
+            },
+            {
+              name: "Σετ συμπλέκτη",
+              pathname: "set-symplekti",
+            },
+            {
+              name: "Αντλία συμπλέκτη",
+              pathname: "antlia-symplekti",
+            },
+            {
+              name: "Γρανάζι βολάν",
+              pathname: "granazi-bolan",
+            },
+            {
+              name: "Σταυροί",
+              pathname: "stavroi",
+            },
+            {
+              name: "Μεσαία τριβή",
+              pathname: "mesaia-tribi",
+            },
+          ],
+        },
+        {
+          name: "Ανάρτηση",
+          pathname: "anartisi",
+          types: [
+            {
+              name: "Αερόφουσκες",
+              pathname: "aerofouskes",
+            },
+            {
+              name: "Αμορτισέρ",
+              pathname: "amortiser",
+            },
+          ],
+        },
+        {
+          name: "Σύστημα καυσίμου",
+          pathname: "systima-kaysimou",
+          types: [
+            {
+              name: "Αντλία fuel ηλεκτρική",
+              pathname: "antlia-fuel-hlektriki",
+            },
+            {
+              name: "Αντλία fuel μηχανική",
+              pathname: "antlia-fuel-mhxaniki",
+            },
+            {
+              name: "Αντλία fuel χειροκίνητη",
+              pathname: "antlia-fuel-xeirokiniti",
+            },
+          ],
+        },
+        {
+          name: "Σύστημα ψύξης",
+          pathname: "systima-psiksis",
+          types: [
+            {
+              name: "Υδραντλία",
+              pathname: "ydrantlia",
+            },
+            {
+              name: "Θερμοστάτες",
+              pathname: "thermostates",
+            },
+          ],
+        },
+        {
+          name: "Κολάρο",
+          pathname: "kolaro",
+          types: [
+            {
+              name: "Νερού-ψυγείου-καλοριφέρ",
+              pathname: "nerou-psygeioy-kalorifer",
+            },
+            {
+              name: "INTERCOOLER",
+              pathname: "INTERCOOLER",
+            },
+          ],
+        },
+        {
+          name: "Ιμάντες",
+          pathname: "imantes",
+          subs: [
+            {
+              name: "Βιομηχανικοί",
+              pathname: "biomhxanikoi",
+              types: [
+                { name: "A", pathname: "A" },
+                { name: "B & BX", pathname: "B-BX" },
+                { name: "C", pathname: "C" },
+                { name: "D", pathname: "D" },
+                { name: "Z", pathname: "Z" },
+                { name: "K", pathname: "K" },
+              ],
+            },
+            {
+              name: "Αυτοκινήτου",
+              pathname: "aytokinitou",
+              types: [
+                { name: "9.5", pathname: "9.5" },
+                { name: "12.5", pathname: "12.5" },
+                { name: "11.5", pathname: "11.5" },
+                { name: "PK", pathname: "PK" },
+                { name: "TEST", pathname: "TEST" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Φίλτρα",
+          pathname: "filtra",
+          types: [
+            {
+              name: "OIL",
+              pathname: "OIL",
+            },
+            {
+              name: "fuel",
+              pathname: "fuel",
+            },
+            {
+              name: "AIR",
+              pathname: "AIR",
+            },
+            {
+              name: "cabin",
+              pathname: "cabin",
+            },
+            {
+              name: "Hydraulic",
+              pathname: "hydraulic",
+            },
+          ],
+        },
+        {
+          name: "Ρουλεμάν",
+          pathname: "rouleman",
+          types: [
+            {
+              name: "Μονόσφαιρα",
+              pathname: "monosfaira",
+            },
+            {
+              name: "Κωνικά",
+              pathname: "konika",
+            },
+            {
+              name: "Βιομηχανικά",
+              pathname: "biomhxanika",
+            },
+            {
+              name: "A/C",
+              pathname: "AC",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Βιομηχανικά",
+      pathname: "biomixanika",
+      subCategories: [],
+    },
+    {
+      name: "Χημικά - Λιπαντικά",
+      pathname: "ximika-lipantika",
+      subCategories: [],
+    },
+    {
+      name: "Διάφορα UNIVERSAL",
+      pathname: "diafora-universal",
+      subCategories: [],
+    },
+  ],
+};
+
 const Admin = () => {
   const initialState = {
     username: "",
@@ -42,10 +252,11 @@ const Admin = () => {
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
   const [categoriesCopy, setCategoriesCopy] = useState([]);
+  const [hasFetchedCategories, setHasFetchedCategories] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [toDelete, setToDelete] = useState({ id: "", name: "", type: "" });
+  const [toDelete, setToDelete] = useState({});
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = (toDeleteObj) => {
@@ -54,11 +265,11 @@ const Admin = () => {
   };
   const handleClose = () => {
     setOpen(false);
-    setToDelete({ id: "", categoryId: "", name: "", type: "" });
+    setToDelete({});
   };
 
   const { isLoading, admin } = useSelector((state) => state.admin);
-  const { isLoadingCategories, categories } = useSelector(
+  const { isLoadingCategories, isLoadingDelete, categories } = useSelector(
     (state) => state.products
   );
 
@@ -77,46 +288,9 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    let categoriesCopyTemp = [];
-
-    categoriesCopyTemp = [...categories];
-    for (let i in categoriesCopyTemp) {
-      // categoriesCopyTemp[i].expanded = false;
-      // categoriesCopyTemp[i] = { ...categories[i], expanded: false };
-      for (let j in categories[i].subCategories) {
-        // categoriesCopyTemp[i].subCategories[j].expanded = false;
-        // categoriesCopyTemp[i].subCategories[j] = {
-        //   ...categories[i].subCategories[j],
-        //   expanded: false,
-        // };
-        for (let k in categories[i].subCategories[j]?.subs) {
-          // categoriesCopyTemp[i].subCategories[j].subs[k].expanded = false;
-          // categoriesCopyTemp[i].subCategories[j].subs[k] = {
-          //   ...categories[i].subCategories[j].subs[k],
-          //   expanded: false,
-          // };
-          for (let l in categories[i].subCategories[j].subs[k].types) {
-            // categoriesCopyTemp[i].subCategories[j].subs[k].types[
-            //   l
-            // ].expanded = false;
-            // categoriesCopyTemp[i].subCategories[j].subs[k].types[l] = {
-            //   ...categories[i].subCategories[j].subs[k].types[l],
-            //   expanded: false,
-            // };
-          }
-        }
-        for (let k in categories[i].subCategories[j].types) {
-          // categoriesCopyTemp[i].subCategories[j].types[k].expanded = false;
-          // categoriesCopyTemp[i].subCategories[j].types[k] = {
-          //   ...categories[i].subCategories[j].types[k],
-          //   expanded: false,
-          // };
-        }
-      }
-    }
-    console.log(categoriesCopyTemp);
-    // console.log(!undefined);
-    setCategoriesCopy(categoriesCopyTemp);
+    if (categories.length === 0 || hasFetchedCategories) return;
+    setHasFetchedCategories(true);
+    setCategoriesCopy([...categories]);
   }, [categories]);
 
   return (
@@ -191,6 +365,20 @@ const Admin = () => {
           >
             ΕΠΕΞΕΡΓΑΣΙΑ ΒΑΣΗΣ
           </Typography>
+          <button
+            onClick={() => {
+              dispatch(sendCategories(categoriesObj));
+            }}
+          >
+            send categories
+          </button>
+          <button
+            onClick={() => {
+              dispatch(deleteAllCategories());
+            }}
+          >
+            delete categories
+          </button>
           {isLoadingCategories ? (
             <Box
               sx={{
@@ -213,188 +401,412 @@ const Admin = () => {
                   marginTop: "50px",
                 }}
               >
-                {categories &&
-                  categories.map((category, idx) => (
-                    <Box key={idx}>
+                {categoriesCopy?.map((category, idx) => (
+                  <Box key={idx}>
+                    <Box
+                      sx={{
+                        borderTop:
+                          idx !== 0 ? "1px solid rgba(0, 0, 0, 0.2)" : "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div
+                        style={{
+                          padding: "10px 30px",
+                          height: "100%",
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                        onClick={() => {
+                          setCategoriesCopy(
+                            categoriesCopy.map((category, index) =>
+                              index === idx
+                                ? {
+                                    ...category,
+                                    expanded: !category.expanded,
+                                  }
+                                : category
+                            )
+                          );
+                        }}
+                      >
+                        {category.name}
+                        <IconButton>
+                          <ExpandMore />
+                        </IconButton>
+                      </div>
+                    </Box>
+                    <Collapse
+                      sx={{
+                        backgroundColor: "rgb(230, 230, 230)",
+                      }}
+                      in={categoriesCopy[idx]?.expanded}
+                      // timeout="auto"
+                      unmountOnExit
+                      // sx={{ position: "relative" }}
+                    >
                       <Box
                         sx={{
-                          borderTop:
-                            idx !== 0 ? "1px solid rgba(0, 0, 0, 0.2)" : "none",
-                          cursor: "pointer",
+                          width: "100%",
+                          padding: "20px",
                         }}
                       >
-                        <div
-                          style={{
-                            padding: "10px 30px",
-                            height: "100%",
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                          }}
-                          onClick={() => {
-                            setCategoriesCopy(
-                              categoriesCopy.map((category, index) =>
-                                index === idx
-                                  ? {
-                                      ...category,
-                                      expanded: !category.expanded,
-                                    }
-                                  : category
-                              )
-                            );
-                          }}
-                        >
-                          {category.name}
-                          <IconButton>
-                            <ExpandMore />
-                          </IconButton>
-                        </div>
-                      </Box>
-                      <Collapse
-                        sx={{
-                          backgroundColor: "rgb(230, 230, 230)",
-                        }}
-                        in={categoriesCopy[idx]?.expanded}
-                        // timeout="auto"
-                        unmountOnExit
-                        // sx={{ position: "relative" }}
-                      >
-                        <Box>hello</Box>
-                        {category?.subCategories.map((subCategory, idxSub) => (
-                          <Box key={idxSub}>
+                        <Box sx={{ boxShadow: 5 }}>
+                          <div
+                            style={{
+                              padding: "10px",
+                              // borderRadius: "10px",
+                              // boxShadow: 5,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              backgroundColor: "#C8D3D6",
+                              zIndex: 100,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setCategoriesCopy(
+                                categoriesCopy.map((category, index) =>
+                                  index === idx
+                                    ? {
+                                        ...category,
+                                        expandedAddSubCategory:
+                                          !category.expandedAddSubCategory,
+                                      }
+                                    : category
+                                )
+                              );
+                            }}
+                          >
+                            <Typography>
+                              Προσθήκη στην κατηγορία {`"${category.name}"`}
+                            </Typography>
+                            <IconButton>
+                              <ExpandMore />
+                            </IconButton>
+                          </div>
+                          <Collapse
+                            in={categoriesCopy[idx]?.expandedAddSubCategory}
+                            unmountOnExit
+                            sx={{
+                              padding: "10px",
+                              // borderRadius: "10px",
+                              // boxShadow: 5,
+                              backgroundColor: "#C8D3D6",
+                            }}
+                          >
+                            <hr
+                              style={{
+                                opacity: 0.2,
+                                marginInline: "auto",
+                                marginTop: "0",
+                              }}
+                            ></hr>
                             <Box
                               sx={{
-                                borderTop: "1px solid rgba(0, 0, 0, 0.2)",
-                                cursor: "pointer",
+                                display: { xs: "block", sm: "flex" },
+                                alignItems: "center",
+                                justifyContent: "space-between",
                               }}
                             >
-                              <div
-                                style={{
-                                  padding: "10px 30px",
-                                  height: "100%",
-                                  width: "100%",
-                                  display: "flex",
+                              <Box
+                                sx={{
+                                  display: { xs: "block", sm: "flex" },
                                   alignItems: "center",
-                                  justifyContent: "space-between",
+                                  marginBottom: { xs: " 10px", sm: "0" },
                                 }}
+                              >
+                                <Typography sx={{ marginRight: "20px" }}>
+                                  Όνομα υποκατηγορίας
+                                </Typography>
+                                <TextField
+                                  size="small"
+                                  sx={{
+                                    backgroundColor: "white",
+                                    borderRadius: "4px",
+                                  }}
+                                  onChange={(e) => {
+                                    setCategoriesCopy(
+                                      categoriesCopy.map((category, index) =>
+                                        index === idx
+                                          ? {
+                                              ...category,
+                                              categoryNameToAdd: e.target.value,
+                                            }
+                                          : category
+                                      )
+                                    );
+                                  }}
+                                ></TextField>
+                              </Box>
+                              <Box
+                                sx={{
+                                  marginBottom: {
+                                    xs: "10px",
+                                    sm: "0",
+                                  },
+                                }}
+                              >
+                                <Typography>Χωρίζεται σε:</Typography>
+                                <FormControl>
+                                  <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={
+                                      category.subCategoryToAddType
+                                        ? category.subCategoryToAddType
+                                        : "types"
+                                    }
+                                    onChange={(e) => {
+                                      console.log(e.target.value);
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((category, index) =>
+                                          index === idx
+                                            ? {
+                                                ...category,
+                                                subCategoryToAddType:
+                                                  e.target.value,
+                                              }
+                                            : category
+                                        )
+                                      );
+                                    }}
+                                  >
+                                    <FormControlLabel
+                                      value="types"
+                                      control={<Radio />}
+                                      label="Τύπους"
+                                    />
+                                    <FormControlLabel
+                                      value="subs"
+                                      control={<Radio />}
+                                      label="Υποκατηγορίες"
+                                    />
+                                  </RadioGroup>
+                                </FormControl>
+                              </Box>
+                              <Button
+                                disabled={
+                                  !categoriesCopy[idx]?.categoryNameToAdd
+                                }
+                                variant="contained"
                                 onClick={() => {
-                                  setCategoriesCopy(
-                                    categoriesCopy.map((category, index) =>
-                                      index === idx
-                                        ? {
-                                            ...category,
-                                            subCategories:
-                                              category.subCategories.map(
-                                                (sub, indexSub) =>
-                                                  indexSub === idxSub
-                                                    ? {
-                                                        ...sub,
-                                                        expanded: !sub.expanded,
-                                                      }
-                                                    : sub
-                                              ),
-                                          }
-                                        : category
+                                  dispatch(
+                                    addSubCategory(
+                                      {
+                                        categoryId: category._id,
+                                        name: category?.categoryNameToAdd,
+                                        subCategoryToAddType:
+                                          category.subCategoryToAddType
+                                            ? category.subCategoryToAddType
+                                            : "types",
+                                        type: "subCategory",
+                                      },
+                                      categoriesCopy,
+                                      setCategoriesCopy
                                     )
                                   );
                                 }}
                               >
-                                {subCategory.name}
-                                <div
+                                ΠΡΟΣΘΗΚΗ
+                              </Button>
+                            </Box>
+                          </Collapse>
+                        </Box>
+                      </Box>
+                      {category?.subCategories.map((subCategory, idxSub) => (
+                        <Box key={idxSub}>
+                          <Box
+                            sx={{
+                              borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <div
+                              style={{
+                                padding: "10px 30px",
+                                height: "100%",
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                              onClick={() => {
+                                setCategoriesCopy(
+                                  categoriesCopy.map((category, index) =>
+                                    index === idx
+                                      ? {
+                                          ...category,
+                                          subCategories:
+                                            category.subCategories.map(
+                                              (sub, indexSub) =>
+                                                indexSub === idxSub
+                                                  ? {
+                                                      ...sub,
+                                                      expanded: !sub.expanded,
+                                                    }
+                                                  : sub
+                                            ),
+                                        }
+                                      : category
+                                  )
+                                );
+                              }}
+                            >
+                              {subCategory.name}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <button
+                                  type="button"
                                   style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
+                                    backgroundColor: "red",
+                                    border: "none",
+                                    color: "white",
+                                    borderRadius: "50%",
+                                    aspectRatio: 1,
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpen({
+                                      id: subCategory._id,
+                                      categoryId: category._id,
+                                      name: subCategory.name,
+                                      type: "subCategory",
+                                    });
                                   }}
                                 >
-                                  <button
-                                    type="button"
-                                    style={{
-                                      backgroundColor: "red",
-                                      border: "none",
-                                      color: "white",
-                                      borderRadius: "50%",
-                                      aspectRatio: 1,
-                                    }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleOpen({
-                                        id: subCategory._id,
-                                        categoryId: category._id,
-                                        name: subCategory.name,
-                                        type: "subCategory",
-                                      });
-                                    }}
-                                  >
-                                    <Delete />
-                                  </button>
+                                  <Delete />
+                                </button>
+                                <IconButton>
+                                  <ExpandMore />
+                                </IconButton>
+                              </div>
+                            </div>
+                          </Box>
+                          <Collapse
+                            sx={{
+                              backgroundColor: categoriesCopy[idx]
+                                ?.subCategories[idxSub]?.types
+                                ? "rgba(190, 190, 190)"
+                                : "rgba(210, 210, 210)",
+                            }}
+                            in={
+                              categoriesCopy[idx]?.subCategories[idxSub]
+                                ?.expanded
+                            }
+                            // timeout="auto"
+                            unmountOnExit
+                          >
+                            <Box
+                              sx={{
+                                width: "100%",
+                                padding: "20px",
+                              }}
+                            >
+                              <Box sx={{ boxShadow: 5 }}>
+                                <div
+                                  style={{
+                                    padding: "10px",
+                                    // borderRadius: "10px",
+                                    // boxShadow: 5,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    backgroundColor: "#C8D3D6",
+                                    zIndex: 100,
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => {
+                                    setCategoriesCopy(
+                                      categoriesCopy.map((category, index) =>
+                                        index === idx
+                                          ? {
+                                              ...category,
+                                              subCategories:
+                                                category.subCategories.map(
+                                                  (
+                                                    subCategory2,
+                                                    indexSubCategory2
+                                                  ) =>
+                                                    indexSubCategory2 === idxSub
+                                                      ? {
+                                                          ...subCategory2,
+                                                          expandedAddBelow:
+                                                            !subCategory2.expandedAddBelow,
+                                                        }
+                                                      : subCategory2
+                                                ),
+                                            }
+                                          : category
+                                      )
+                                    );
+                                  }}
+                                >
+                                  <Typography>
+                                    Προσθήκη στην υποκατηγορία{" "}
+                                    {`"${subCategory.name}"`}
+                                  </Typography>
                                   <IconButton>
                                     <ExpandMore />
                                   </IconButton>
                                 </div>
-                              </div>
-                            </Box>
-                            <Collapse
-                              in={
-                                categoriesCopy[idx]?.subCategories[idxSub]
-                                  ?.expanded
-                              }
-                              // timeout="auto"
-                              unmountOnExit
-                            >
-                              {subCategory?.types &&
-                                subCategory?.types.map((type, idxType) => (
-                                  <Box key={idxType}>
+                                <Collapse
+                                  in={
+                                    categoriesCopy[idx]?.subCategories[idxSub]
+                                      ?.expandedAddBelow
+                                  }
+                                  unmountOnExit
+                                  sx={{
+                                    padding: "10px",
+                                    // borderRadius: "10px",
+                                    // boxShadow: 5,
+                                    backgroundColor: "#C8D3D6",
+                                  }}
+                                >
+                                  <hr
+                                    style={{
+                                      opacity: 0.2,
+                                      marginInline: "auto",
+                                      marginTop: "0",
+                                    }}
+                                  ></hr>
+                                  <Box
+                                    sx={{
+                                      display: { xs: "block", sm: "flex" },
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                    }}
+                                  >
                                     <Box
                                       sx={{
-                                        borderTop:
-                                          idxType !== 0
-                                            ? "1px solid rgba(0, 0, 0, 0.2)"
-                                            : "none",
-                                        cursor: "pointer",
-                                        backgroundColor: "rgb(190, 190, 190)",
+                                        display: { xs: "block", sm: "flex" },
+                                        alignItems: "center",
+                                        marginBottom: { xs: "10px", sm: "0" },
                                       }}
                                     >
-                                      <div
-                                        style={{
-                                          padding: "10px 30px",
-                                          height: "100%",
-                                          width: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "space-between",
+                                      <Typography sx={{ marginRight: "20px" }}>
+                                        Όνομα{" "}
+                                        {subCategory.types
+                                          ? "τύπου"
+                                          : subCategory.subs
+                                          ? "υποκατηγορίας"
+                                          : "--"}
+                                      </Typography>
+                                      <TextField
+                                        size="small"
+                                        sx={{
+                                          backgroundColor: "white",
+                                          borderRadius: "4px",
                                         }}
-                                        onClick={() => {}}
-                                      >
-                                        {type.name}
-                                      </div>
-                                    </Box>
-                                  </Box>
-                                ))}
-                              {subCategory?.subs &&
-                                subCategory.subs.map((sub, idxSub2) => (
-                                  <Box key={idxSub2}>
-                                    <Box
-                                      sx={{
-                                        borderTop:
-                                          idxSub2 !== 0
-                                            ? "1px solid rgba(0, 0, 0, 0.2)"
-                                            : "none",
-                                        cursor: "pointer",
-                                        backgroundColor: "rgb(210, 210, 210)",
-                                      }}
-                                    >
-                                      <div
-                                        style={{
-                                          padding: "10px 30px",
-                                          height: "100%",
-                                          width: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "space-between",
-                                        }}
-                                        onClick={() => {
+                                        onChange={(e) => {
                                           setCategoriesCopy(
                                             categoriesCopy.map(
                                               (category, index) =>
@@ -403,54 +815,438 @@ const Admin = () => {
                                                       ...category,
                                                       subCategories:
                                                         category.subCategories.map(
-                                                          (sub, indexSub) =>
-                                                            indexSub === idxSub
+                                                          (
+                                                            subCategory2,
+                                                            indexSubCategory2
+                                                          ) =>
+                                                            indexSubCategory2 ===
+                                                            idxSub
                                                               ? {
-                                                                  ...sub,
-                                                                  subs: sub.subs.map(
-                                                                    (
-                                                                      sub2,
-                                                                      indexSub2
-                                                                    ) =>
-                                                                      indexSub2 ===
-                                                                      idxSub2
-                                                                        ? {
-                                                                            ...sub2,
-                                                                            expanded:
-                                                                              !sub2.expanded,
-                                                                          }
-                                                                        : sub2
-                                                                  ),
+                                                                  ...subCategory2,
+                                                                  typeNameToAdd:
+                                                                    subCategory.types
+                                                                      ? e.target
+                                                                          .value
+                                                                      : undefined,
+                                                                  subNameToAdd:
+                                                                    subCategory.subs
+                                                                      ? e.target
+                                                                          .value
+                                                                      : undefined,
                                                                 }
-                                                              : sub
+                                                              : subCategory2
                                                         ),
                                                     }
                                                   : category
                                             )
                                           );
+                                          console.log(subCategory);
+                                        }}
+                                      ></TextField>
+                                    </Box>
+                                    <Button
+                                      disabled={
+                                        !(subCategory.types
+                                          ? categoriesCopy[idx]?.subCategories[
+                                              idxSub
+                                            ]?.typeNameToAdd
+                                          : subCategory.subs
+                                          ? categoriesCopy[idx]?.subCategories[
+                                              idxSub
+                                            ]?.subNameToAdd
+                                          : false)
+                                      }
+                                      variant="contained"
+                                      onClick={() => {
+                                        console.log(subCategory.subNameToAdd);
+                                        dispatch(
+                                          addSubCategory(
+                                            {
+                                              categoryId: category._id,
+                                              subCategoryId: subCategory._id,
+                                              name: subCategory.types
+                                                ? subCategory.typeNameToAdd
+                                                : subCategory.subNameToAdd,
+                                              type: subCategory.types
+                                                ? "type"
+                                                : "sub",
+                                            },
+                                            categoriesCopy,
+                                            setCategoriesCopy
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      ΠΡΟΣΘΗΚΗ
+                                    </Button>
+                                  </Box>
+                                </Collapse>
+                              </Box>
+                            </Box>
+                            {subCategory?.types &&
+                              subCategory?.types.map((type, idxType) => (
+                                <Box key={idxType}>
+                                  <Box
+                                    sx={{
+                                      borderTop:
+                                        idxType !== 0
+                                          ? "1px solid rgba(0, 0, 0, 0.2)"
+                                          : "none",
+                                      cursor: "pointer",
+                                      backgroundColor: "rgb(190, 190, 190)",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        padding: "10px 30px",
+                                        height: "100%",
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                      }}
+                                      onClick={() => {}}
+                                    >
+                                      {type.name}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
                                         }}
                                       >
-                                        {sub.name}
+                                        <button
+                                          type="button"
+                                          style={{
+                                            backgroundColor: "red",
+                                            border: "none",
+                                            color: "white",
+                                            borderRadius: "50%",
+                                            aspectRatio: 1,
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleOpen({
+                                              id: type._id,
+                                              categoryId: category._id,
+                                              subCategoryId: subCategory._id,
+                                              name: type.name,
+                                              type: "type",
+                                            });
+                                          }}
+                                        >
+                                          <Delete />
+                                        </button>
                                         <IconButton>
                                           <ExpandMore />
                                         </IconButton>
                                       </div>
-                                    </Box>
-                                    <Collapse
-                                      in={
-                                        categoriesCopy[idx]?.subCategories[
-                                          idxSub
-                                        ]?.subs[idxSub2]?.expanded
-                                      }
-                                      // timeout="auto"
-                                      unmountOnExit
+                                    </div>
+                                  </Box>
+                                </Box>
+                              ))}
+                            {subCategory?.subs &&
+                              subCategory.subs.map((sub, idxSub2) => (
+                                <Box key={idxSub2}>
+                                  <Box
+                                    sx={{
+                                      borderTop:
+                                        idxSub2 !== 0
+                                          ? "1px solid rgba(0, 0, 0, 0.2)"
+                                          : "none",
+                                      cursor: "pointer",
+                                      backgroundColor: "rgb(210, 210, 210)",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        padding: "10px 30px",
+                                        height: "100%",
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                      }}
+                                      onClick={() => {
+                                        setCategoriesCopy(
+                                          categoriesCopy.map(
+                                            (category, index) =>
+                                              index === idx
+                                                ? {
+                                                    ...category,
+                                                    subCategories:
+                                                      category.subCategories.map(
+                                                        (sub, indexSub) =>
+                                                          indexSub === idxSub
+                                                            ? {
+                                                                ...sub,
+                                                                subs: sub.subs.map(
+                                                                  (
+                                                                    sub2,
+                                                                    indexSub2
+                                                                  ) =>
+                                                                    indexSub2 ===
+                                                                    idxSub2
+                                                                      ? {
+                                                                          ...sub2,
+                                                                          expanded:
+                                                                            !sub2.expanded,
+                                                                        }
+                                                                      : sub2
+                                                                ),
+                                                              }
+                                                            : sub
+                                                      ),
+                                                  }
+                                                : category
+                                          )
+                                        );
+                                        console.log(sub);
+                                      }}
                                     >
-                                      {sub?.types?.map((type2, idxType2) => (
-                                        <Box key={idxType2}>
+                                      {sub.name}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                        }}
+                                      >
+                                        <button
+                                          type="button"
+                                          style={{
+                                            backgroundColor: "red",
+                                            border: "none",
+                                            color: "white",
+                                            borderRadius: "50%",
+                                            aspectRatio: 1,
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleOpen({
+                                              id: sub._id,
+                                              categoryId: category._id,
+                                              subCategoryId: subCategory._id,
+                                              name: sub.name,
+                                              type: "sub",
+                                            });
+                                          }}
+                                        >
+                                          <Delete />
+                                        </button>
+                                        <IconButton>
+                                          <ExpandMore />
+                                        </IconButton>
+                                      </div>
+                                    </div>
+                                  </Box>
+                                  <Collapse
+                                    in={
+                                      categoriesCopy[idx]?.subCategories[idxSub]
+                                        ?.subs[idxSub2]?.expanded
+                                    }
+                                    // timeout="auto"
+                                    unmountOnExit
+                                  >
+                                    <Box
+                                      sx={{
+                                        width: "100%",
+                                        padding: "20px",
+                                      }}
+                                    >
+                                      <Box sx={{ boxShadow: 5 }}>
+                                        <div
+                                          style={{
+                                            padding: "10px",
+                                            // borderRadius: "10px",
+                                            // boxShadow: 5,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            backgroundColor: "#C8D3D6",
+                                            zIndex: 100,
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map(
+                                                (category, index) =>
+                                                  index === idx
+                                                    ? {
+                                                        ...category,
+                                                        subCategories:
+                                                          category.subCategories.map(
+                                                            (
+                                                              subCategory2,
+                                                              indexSubCategory2
+                                                            ) =>
+                                                              indexSubCategory2 ===
+                                                              idxSub
+                                                                ? {
+                                                                    ...subCategory2,
+                                                                    subs: subCategory2.subs.map(
+                                                                      (
+                                                                        sub2,
+                                                                        idxSub3
+                                                                      ) =>
+                                                                        idxSub2 ===
+                                                                        idxSub3
+                                                                          ? {
+                                                                              ...sub2,
+                                                                              expandedAddType:
+                                                                                !sub2.expandedAddType,
+                                                                            }
+                                                                          : sub2
+                                                                    ),
+                                                                  }
+                                                                : subCategory2
+                                                          ),
+                                                      }
+                                                    : category
+                                              )
+                                            );
+                                            console.log(sub);
+                                          }}
+                                        >
+                                          <Typography>
+                                            Προσθήκη στην υποκατηγορία{" "}
+                                            {`"${sub.name}"`}
+                                          </Typography>
+                                          <IconButton>
+                                            <ExpandMore />
+                                          </IconButton>
+                                        </div>
+                                        <Collapse
+                                          in={sub?.expandedAddType}
+                                          unmountOnExit
+                                          sx={{
+                                            padding: "10px",
+                                            // borderRadius: "10px",
+                                            // boxShadow: 5,
+                                            backgroundColor: "#C8D3D6",
+                                          }}
+                                        >
+                                          <hr
+                                            style={{
+                                              opacity: 0.2,
+                                              marginInline: "auto",
+                                              marginTop: "0",
+                                            }}
+                                          ></hr>
+                                          <Box
+                                            sx={{
+                                              display: {
+                                                xs: "block",
+                                                sm: "flex",
+                                              },
+                                              alignItems: "center",
+                                              justifyContent: "space-between",
+                                            }}
+                                          >
+                                            <Box
+                                              sx={{
+                                                display: {
+                                                  xs: "block",
+                                                  sm: "flex",
+                                                },
+                                                alignItems: "center",
+                                                marginBottom: {
+                                                  xs: "10px",
+                                                  sm: "0",
+                                                },
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Όνομα τύπου
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                }}
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          subs: subCategory2.subs.map(
+                                                                            (
+                                                                              sub2,
+                                                                              idxSub3
+                                                                            ) =>
+                                                                              idxSub2 ===
+                                                                              idxSub3
+                                                                                ? {
+                                                                                    ...sub2,
+                                                                                    typeNameToAdd:
+                                                                                      e
+                                                                                        .target
+                                                                                        .value,
+                                                                                  }
+                                                                                : sub2
+                                                                          ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(sub);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Button
+                                              disabled={!sub.typeNameToAdd}
+                                              variant="contained"
+                                              onClick={() => {
+                                                console.log(
+                                                  subCategory.subNameToAdd
+                                                );
+                                                dispatch(
+                                                  addSubCategory(
+                                                    {
+                                                      categoryId: category._id,
+                                                      subCategoryId:
+                                                        subCategory._id,
+                                                      subId: sub._id,
+                                                      name: sub.typeNameToAdd,
+                                                      type: "innerType",
+                                                    },
+                                                    categoriesCopy,
+                                                    setCategoriesCopy
+                                                  )
+                                                );
+                                              }}
+                                            >
+                                              ΠΡΟΣΘΗΚΗ
+                                            </Button>
+                                          </Box>
+                                        </Collapse>
+                                      </Box>
+                                    </Box>
+                                    {sub?.types?.map(
+                                      (typeInner, idxTypeInner) => (
+                                        <Box key={idxTypeInner}>
                                           <Box
                                             sx={{
                                               borderTop:
-                                                idxType2 !== 0
+                                                idxTypeInner !== 0
                                                   ? "1px solid rgba(0, 0, 0, 0.2)"
                                                   : "none",
                                               cursor: "pointer",
@@ -469,20 +1265,56 @@ const Admin = () => {
                                               }}
                                               onClick={() => {}}
                                             >
-                                              {type2.name}
+                                              {typeInner.name}
+                                              <div
+                                                style={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  justifyContent: "center",
+                                                }}
+                                              >
+                                                <button
+                                                  type="button"
+                                                  style={{
+                                                    backgroundColor: "red",
+                                                    border: "none",
+                                                    color: "white",
+                                                    borderRadius: "50%",
+                                                    aspectRatio: 1,
+                                                  }}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleOpen({
+                                                      id: typeInner._id,
+                                                      categoryId: category._id,
+                                                      subCategoryId:
+                                                        subCategory._id,
+                                                      subId: sub._id,
+                                                      name: typeInner.name,
+                                                      type: "innerType",
+                                                    });
+                                                  }}
+                                                >
+                                                  <Delete />
+                                                </button>
+                                                <IconButton>
+                                                  <ExpandMore />
+                                                </IconButton>
+                                              </div>
                                             </div>
                                           </Box>
                                         </Box>
-                                      ))}
-                                    </Collapse>
-                                  </Box>
-                                ))}
-                            </Collapse>
-                          </Box>
-                        ))}
-                      </Collapse>
-                    </Box>
-                  ))}
+                                      )
+                                    )}
+                                  </Collapse>
+                                </Box>
+                              ))}
+                          </Collapse>
+                        </Box>
+                      ))}
+                    </Collapse>
+                  </Box>
+                ))}
               </Card>
             </>
           )}
@@ -508,7 +1340,12 @@ const Admin = () => {
                 </Typography>
                 <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                   {`Πρόκειται να διαγραφεί ${
-                    toDelete?.type === "subCategory" ? "η υποκατηγορία" : "--"
+                    toDelete?.type === "subCategory" || toDelete?.type === "sub"
+                      ? "η υποκατηγορία"
+                      : toDelete?.type === "type" ||
+                        toDelete?.type === "innerType"
+                      ? " ο τύπος"
+                      : "--"
                   } "${toDelete?.name}" και όλα ${
                     toDelete?.type === "subCategory" || toDelete?.type === "sub"
                       ? "της"
@@ -536,18 +1373,43 @@ const Admin = () => {
                     variant="contained"
                     color="primary"
                     onClick={() => {
+                      handleClose();
                       dispatch(
-                        deleteById({
-                          id: toDelete.id,
-                          categoryId: toDelete.categoryId,
-                          type: toDelete.type,
-                        })
+                        deleteById(
+                          {
+                            id: toDelete.id,
+                            categoryId: toDelete.categoryId,
+                            subCategoryId: toDelete.subCategoryId,
+                            subId: toDelete.subId,
+                            type: toDelete.type,
+                          },
+                          categoriesCopy,
+                          setCategoriesCopy
+                        )
                       );
                     }}
                   >
                     ΔΙΑΓΡΑΦΗ
                   </Button>
                 </Box>
+              </Box>
+            </Fade>
+          </Modal>
+          <Modal
+            open={isLoadingDelete}
+            // closeAfterTransition
+            BackdropComponent={Backdrop}
+          >
+            <Fade in={isLoadingDelete}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <LoadingGear width="150px" />
               </Box>
             </Fade>
           </Modal>

@@ -1,50 +1,46 @@
 import mongoose from "mongoose";
 
 const categoriesSchema = mongoose.Schema({
-  categories: [
-    {
-      name: { type: String, required: true },
-      pathname: { type: String, required: true },
-      subCategories: {
-        type: [
-          {
-            name: { type: String, required: true },
-            pathname: { type: String, required: true },
-            types: {
-              type: [
-                {
-                  name: { type: String, required: true },
-                  pathname: { type: String, required: true },
-                },
-              ],
-              required: false,
-              default: undefined,
+  name: { type: String, required: true },
+  // pathname: { type: String, required: true },
+  subCategories: {
+    type: [
+      {
+        name: { type: String, required: true },
+        // pathname: { type: String, required: true },
+        types: {
+          type: [
+            {
+              name: { type: String, required: true },
+              // pathname: { type: String, required: true },
             },
-            subs: {
-              type: [
-                {
-                  name: { type: String, required: true },
-                  pathname: { type: String, required: true },
-                  types: {
-                    type: [
-                      {
-                        name: { type: String, required: true },
-                        pathname: { type: String, required: true },
-                      },
-                    ],
-                    required: false,
+          ],
+          required: false,
+          default: undefined,
+        },
+        subs: {
+          type: [
+            {
+              name: { type: String, required: true },
+              // pathname: { type: String, required: true },
+              types: {
+                type: [
+                  {
+                    name: { type: String, required: true },
+                    // pathname: { type: String, required: true },
                   },
-                },
-              ],
-              required: false,
-              default: undefined,
+                ],
+                required: false,
+              },
             },
-          },
-        ],
-        required: true,
+          ],
+          required: false,
+          default: undefined,
+        },
       },
-    },
-  ],
+    ],
+    required: true,
+  },
 });
 
 const Categories = mongoose.model("Categories", categoriesSchema);
