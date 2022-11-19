@@ -87,30 +87,12 @@ const NavBar = () => {
       ? 1
       : 2
   );
-  const [dropdown, setDropdown] = useState(false);
   const [contactDropdown, setContactDropdown] = useState(false);
 
-  const { categories } = useSelector((state) => state.products);
+  const { categories } = useSelector((state) => state.categories);
   const { admin } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
 
-  const onMouseEnter = () => {
-    if (window.innerWidth < 960) {
-      setDropdown(false);
-    } else {
-      console.log("enter");
-      setDropdown(true);
-    }
-  };
-
-  const onMouseLeave = () => {
-    if (window.innerWidth < 960) {
-      setDropdown(false);
-    } else {
-      console.log("leave");
-      setDropdown(false);
-    }
-  };
   const onMouseEnterContact = () => {
     if (window.innerWidth < 960) {
       setContactDropdown(false);

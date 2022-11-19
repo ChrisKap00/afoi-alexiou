@@ -250,3 +250,54 @@ export const addSubCategory =
     }
     dispatch({ type: "STOP_LOADING_UPDATE" });
   };
+
+export const addProduct = (item) => async (dispatch) => {
+  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
+  console.log(item);
+  try {
+    const { data } = await api.addProduct(item);
+    console.log(data);
+    dispatch({ type: "ADD_PRODUCT", payload: { ...item, _id: data._id } });
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
+};
+
+export const fetchProducts = (params) => async (dispatch) => {
+  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
+  try {
+    const {
+      data: { products },
+    } = await api.fetchProducts(params);
+    console.log(products);
+    dispatch({ type: "FETCH_PRODUCTS", payload: products });
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
+};
+
+export const deleteProduct = (id) => async (dispatch) => {
+  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
+  try {
+    const { data } = await api.deleteProduct(id);
+    console.log(data);
+    dispatch({ type: "DELETE_PRODUCT", payload: data.id });
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
+};
+
+export const editProduct = (productData) => async (dispatch) => {
+  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
+  try {
+    const { data } = await api.editProduct(productData);
+    console.log(data);
+    dispatch({ type: "EDIT_PRODUCT", payload: { id: data.id, productData } });
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
+};

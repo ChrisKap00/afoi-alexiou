@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Categories from "../models/categories.js";
+import Product from "../models/product.js";
 
 export const fetchCategories = async (req, res) => {
   console.log("FETCHING CATEGORIES");
@@ -117,5 +118,79 @@ export const addSubCategory = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+export const addProduct = async (req, res) => {
+  try {
+    console.log(req.body);
+    const productToAdd = req.body;
+    const result = await Product.create({
+      ...productToAdd,
+      images: productToAdd.images.map((image) => image.data),
+    });
+    res.status(200).json({ _id: result._id });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const fetchProducts = async (req, res) => {
+  console.log(req.query);
+  const {
+    ids: { categoryId, subCategoryId, typeId, subId, innerTypeId },
+    type,
+  } = req.query;
+  try {
+    if (type === "type") {
+      if (!mongoose.Types.ObjectId.isValid(categoryId))
+        return res.status(404).send("Invalid category");
+      if (!mongoose.Types.ObjectId.isValid(subCategoryId))
+        return res.status(404).send("Invalid sub-category");
+      if (!mongoose.Types.ObjectId.isValid(typeId))
+        return res.status(404).send("Invalid type");
+
+      const products = await Product.find({
+        categoryId,
+        subCategoryId,
+        typeId,
+      });
+      console.log(products);
+      res.status(200).json({ products });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  console.log(req.body);
+  try {
+    const { id } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send("Invalid product id");
+
+    const result = await Product.findByIdAndDelete(id);
+    res.status(200).json({ id });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const editProduct = async (req, res) => {
+  console.log(req.body);
+  try {
+    const data = req.body;
+    if (!mongoose.Types.ObjectId.isValid(data._id))
+      return res.status(404).send("Invalid product id");
+
+    const result = await Product.findByIdAndUpdate(data._id, data, {
+      new: true,
+    });
+    console.log(data);
+    console.log(result);
+    res.status(200).json({ id: data._id });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
   }
 };

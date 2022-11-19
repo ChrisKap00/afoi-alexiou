@@ -21,4 +21,12 @@ export const sendCategories = (categories) =>
 export const deleteAllCategories = () => API.patch("admin/catDel");
 
 export const deleteById = (item) => API.patch("/products/delete", item);
-export const addSubCategory = (item) => API.post("/products/addSubCategory", item);
+export const addSubCategory = (item) =>
+  API.post("/products/addSubCategory", item);
+export const addProduct = (item) => API.post("/products/addProduct", item);
+export const fetchProducts = (params) =>
+  API.get("/products/fetch", {
+    params: { ids: params.ids, type: params.type },
+  });
+export const deleteProduct = (id) => API.patch("/products/deleteProduct", id);
+export const editProduct = (data) => API.patch("/products/editProduct", data);

@@ -1,28 +1,27 @@
-export default (
-  state = {
-    isLoadingCategories: false,
-    isLoadingDelete: false,
-    isLoadingProducts: false,
-    categories: [],
-  },
-  action
-) => {
+export default (state = { isLoadingProducts: false, products: [] }, action) => {
   switch (action.type) {
-    case "START_LOADING_FETCH_CATEGORIES":
-      return { ...state, isLoadingCategories: true };
-    case "STOP_LOADING_FETCH_CATEGORIES":
-      return { ...state, isLoadingCategories: false };
-    case "FETCH_CATEGORIES":
-      return { ...state, categories: action.payload };
-    case "START_LOADING_UPDATE":
-      return { ...state, isLoadingDelete: true };
-    case "STOP_LOADING_UPDATE":
-      return { ...state, isLoadingDelete: false };
-    case "UPDATE":
+    case "START_LOADING_FETCH_PRODUCTS":
+      return { ...state, isLoadingProducts: true };
+    case "STOP_LOADING_FETCH_PRODUCTS":
+      return { ...state, isLoadingProducts: false };
+    case "ADD_PRODUCT":
+      return { ...state, products: [...state.products, action.payload] };
+    case "FETCH_PRODUCTS":
+      return { ...state, products: [...state.products, ...action.payload] };
+    case "DELETE_PRODUCT":
       return {
         ...state,
-        categories: state.categories.map((category) =>
-          category._id === action.payload._id ? action.payload : category
+        products: state.products.filter(
+          (product) => product._id !== action.payload
+        ),
+      };
+    case "EDIT_PRODUCT":
+      return {
+        ...state,
+        products: state.products.map((product) =>
+          product._id === action.payload.id
+            ? action.payload.productData
+            : product
         ),
       };
     default:
