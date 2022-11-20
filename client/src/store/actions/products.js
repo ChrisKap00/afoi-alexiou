@@ -257,7 +257,14 @@ export const addProduct = (item) => async (dispatch) => {
   try {
     const { data } = await api.addProduct(item);
     console.log(data);
-    dispatch({ type: "ADD_PRODUCT", payload: { ...item, _id: data._id } });
+    dispatch({
+      type: "ADD_PRODUCT",
+      payload: {
+        ...item,
+        images: item.images.map((image) => image.data),
+        _id: data._id,
+      },
+    });
   } catch (error) {
     console.log(error);
   }
@@ -265,6 +272,7 @@ export const addProduct = (item) => async (dispatch) => {
 };
 
 export const fetchProducts = (params) => async (dispatch) => {
+  console.log(params);
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
     const {
@@ -278,8 +286,23 @@ export const fetchProducts = (params) => async (dispatch) => {
   dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
 };
 
+export const fetchClientProducts = (params) => async (dispatch) => {
+  console.log(params);
+  dispatch({ type: "START_LOADING_FETCH_CLIENT_PRODUCTS" });
+  try {
+    const {
+      data: { products },
+    } = await api.fetchProducts(params);
+    console.log(products);
+    dispatch({ type: "FETCH_CLIENT_PRODUCTS", payload: products });
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_CLIENT_PRODUCTS" });
+};
+
 export const deleteProduct = (id) => async (dispatch) => {
-  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
+  dispatch({ type: "START_LOADING_FETCH_CLIENT_PRODUCTS" });
   try {
     const { data } = await api.deleteProduct(id);
     console.log(data);

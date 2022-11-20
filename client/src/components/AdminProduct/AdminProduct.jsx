@@ -25,7 +25,7 @@ const AdminProduct = ({ product }) => {
         style={{
           width: "120px",
           aspectRatio: 1,
-          objectFit: "cover",
+          objectFit: "contain",
         }}
       ></img>
       <Box

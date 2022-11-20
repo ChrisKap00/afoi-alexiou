@@ -9,8 +9,9 @@ const productSchema = mongoose.Schema({
   manufacturer: { type: String, required: true },
   categoryId: { type: String, required: true },
   subCategoryId: { type: String, required: false },
-  subId: { type: String, required: false },
   typeId: { type: String, required: false },
+  subId: { type: String, required: false },
+  innerTypeId: { type: String, required: false },
 });
 
 const Product = mongoose.model("Product", productSchema);

@@ -88,7 +88,7 @@ const EditProductModal = ({ setEditModalOpen, product }) => {
                   style={{
                     width: "120px",
                     aspectRatio: 1,
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "5px",
                   }}
                 ></img>

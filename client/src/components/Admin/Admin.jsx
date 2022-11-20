@@ -890,814 +890,805 @@ const Admin = () => {
                                 </Collapse>
                               </Box>
                             </Box>
-                            {subCategory?.types &&
-                              subCategory?.types.map((type, idxType) => (
-                                <Box key={idxType}>
-                                  <Box
-                                    sx={{
-                                      borderTop:
-                                        idxType !== 0
-                                          ? "1px solid rgba(0, 0, 0, 0.2)"
-                                          : "none",
-                                      cursor: "pointer",
-                                      backgroundColor: "rgb(190, 190, 190)",
+                            {subCategory?.types?.map((type, idxType) => (
+                              <Box key={idxType}>
+                                <Box
+                                  sx={{
+                                    borderTop:
+                                      idxType !== 0
+                                        ? "1px solid rgba(0, 0, 0, 0.2)"
+                                        : "none",
+                                    cursor: "pointer",
+                                    backgroundColor: "rgb(190, 190, 190)",
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      padding: "10px 30px",
+                                      height: "100%",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
                                     }}
-                                  >
-                                    <div
-                                      style={{
-                                        padding: "10px 30px",
-                                        height: "100%",
-                                        width: "100%",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                      }}
-                                      onClick={() => {
-                                        if (!type.firstTimeExpanded) {
-                                          console.log(
-                                            `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n\tsubCategoryId: ${subCategory._id},\n\ttypeId: ${type._id}\n}`
-                                          );
-                                          dispatch(
-                                            fetchProducts({
-                                              ids: {
-                                                categoryId: category._id,
-                                                subCategoryId: subCategory._id,
-                                                typeId: type._id,
-                                              },
-                                              type: "type",
-                                            })
-                                          );
-                                        }
-                                        setCategoriesCopy(
-                                          categoriesCopy.map(
-                                            (category, index) =>
-                                              index === idx
-                                                ? {
-                                                    ...category,
-                                                    subCategories:
-                                                      category.subCategories.map(
-                                                        (sub, indexSub) =>
-                                                          indexSub === idxSub
-                                                            ? {
-                                                                ...sub,
-                                                                types:
-                                                                  sub.types.map(
-                                                                    (
-                                                                      type2,
-                                                                      indexType2
-                                                                    ) =>
-                                                                      indexType2 ===
-                                                                      idxType
-                                                                        ? {
-                                                                            ...type2,
-                                                                            expanded:
-                                                                              !type2.expanded,
-                                                                            firstTimeExpanded: true,
-                                                                          }
-                                                                        : type2
-                                                                  ),
-                                                              }
-                                                            : sub
-                                                      ),
-                                                  }
-                                                : category
-                                          )
+                                    onClick={() => {
+                                      if (!type.firstTimeExpanded) {
+                                        console.log(
+                                          `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n\tsubCategoryId: ${subCategory._id},\n\ttypeId: ${type._id}\n}`
                                         );
-                                      }}
-                                    >
-                                      {type.name}
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <button
-                                          type="button"
-                                          style={{
-                                            backgroundColor: "red",
-                                            border: "none",
-                                            color: "white",
-                                            borderRadius: "50%",
-                                            aspectRatio: 1,
-                                          }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleOpen({
-                                              id: type._id,
+                                        dispatch(
+                                          fetchProducts({
+                                            ids: {
                                               categoryId: category._id,
                                               subCategoryId: subCategory._id,
-                                              name: type.name,
-                                              type: "type",
-                                            });
-                                          }}
-                                        >
-                                          <Delete />
-                                        </button>
+                                              typeId: type._id,
+                                            },
+                                            type: "type",
+                                          })
+                                        );
+                                      }
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((category, index) =>
+                                          index === idx
+                                            ? {
+                                                ...category,
+                                                subCategories:
+                                                  category.subCategories.map(
+                                                    (sub, indexSub) =>
+                                                      indexSub === idxSub
+                                                        ? {
+                                                            ...sub,
+                                                            types:
+                                                              sub.types.map(
+                                                                (
+                                                                  type2,
+                                                                  indexType2
+                                                                ) =>
+                                                                  indexType2 ===
+                                                                  idxType
+                                                                    ? {
+                                                                        ...type2,
+                                                                        expanded:
+                                                                          !type2.expanded,
+                                                                        firstTimeExpanded: true,
+                                                                      }
+                                                                    : type2
+                                                              ),
+                                                          }
+                                                        : sub
+                                                  ),
+                                              }
+                                            : category
+                                        )
+                                      );
+                                    }}
+                                  >
+                                    {type.name}
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      <button
+                                        type="button"
+                                        style={{
+                                          backgroundColor: "red",
+                                          border: "none",
+                                          color: "white",
+                                          borderRadius: "50%",
+                                          aspectRatio: 1,
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleOpen({
+                                            id: type._id,
+                                            categoryId: category._id,
+                                            subCategoryId: subCategory._id,
+                                            name: type.name,
+                                            type: "type",
+                                          });
+                                        }}
+                                      >
+                                        <Delete />
+                                      </button>
+                                      <IconButton>
+                                        <ExpandMore />
+                                      </IconButton>
+                                    </div>
+                                  </div>
+                                </Box>
+                                <Collapse
+                                  in={type.expanded}
+                                  unmountOnExit
+                                  sx={{
+                                    backgroundColor: "rgb(160, 160, 160)",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      width: "100%",
+                                      padding: "20px",
+                                    }}
+                                  >
+                                    <Box sx={{ boxShadow: 5 }}>
+                                      <div
+                                        style={{
+                                          padding: "10px",
+                                          // borderRadius: "10px",
+                                          // boxShadow: 5,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          backgroundColor: "#C8D3D6",
+                                          zIndex: 100,
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          setCategoriesCopy(
+                                            categoriesCopy.map(
+                                              (category, index) =>
+                                                index === idx
+                                                  ? {
+                                                      ...category,
+                                                      subCategories:
+                                                        category.subCategories.map(
+                                                          (
+                                                            subCategory2,
+                                                            indexSubCategory2
+                                                          ) =>
+                                                            indexSubCategory2 ===
+                                                            idxSub
+                                                              ? {
+                                                                  ...subCategory2,
+                                                                  types:
+                                                                    subCategory2.types.map(
+                                                                      (
+                                                                        type2,
+                                                                        idxType2
+                                                                      ) =>
+                                                                        idxType2 ===
+                                                                        idxType
+                                                                          ? {
+                                                                              ...type2,
+                                                                              expandedAddProduct:
+                                                                                !type2.expandedAddProduct,
+                                                                            }
+                                                                          : type2
+                                                                    ),
+                                                                }
+                                                              : subCategory2
+                                                        ),
+                                                    }
+                                                  : category
+                                            )
+                                          );
+                                        }}
+                                      >
+                                        <Typography>
+                                          Προσθήκη προϊόντος στον τύπο{" "}
+                                          {`"${type.name}"`}
+                                        </Typography>
                                         <IconButton>
                                           <ExpandMore />
                                         </IconButton>
                                       </div>
-                                    </div>
-                                  </Box>
-                                  <Collapse
-                                    in={type.expanded}
-                                    unmountOnExit
-                                    sx={{
-                                      backgroundColor: "rgb(160, 160, 160)",
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        width: "100%",
-                                        padding: "20px",
-                                      }}
-                                    >
-                                      <Box sx={{ boxShadow: 5 }}>
-                                        <div
+                                      <Collapse
+                                        in={type?.expandedAddProduct}
+                                        unmountOnExit
+                                        sx={{
+                                          padding: "10px",
+                                          // borderRadius: "10px",
+                                          // boxShadow: 5,
+                                          backgroundColor: "#C8D3D6",
+                                        }}
+                                      >
+                                        <hr
                                           style={{
-                                            padding: "10px",
-                                            // borderRadius: "10px",
-                                            // boxShadow: 5,
+                                            opacity: 0.2,
+                                            marginInline: "auto",
+                                            marginTop: "0",
+                                          }}
+                                        ></hr>
+                                        <Box
+                                          sx={{
                                             display: "flex",
                                             alignItems: "center",
-                                            justifyContent: "space-between",
-                                            backgroundColor: "#C8D3D6",
-                                            zIndex: 100,
-                                            cursor: "pointer",
-                                          }}
-                                          onClick={() => {
-                                            setCategoriesCopy(
-                                              categoriesCopy.map(
-                                                (category, index) =>
-                                                  index === idx
-                                                    ? {
-                                                        ...category,
-                                                        subCategories:
-                                                          category.subCategories.map(
-                                                            (
-                                                              subCategory2,
-                                                              indexSubCategory2
-                                                            ) =>
-                                                              indexSubCategory2 ===
-                                                              idxSub
-                                                                ? {
-                                                                    ...subCategory2,
-                                                                    types:
-                                                                      subCategory2.types.map(
-                                                                        (
-                                                                          type2,
-                                                                          idxType2
-                                                                        ) =>
-                                                                          idxType2 ===
-                                                                          idxType
-                                                                            ? {
-                                                                                ...type2,
-                                                                                expandedAddProduct:
-                                                                                  !type2.expandedAddProduct,
-                                                                              }
-                                                                            : type2
-                                                                      ),
-                                                                  }
-                                                                : subCategory2
-                                                          ),
-                                                      }
-                                                    : category
-                                              )
-                                            );
+                                            justifyContent: "flex-start",
                                           }}
                                         >
-                                          <Typography>
-                                            Προσθήκη προϊόντος στον τύπο{" "}
-                                            {`"${type.name}"`}
-                                          </Typography>
-                                          <IconButton>
-                                            <ExpandMore />
-                                          </IconButton>
-                                        </div>
-                                        <Collapse
-                                          in={type?.expandedAddProduct}
-                                          unmountOnExit
-                                          sx={{
-                                            padding: "10px",
-                                            // borderRadius: "10px",
-                                            // boxShadow: 5,
-                                            backgroundColor: "#C8D3D6",
-                                          }}
-                                        >
-                                          <hr
-                                            style={{
-                                              opacity: 0.2,
-                                              marginInline: "auto",
-                                              marginTop: "0",
-                                            }}
-                                          ></hr>
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "flex-start",
+                                              // backgroundColor: "red",
+                                              width: "fit-content",
                                             }}
                                           >
                                             <Box
                                               sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
                                                 // backgroundColor: "red",
-                                                width: "fit-content",
+                                                // minWidth: "50%",
                                               }}
                                             >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Εικόνες
+                                              </Typography>
                                               <Box
                                                 sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
+                                                  maxWidth: "234px",
                                                 }}
                                               >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Εικόνες
-                                                </Typography>
-                                                <Box
-                                                  sx={{
-                                                    maxWidth: "234px",
+                                                <FileBase
+                                                  multiple={false}
+                                                  onDone={(data) => {
+                                                    console.log(data);
+                                                    if (
+                                                      data.type.substring(
+                                                        0,
+                                                        data.type.indexOf("/")
+                                                      ) !== "image"
+                                                    ) {
+                                                      console.log("INVALID");
+                                                      return;
+                                                    }
+                                                    setCategoriesCopy(
+                                                      categoriesCopy.map(
+                                                        (category, index) =>
+                                                          index === idx
+                                                            ? {
+                                                                ...category,
+                                                                subCategories:
+                                                                  category.subCategories.map(
+                                                                    (
+                                                                      subCategory2,
+                                                                      indexSubCategory2
+                                                                    ) =>
+                                                                      indexSubCategory2 ===
+                                                                      idxSub
+                                                                        ? {
+                                                                            ...subCategory2,
+                                                                            types:
+                                                                              subCategory2.types.map(
+                                                                                (
+                                                                                  type2,
+                                                                                  idxType2
+                                                                                ) =>
+                                                                                  idxType2 ===
+                                                                                  idxType
+                                                                                    ? {
+                                                                                        ...type2,
+                                                                                        productToAddImages:
+                                                                                          !type2.productToAddImages
+                                                                                            ? [
+                                                                                                {
+                                                                                                  name: data.name,
+                                                                                                  data: data.base64,
+                                                                                                },
+                                                                                              ]
+                                                                                            : [
+                                                                                                ...type2.productToAddImages,
+                                                                                                {
+                                                                                                  name: data.name,
+                                                                                                  data: data.base64,
+                                                                                                },
+                                                                                              ],
+                                                                                      }
+                                                                                    : type2
+                                                                              ),
+                                                                          }
+                                                                        : subCategory2
+                                                                  ),
+                                                              }
+                                                            : category
+                                                      )
+                                                    );
                                                   }}
-                                                >
-                                                  <FileBase
-                                                    multiple={false}
-                                                    onDone={(data) => {
-                                                      console.log(data);
-                                                      if (
-                                                        data.type.substring(
-                                                          0,
-                                                          data.type.indexOf("/")
-                                                        ) !== "image"
-                                                      ) {
-                                                        console.log("INVALID");
-                                                        return;
-                                                      }
-                                                      setCategoriesCopy(
-                                                        categoriesCopy.map(
-                                                          (category, index) =>
-                                                            index === idx
-                                                              ? {
-                                                                  ...category,
-                                                                  subCategories:
-                                                                    category.subCategories.map(
-                                                                      (
-                                                                        subCategory2,
-                                                                        indexSubCategory2
-                                                                      ) =>
-                                                                        indexSubCategory2 ===
-                                                                        idxSub
-                                                                          ? {
-                                                                              ...subCategory2,
-                                                                              types:
-                                                                                subCategory2.types.map(
-                                                                                  (
-                                                                                    type2,
-                                                                                    idxType2
-                                                                                  ) =>
-                                                                                    idxType2 ===
-                                                                                    idxType
-                                                                                      ? {
-                                                                                          ...type2,
-                                                                                          productToAddImages:
-                                                                                            !type2.productToAddImages
-                                                                                              ? [
-                                                                                                  {
-                                                                                                    name: data.name,
-                                                                                                    data: data.base64,
-                                                                                                  },
-                                                                                                ]
-                                                                                              : [
-                                                                                                  ...type2.productToAddImages,
-                                                                                                  {
-                                                                                                    name: data.name,
-                                                                                                    data: data.base64,
-                                                                                                  },
-                                                                                                ],
-                                                                                        }
-                                                                                      : type2
-                                                                                ),
-                                                                            }
-                                                                          : subCategory2
-                                                                    ),
-                                                                }
-                                                              : category
-                                                        )
-                                                      );
-                                                    }}
-                                                  />
-                                                  {type?.productToAddImages?.map(
-                                                    (image, idxImage) => (
-                                                      <Box
-                                                        key={idxImage}
-                                                        sx={{
+                                                />
+                                                {type?.productToAddImages?.map(
+                                                  (image, idxImage) => (
+                                                    <Box
+                                                      key={idxImage}
+                                                      sx={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        marginTop: "5px",
+                                                      }}
+                                                    >
+                                                      <Typography>
+                                                        {image.name}
+                                                      </Typography>
+                                                      <button
+                                                        style={{
+                                                          backgroundColor:
+                                                            "red",
+                                                          borderRadius: "50%",
+                                                          border: "none",
+                                                          color: "white",
+                                                          aspectRatio: 1,
+                                                          height: "1.5rem",
                                                           display: "flex",
                                                           alignItems: "center",
-                                                          marginTop: "5px",
+                                                          justifyContent:
+                                                            "center",
+                                                          marginLeft: "10px",
+                                                        }}
+                                                        onClick={() => {
+                                                          setCategoriesCopy(
+                                                            categoriesCopy.map(
+                                                              (
+                                                                category,
+                                                                index
+                                                              ) =>
+                                                                index === idx
+                                                                  ? {
+                                                                      ...category,
+                                                                      subCategories:
+                                                                        category.subCategories.map(
+                                                                          (
+                                                                            subCategory2,
+                                                                            indexSubCategory2
+                                                                          ) =>
+                                                                            indexSubCategory2 ===
+                                                                            idxSub
+                                                                              ? {
+                                                                                  ...subCategory2,
+                                                                                  types:
+                                                                                    subCategory2.types.map(
+                                                                                      (
+                                                                                        type2,
+                                                                                        idxType2
+                                                                                      ) =>
+                                                                                        idxType2 ===
+                                                                                        idxType
+                                                                                          ? {
+                                                                                              ...type2,
+                                                                                              productToAddImages:
+                                                                                                type2.productToAddImages.filter(
+                                                                                                  (
+                                                                                                    image2,
+                                                                                                    idxImage2
+                                                                                                  ) =>
+                                                                                                    idxImage !==
+                                                                                                    idxImage2
+                                                                                                ),
+                                                                                            }
+                                                                                          : type2
+                                                                                    ),
+                                                                                }
+                                                                              : subCategory2
+                                                                        ),
+                                                                    }
+                                                                  : category
+                                                            )
+                                                          );
                                                         }}
                                                       >
-                                                        <Typography>
-                                                          {image.name}
-                                                        </Typography>
-                                                        <button
-                                                          style={{
-                                                            backgroundColor:
-                                                              "red",
-                                                            borderRadius: "50%",
-                                                            border: "none",
-                                                            color: "white",
-                                                            aspectRatio: 1,
-                                                            height: "1.5rem",
-                                                            display: "flex",
-                                                            alignItems:
-                                                              "center",
-                                                            justifyContent:
-                                                              "center",
-                                                            marginLeft: "10px",
+                                                        <Delete
+                                                          sx={{
+                                                            height: "20px",
                                                           }}
-                                                          onClick={() => {
-                                                            setCategoriesCopy(
-                                                              categoriesCopy.map(
-                                                                (
-                                                                  category,
-                                                                  index
-                                                                ) =>
-                                                                  index === idx
-                                                                    ? {
-                                                                        ...category,
-                                                                        subCategories:
-                                                                          category.subCategories.map(
-                                                                            (
-                                                                              subCategory2,
-                                                                              indexSubCategory2
-                                                                            ) =>
-                                                                              indexSubCategory2 ===
-                                                                              idxSub
-                                                                                ? {
-                                                                                    ...subCategory2,
-                                                                                    types:
-                                                                                      subCategory2.types.map(
-                                                                                        (
-                                                                                          type2,
-                                                                                          idxType2
-                                                                                        ) =>
-                                                                                          idxType2 ===
-                                                                                          idxType
-                                                                                            ? {
-                                                                                                ...type2,
-                                                                                                productToAddImages:
-                                                                                                  type2.productToAddImages.filter(
-                                                                                                    (
-                                                                                                      image2,
-                                                                                                      idxImage2
-                                                                                                    ) =>
-                                                                                                      idxImage !==
-                                                                                                      idxImage2
-                                                                                                  ),
-                                                                                              }
-                                                                                            : type2
-                                                                                      ),
-                                                                                  }
-                                                                                : subCategory2
-                                                                          ),
-                                                                      }
-                                                                    : category
-                                                              )
-                                                            );
-                                                          }}
-                                                        >
-                                                          <Delete
-                                                            sx={{
-                                                              height: "20px",
-                                                            }}
-                                                          />
-                                                        </button>
-                                                      </Box>
-                                                    )
-                                                  )}
-                                                </Box>
+                                                        />
+                                                      </button>
+                                                    </Box>
+                                                  )
+                                                )}
                                               </Box>
-                                              <Box
-                                                sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Κωδικός
-                                                </Typography>
-                                                <TextField
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "4px",
-                                                  }}
-                                                  onChange={(e) => {
-                                                    setCategoriesCopy(
-                                                      categoriesCopy.map(
-                                                        (category, index) =>
-                                                          index === idx
-                                                            ? {
-                                                                ...category,
-                                                                subCategories:
-                                                                  category.subCategories.map(
-                                                                    (
-                                                                      subCategory2,
-                                                                      indexSubCategory2
-                                                                    ) =>
-                                                                      indexSubCategory2 ===
-                                                                      idxSub
-                                                                        ? {
-                                                                            ...subCategory2,
-                                                                            types:
-                                                                              subCategory2.types.map(
-                                                                                (
-                                                                                  type2,
-                                                                                  idxType2
-                                                                                ) =>
-                                                                                  idxType2 ===
-                                                                                  idxType
-                                                                                    ? {
-                                                                                        ...type2,
-                                                                                        productToAddCode:
-                                                                                          e
-                                                                                            .target
-                                                                                            .value,
-                                                                                      }
-                                                                                    : type2
-                                                                              ),
-                                                                          }
-                                                                        : subCategory2
-                                                                  ),
-                                                              }
-                                                            : category
-                                                      )
-                                                    );
-                                                    console.log(type);
-                                                  }}
-                                                ></TextField>
-                                              </Box>
-                                              <Box
-                                                sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Όνομα
-                                                </Typography>
-                                                <TextField
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "4px",
-                                                  }}
-                                                  onChange={(e) => {
-                                                    setCategoriesCopy(
-                                                      categoriesCopy.map(
-                                                        (category, index) =>
-                                                          index === idx
-                                                            ? {
-                                                                ...category,
-                                                                subCategories:
-                                                                  category.subCategories.map(
-                                                                    (
-                                                                      subCategory2,
-                                                                      indexSubCategory2
-                                                                    ) =>
-                                                                      indexSubCategory2 ===
-                                                                      idxSub
-                                                                        ? {
-                                                                            ...subCategory2,
-                                                                            types:
-                                                                              subCategory2.types.map(
-                                                                                (
-                                                                                  type2,
-                                                                                  idxType2
-                                                                                ) =>
-                                                                                  idxType2 ===
-                                                                                  idxType
-                                                                                    ? {
-                                                                                        ...type2,
-                                                                                        productToAddName:
-                                                                                          e
-                                                                                            .target
-                                                                                            .value,
-                                                                                      }
-                                                                                    : type2
-                                                                              ),
-                                                                          }
-                                                                        : subCategory2
-                                                                  ),
-                                                              }
-                                                            : category
-                                                      )
-                                                    );
-                                                    console.log(type);
-                                                  }}
-                                                ></TextField>
-                                              </Box>
-                                              <Box
-                                                sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Τιμή
-                                                </Typography>
-                                                <TextField
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "4px",
-                                                    // border: ,
-                                                  }}
-                                                  type="number"
-                                                  onChange={(e) => {
-                                                    setCategoriesCopy(
-                                                      categoriesCopy.map(
-                                                        (category, index) =>
-                                                          index === idx
-                                                            ? {
-                                                                ...category,
-                                                                subCategories:
-                                                                  category.subCategories.map(
-                                                                    (
-                                                                      subCategory2,
-                                                                      indexSubCategory2
-                                                                    ) =>
-                                                                      indexSubCategory2 ===
-                                                                      idxSub
-                                                                        ? {
-                                                                            ...subCategory2,
-                                                                            types:
-                                                                              subCategory2.types.map(
-                                                                                (
-                                                                                  type2,
-                                                                                  idxType2
-                                                                                ) =>
-                                                                                  idxType2 ===
-                                                                                  idxType
-                                                                                    ? {
-                                                                                        ...type2,
-                                                                                        productToAddPrice:
-                                                                                          e
-                                                                                            .target
-                                                                                            .value,
-                                                                                      }
-                                                                                    : type2
-                                                                              ),
-                                                                          }
-                                                                        : subCategory2
-                                                                  ),
-                                                              }
-                                                            : category
-                                                      )
-                                                    );
-                                                    console.log(
-                                                      Number(
-                                                        type.productToAddPrice
-                                                      )
-                                                    );
-                                                    console.log(type);
-                                                  }}
-                                                ></TextField>
-                                              </Box>
-                                              <Box
-                                                sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Τεμάχια
-                                                </Typography>
-                                                <TextField
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "4px",
-                                                  }}
-                                                  type="number"
-                                                  onChange={(e) => {
-                                                    setCategoriesCopy(
-                                                      categoriesCopy.map(
-                                                        (category, index) =>
-                                                          index === idx
-                                                            ? {
-                                                                ...category,
-                                                                subCategories:
-                                                                  category.subCategories.map(
-                                                                    (
-                                                                      subCategory2,
-                                                                      indexSubCategory2
-                                                                    ) =>
-                                                                      indexSubCategory2 ===
-                                                                      idxSub
-                                                                        ? {
-                                                                            ...subCategory2,
-                                                                            types:
-                                                                              subCategory2.types.map(
-                                                                                (
-                                                                                  type2,
-                                                                                  idxType2
-                                                                                ) =>
-                                                                                  idxType2 ===
-                                                                                  idxType
-                                                                                    ? {
-                                                                                        ...type2,
-                                                                                        productToAddInStock:
-                                                                                          e
-                                                                                            .target
-                                                                                            .value,
-                                                                                      }
-                                                                                    : type2
-                                                                              ),
-                                                                          }
-                                                                        : subCategory2
-                                                                  ),
-                                                              }
-                                                            : category
-                                                      )
-                                                    );
-                                                    console.log(type);
-                                                  }}
-                                                ></TextField>
-                                              </Box>
-                                              <Box
-                                                sx={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  justifyContent:
-                                                    "space-between",
-                                                  width: "100%",
-                                                  marginBottom: "10px",
-                                                  // backgroundColor: "red",
-                                                  // minWidth: "50%",
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{ marginRight: "20px" }}
-                                                >
-                                                  Κατασκευαστής
-                                                </Typography>
-                                                <TextField
-                                                  size="small"
-                                                  sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "4px",
-                                                  }}
-                                                  onChange={(e) => {
-                                                    setCategoriesCopy(
-                                                      categoriesCopy.map(
-                                                        (category, index) =>
-                                                          index === idx
-                                                            ? {
-                                                                ...category,
-                                                                subCategories:
-                                                                  category.subCategories.map(
-                                                                    (
-                                                                      subCategory2,
-                                                                      indexSubCategory2
-                                                                    ) =>
-                                                                      indexSubCategory2 ===
-                                                                      idxSub
-                                                                        ? {
-                                                                            ...subCategory2,
-                                                                            types:
-                                                                              subCategory2.types.map(
-                                                                                (
-                                                                                  type2,
-                                                                                  idxType2
-                                                                                ) =>
-                                                                                  idxType2 ===
-                                                                                  idxType
-                                                                                    ? {
-                                                                                        ...type2,
-                                                                                        productToAddManufacturer:
-                                                                                          e
-                                                                                            .target
-                                                                                            .value,
-                                                                                      }
-                                                                                    : type2
-                                                                              ),
-                                                                          }
-                                                                        : subCategory2
-                                                                  ),
-                                                              }
-                                                            : category
-                                                      )
-                                                    );
-                                                    console.log(type);
-                                                  }}
-                                                ></TextField>
-                                              </Box>
-                                              <Button
-                                                type="button"
-                                                variant="contained"
-                                                sx={{ marginTop: "10px" }}
-                                                disabled={
-                                                  !type.productToAddImages ||
-                                                  (type.productToAddImages &&
-                                                    type.productToAddImages
-                                                      .length === 0) ||
-                                                  !type.productToAddCode ||
-                                                  !type.productToAddName ||
-                                                  !type.productToAddPrice ||
-                                                  !type.productToAddInStock ||
-                                                  !type.productToAddManufacturer
-                                                }
-                                                onClick={() => {
-                                                  dispatch(
-                                                    addProduct({
-                                                      images:
-                                                        type.productToAddImages,
-                                                      code: type.productToAddCode,
-                                                      name: type.productToAddName,
-                                                      price:
-                                                        type.productToAddPrice,
-                                                      inStock:
-                                                        type.productToAddInStock,
-                                                      manufacturer:
-                                                        type.productToAddManufacturer,
-                                                      categoryId: category._id,
-                                                      subCategoryId:
-                                                        subCategory._id,
-                                                      typeId: type._id,
-                                                    })
-                                                  );
-                                                }}
-                                              >
-                                                ΠΡΟΣΘΗΚΗ
-                                              </Button>
                                             </Box>
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
+                                                // backgroundColor: "red",
+                                                // minWidth: "50%",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Κωδικός
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                }}
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          types:
+                                                                            subCategory2.types.map(
+                                                                              (
+                                                                                type2,
+                                                                                idxType2
+                                                                              ) =>
+                                                                                idxType2 ===
+                                                                                idxType
+                                                                                  ? {
+                                                                                      ...type2,
+                                                                                      productToAddCode:
+                                                                                        e
+                                                                                          .target
+                                                                                          .value,
+                                                                                    }
+                                                                                  : type2
+                                                                            ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(type);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
+                                                // backgroundColor: "red",
+                                                // minWidth: "50%",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Όνομα
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                }}
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          types:
+                                                                            subCategory2.types.map(
+                                                                              (
+                                                                                type2,
+                                                                                idxType2
+                                                                              ) =>
+                                                                                idxType2 ===
+                                                                                idxType
+                                                                                  ? {
+                                                                                      ...type2,
+                                                                                      productToAddName:
+                                                                                        e
+                                                                                          .target
+                                                                                          .value,
+                                                                                    }
+                                                                                  : type2
+                                                                            ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(type);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
+                                                // backgroundColor: "red",
+                                                // minWidth: "50%",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Τιμή
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                  // border: ,
+                                                }}
+                                                type="number"
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          types:
+                                                                            subCategory2.types.map(
+                                                                              (
+                                                                                type2,
+                                                                                idxType2
+                                                                              ) =>
+                                                                                idxType2 ===
+                                                                                idxType
+                                                                                  ? {
+                                                                                      ...type2,
+                                                                                      productToAddPrice:
+                                                                                        e
+                                                                                          .target
+                                                                                          .value,
+                                                                                    }
+                                                                                  : type2
+                                                                            ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(
+                                                    Number(
+                                                      type.productToAddPrice
+                                                    )
+                                                  );
+                                                  console.log(type);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
+                                                // backgroundColor: "red",
+                                                // minWidth: "50%",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Τεμάχια
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                }}
+                                                type="number"
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          types:
+                                                                            subCategory2.types.map(
+                                                                              (
+                                                                                type2,
+                                                                                idxType2
+                                                                              ) =>
+                                                                                idxType2 ===
+                                                                                idxType
+                                                                                  ? {
+                                                                                      ...type2,
+                                                                                      productToAddInStock:
+                                                                                        e
+                                                                                          .target
+                                                                                          .value,
+                                                                                    }
+                                                                                  : type2
+                                                                            ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(type);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                width: "100%",
+                                                marginBottom: "10px",
+                                                // backgroundColor: "red",
+                                                // minWidth: "50%",
+                                              }}
+                                            >
+                                              <Typography
+                                                sx={{ marginRight: "20px" }}
+                                              >
+                                                Κατασκευαστής
+                                              </Typography>
+                                              <TextField
+                                                size="small"
+                                                sx={{
+                                                  backgroundColor: "white",
+                                                  borderRadius: "4px",
+                                                }}
+                                                onChange={(e) => {
+                                                  setCategoriesCopy(
+                                                    categoriesCopy.map(
+                                                      (category, index) =>
+                                                        index === idx
+                                                          ? {
+                                                              ...category,
+                                                              subCategories:
+                                                                category.subCategories.map(
+                                                                  (
+                                                                    subCategory2,
+                                                                    indexSubCategory2
+                                                                  ) =>
+                                                                    indexSubCategory2 ===
+                                                                    idxSub
+                                                                      ? {
+                                                                          ...subCategory2,
+                                                                          types:
+                                                                            subCategory2.types.map(
+                                                                              (
+                                                                                type2,
+                                                                                idxType2
+                                                                              ) =>
+                                                                                idxType2 ===
+                                                                                idxType
+                                                                                  ? {
+                                                                                      ...type2,
+                                                                                      productToAddManufacturer:
+                                                                                        e
+                                                                                          .target
+                                                                                          .value,
+                                                                                    }
+                                                                                  : type2
+                                                                            ),
+                                                                        }
+                                                                      : subCategory2
+                                                                ),
+                                                            }
+                                                          : category
+                                                    )
+                                                  );
+                                                  console.log(type);
+                                                }}
+                                              ></TextField>
+                                            </Box>
+                                            <Button
+                                              type="button"
+                                              variant="contained"
+                                              sx={{ marginTop: "10px" }}
+                                              disabled={
+                                                !type.productToAddImages ||
+                                                (type.productToAddImages &&
+                                                  type.productToAddImages
+                                                    .length === 0) ||
+                                                !type.productToAddCode ||
+                                                !type.productToAddName ||
+                                                !type.productToAddPrice ||
+                                                !type.productToAddInStock ||
+                                                !type.productToAddManufacturer
+                                              }
+                                              onClick={() => {
+                                                dispatch(
+                                                  addProduct({
+                                                    images:
+                                                      type.productToAddImages,
+                                                    code: type.productToAddCode,
+                                                    name: type.productToAddName,
+                                                    price:
+                                                      type.productToAddPrice,
+                                                    inStock:
+                                                      type.productToAddInStock,
+                                                    manufacturer:
+                                                      type.productToAddManufacturer,
+                                                    categoryId: category._id,
+                                                    subCategoryId:
+                                                      subCategory._id,
+                                                    typeId: type._id,
+                                                  })
+                                                );
+                                              }}
+                                            >
+                                              ΠΡΟΣΘΗΚΗ
+                                            </Button>
                                           </Box>
-                                        </Collapse>
-                                      </Box>
+                                        </Box>
+                                      </Collapse>
                                     </Box>
-                                    <Box
-                                      sx={{
-                                        padding: "0 15px",
-                                        paddingBottom: "10px",
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      {products?.map(
-                                        (product, idxProduct) =>
-                                          product.typeId === type._id && (
-                                            <AdminProduct
-                                              key={idxProduct}
-                                              product={product}
-                                            />
-                                          )
-                                      )}
-                                    </Box>
-                                  </Collapse>
-                                </Box>
-                              ))}
+                                  </Box>
+                                  <Box
+                                    sx={{
+                                      padding: "0 15px",
+                                      paddingBottom: "10px",
+                                      display: "flex",
+                                      flexWrap: "wrap",
+                                      justifyContent: "space-between",
+                                    }}
+                                  >
+                                    {products?.map(
+                                      (product, idxProduct) =>
+                                        product.typeId === type._id && (
+                                          <AdminProduct
+                                            key={idxProduct}
+                                            product={product}
+                                          />
+                                        )
+                                    )}
+                                  </Box>
+                                </Collapse>
+                              </Box>
+                            ))}
                             {subCategory?.subs &&
                               subCategory.subs.map((sub, idxSub2) => (
                                 <Box key={idxSub2}>
@@ -2016,7 +2007,77 @@ const Admin = () => {
                                                 alignItems: "center",
                                                 justifyContent: "space-between",
                                               }}
-                                              onClick={() => {}}
+                                              onClick={() => {
+                                                if (
+                                                  !typeInner.firstTimeExpanded
+                                                ) {
+                                                  dispatch(
+                                                    fetchProducts({
+                                                      ids: {
+                                                        categoryId:
+                                                          category._id,
+                                                        subCategoryId:
+                                                          subCategory._id,
+                                                        subId: sub._id,
+                                                        innerTypeId:
+                                                          typeInner._id,
+                                                      },
+                                                      type: "innerType",
+                                                    })
+                                                  );
+                                                }
+                                                setCategoriesCopy(
+                                                  categoriesCopy.map(
+                                                    (category, index) =>
+                                                      index === idx
+                                                        ? {
+                                                            ...category,
+                                                            subCategories:
+                                                              category.subCategories.map(
+                                                                (
+                                                                  subCategory2,
+                                                                  indexSubCategory2
+                                                                ) =>
+                                                                  indexSubCategory2 ===
+                                                                  idxSub
+                                                                    ? {
+                                                                        ...subCategory2,
+                                                                        subs: subCategory2.subs.map(
+                                                                          (
+                                                                            sub2,
+                                                                            idxSub3
+                                                                          ) =>
+                                                                            idxSub2 ===
+                                                                            idxSub3
+                                                                              ? {
+                                                                                  ...sub2,
+                                                                                  types:
+                                                                                    sub2.types.map(
+                                                                                      (
+                                                                                        innerType2,
+                                                                                        idxInnerType2
+                                                                                      ) =>
+                                                                                        idxInnerType2 ===
+                                                                                        idxTypeInner
+                                                                                          ? {
+                                                                                              ...innerType2,
+                                                                                              expanded:
+                                                                                                !innerType2.expanded,
+                                                                                              firstTimeExpanded: true,
+                                                                                            }
+                                                                                          : innerType2
+                                                                                    ),
+                                                                                }
+                                                                              : sub2
+                                                                        ),
+                                                                      }
+                                                                    : subCategory2
+                                                              ),
+                                                          }
+                                                        : category
+                                                  )
+                                                );
+                                              }}
                                             >
                                               {typeInner.name}
                                               <div
@@ -2056,6 +2117,868 @@ const Admin = () => {
                                               </div>
                                             </div>
                                           </Box>
+                                          <Collapse
+                                            in={typeInner.expanded}
+                                            unmountOnExit
+                                            sx={{
+                                              backgroundColor:
+                                                "rgb(160, 160, 160)",
+                                            }}
+                                          >
+                                            <Box
+                                              sx={{
+                                                width: "100%",
+                                                padding: "20px",
+                                              }}
+                                            >
+                                              <Box sx={{ boxShadow: 5 }}>
+                                                <div
+                                                  style={{
+                                                    padding: "10px",
+                                                    // borderRadius: "10px",
+                                                    // boxShadow: 5,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent:
+                                                      "space-between",
+                                                    backgroundColor: "#C8D3D6",
+                                                    zIndex: 100,
+                                                    cursor: "pointer",
+                                                  }}
+                                                  onClick={() => {
+                                                    setCategoriesCopy(
+                                                      categoriesCopy.map(
+                                                        (category, index) =>
+                                                          index === idx
+                                                            ? {
+                                                                ...category,
+                                                                subCategories:
+                                                                  category.subCategories.map(
+                                                                    (
+                                                                      subCategory2,
+                                                                      indexSubCategory2
+                                                                    ) =>
+                                                                      indexSubCategory2 ===
+                                                                      idxSub
+                                                                        ? {
+                                                                            ...subCategory2,
+                                                                            subs: subCategory2.subs.map(
+                                                                              (
+                                                                                sub2,
+                                                                                idxSub3
+                                                                              ) =>
+                                                                                idxSub2 ===
+                                                                                idxSub3
+                                                                                  ? {
+                                                                                      ...sub2,
+                                                                                      types:
+                                                                                        sub2.types.map(
+                                                                                          (
+                                                                                            innerType2,
+                                                                                            idxInnerType2
+                                                                                          ) =>
+                                                                                            idxInnerType2 ===
+                                                                                            idxTypeInner
+                                                                                              ? {
+                                                                                                  ...innerType2,
+                                                                                                  expandedAddProduct:
+                                                                                                    !innerType2.expandedAddProduct,
+                                                                                                }
+                                                                                              : innerType2
+                                                                                        ),
+                                                                                    }
+                                                                                  : sub2
+                                                                            ),
+                                                                          }
+                                                                        : subCategory2
+                                                                  ),
+                                                              }
+                                                            : category
+                                                      )
+                                                    );
+                                                  }}
+                                                >
+                                                  <Typography>
+                                                    Προσθήκη προϊόντος στον τύπο{" "}
+                                                    {`"${typeInner.name}"`}
+                                                  </Typography>
+                                                  <IconButton>
+                                                    <ExpandMore />
+                                                  </IconButton>
+                                                </div>
+                                                <Collapse
+                                                  in={
+                                                    typeInner?.expandedAddProduct
+                                                  }
+                                                  unmountOnExit
+                                                  sx={{
+                                                    padding: "10px",
+                                                    // borderRadius: "10px",
+                                                    // boxShadow: 5,
+                                                    backgroundColor: "#C8D3D6",
+                                                  }}
+                                                >
+                                                  <hr
+                                                    style={{
+                                                      opacity: 0.2,
+                                                      marginInline: "auto",
+                                                      marginTop: "0",
+                                                    }}
+                                                  ></hr>
+                                                  <Box
+                                                    sx={{
+                                                      display: "flex",
+                                                      alignItems: "center",
+                                                      justifyContent:
+                                                        "flex-start",
+                                                    }}
+                                                  >
+                                                    <Box
+                                                      sx={{
+                                                        // backgroundColor: "red",
+                                                        width: "fit-content",
+                                                      }}
+                                                    >
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Εικόνες
+                                                        </Typography>
+                                                        <Box
+                                                          sx={{
+                                                            maxWidth: "234px",
+                                                          }}
+                                                        >
+                                                          <FileBase
+                                                            multiple={false}
+                                                            onDone={(data) => {
+                                                              console.log(data);
+                                                              if (
+                                                                data.type.substring(
+                                                                  0,
+                                                                  data.type.indexOf(
+                                                                    "/"
+                                                                  )
+                                                                ) !== "image"
+                                                              ) {
+                                                                console.log(
+                                                                  "INVALID"
+                                                                );
+                                                                return;
+                                                              }
+                                                              setCategoriesCopy(
+                                                                categoriesCopy.map(
+                                                                  (
+                                                                    category,
+                                                                    index
+                                                                  ) =>
+                                                                    index ===
+                                                                    idx
+                                                                      ? {
+                                                                          ...category,
+                                                                          subCategories:
+                                                                            category.subCategories.map(
+                                                                              (
+                                                                                subCategory2,
+                                                                                indexSubCategory2
+                                                                              ) =>
+                                                                                indexSubCategory2 ===
+                                                                                idxSub
+                                                                                  ? {
+                                                                                      ...subCategory2,
+                                                                                      subs: subCategory2.subs.map(
+                                                                                        (
+                                                                                          sub2,
+                                                                                          idxSub3
+                                                                                        ) =>
+                                                                                          idxSub2 ===
+                                                                                          idxSub3
+                                                                                            ? {
+                                                                                                ...sub2,
+                                                                                                types:
+                                                                                                  sub2.types.map(
+                                                                                                    (
+                                                                                                      innerType2,
+                                                                                                      idxInnerType2
+                                                                                                    ) =>
+                                                                                                      idxInnerType2 ===
+                                                                                                      idxTypeInner
+                                                                                                        ? {
+                                                                                                            ...innerType2,
+                                                                                                            productToAddImages:
+                                                                                                              !innerType2.productToAddImages
+                                                                                                                ? [
+                                                                                                                    {
+                                                                                                                      name: data.name,
+                                                                                                                      data: data.base64,
+                                                                                                                    },
+                                                                                                                  ]
+                                                                                                                : [
+                                                                                                                    ...innerType2.productToAddImages,
+                                                                                                                    {
+                                                                                                                      name: data.name,
+                                                                                                                      data: data.base64,
+                                                                                                                    },
+                                                                                                                  ],
+                                                                                                          }
+                                                                                                        : innerType2
+                                                                                                  ),
+                                                                                              }
+                                                                                            : sub2
+                                                                                      ),
+                                                                                    }
+                                                                                  : subCategory2
+                                                                            ),
+                                                                        }
+                                                                      : category
+                                                                )
+                                                              );
+                                                            }}
+                                                          />
+                                                          {typeInner?.productToAddImages?.map(
+                                                            (
+                                                              image,
+                                                              idxImage
+                                                            ) => (
+                                                              <Box
+                                                                key={idxImage}
+                                                                sx={{
+                                                                  display:
+                                                                    "flex",
+                                                                  alignItems:
+                                                                    "center",
+                                                                  marginTop:
+                                                                    "5px",
+                                                                }}
+                                                              >
+                                                                <Typography>
+                                                                  {image.name}
+                                                                </Typography>
+                                                                <button
+                                                                  style={{
+                                                                    backgroundColor:
+                                                                      "red",
+                                                                    borderRadius:
+                                                                      "50%",
+                                                                    border:
+                                                                      "none",
+                                                                    color:
+                                                                      "white",
+                                                                    aspectRatio: 1,
+                                                                    height:
+                                                                      "1.5rem",
+                                                                    display:
+                                                                      "flex",
+                                                                    alignItems:
+                                                                      "center",
+                                                                    justifyContent:
+                                                                      "center",
+                                                                    marginLeft:
+                                                                      "10px",
+                                                                  }}
+                                                                  onClick={() => {
+                                                                    setCategoriesCopy(
+                                                                      categoriesCopy.map(
+                                                                        (
+                                                                          category,
+                                                                          index
+                                                                        ) =>
+                                                                          index ===
+                                                                          idx
+                                                                            ? {
+                                                                                ...category,
+                                                                                subCategories:
+                                                                                  category.subCategories.map(
+                                                                                    (
+                                                                                      subCategory2,
+                                                                                      indexSubCategory2
+                                                                                    ) =>
+                                                                                      indexSubCategory2 ===
+                                                                                      idxSub
+                                                                                        ? {
+                                                                                            ...subCategory2,
+                                                                                            subs: subCategory2.subs.map(
+                                                                                              (
+                                                                                                sub2,
+                                                                                                idxSub3
+                                                                                              ) =>
+                                                                                                idxSub2 ===
+                                                                                                idxSub3
+                                                                                                  ? {
+                                                                                                      ...sub2,
+                                                                                                      types:
+                                                                                                        sub2.types.map(
+                                                                                                          (
+                                                                                                            innerType2,
+                                                                                                            idxInnerType2
+                                                                                                          ) =>
+                                                                                                            idxInnerType2 ===
+                                                                                                            idxTypeInner
+                                                                                                              ? {
+                                                                                                                  ...innerType2,
+                                                                                                                  productToAddImages:
+                                                                                                                    innerType2.productToAddImages.filter(
+                                                                                                                      (
+                                                                                                                        image2,
+                                                                                                                        idxImage2
+                                                                                                                      ) =>
+                                                                                                                        idxImage !==
+                                                                                                                        idxImage2
+                                                                                                                    ),
+                                                                                                                }
+                                                                                                              : innerType2
+                                                                                                        ),
+                                                                                                    }
+                                                                                                  : sub2
+                                                                                            ),
+                                                                                          }
+                                                                                        : subCategory2
+                                                                                  ),
+                                                                              }
+                                                                            : category
+                                                                      )
+                                                                    );
+                                                                  }}
+                                                                >
+                                                                  <Delete
+                                                                    sx={{
+                                                                      height:
+                                                                        "20px",
+                                                                    }}
+                                                                  />
+                                                                </button>
+                                                              </Box>
+                                                            )
+                                                          )}
+                                                        </Box>
+                                                      </Box>
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Κωδικός
+                                                        </Typography>
+                                                        <TextField
+                                                          size="small"
+                                                          sx={{
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius: "4px",
+                                                          }}
+                                                          onChange={(e) => {
+                                                            setCategoriesCopy(
+                                                              categoriesCopy.map(
+                                                                (
+                                                                  category,
+                                                                  index
+                                                                ) =>
+                                                                  index === idx
+                                                                    ? {
+                                                                        ...category,
+                                                                        subCategories:
+                                                                          category.subCategories.map(
+                                                                            (
+                                                                              subCategory2,
+                                                                              indexSubCategory2
+                                                                            ) =>
+                                                                              indexSubCategory2 ===
+                                                                              idxSub
+                                                                                ? {
+                                                                                    ...subCategory2,
+                                                                                    subs: subCategory2.subs.map(
+                                                                                      (
+                                                                                        sub2,
+                                                                                        idxSub3
+                                                                                      ) =>
+                                                                                        idxSub2 ===
+                                                                                        idxSub3
+                                                                                          ? {
+                                                                                              ...sub2,
+                                                                                              types:
+                                                                                                sub2.types.map(
+                                                                                                  (
+                                                                                                    innerType2,
+                                                                                                    idxInnerType2
+                                                                                                  ) =>
+                                                                                                    idxInnerType2 ===
+                                                                                                    idxTypeInner
+                                                                                                      ? {
+                                                                                                          ...innerType2,
+                                                                                                          productToAddCode:
+                                                                                                            e
+                                                                                                              .target
+                                                                                                              .value,
+                                                                                                        }
+                                                                                                      : innerType2
+                                                                                                ),
+                                                                                            }
+                                                                                          : sub2
+                                                                                    ),
+                                                                                  }
+                                                                                : subCategory2
+                                                                          ),
+                                                                      }
+                                                                    : category
+                                                              )
+                                                            );
+                                                            console.log(
+                                                              typeInner
+                                                            );
+                                                          }}
+                                                        ></TextField>
+                                                      </Box>
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Όνομα
+                                                        </Typography>
+                                                        <TextField
+                                                          size="small"
+                                                          sx={{
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius: "4px",
+                                                          }}
+                                                          onChange={(e) => {
+                                                            setCategoriesCopy(
+                                                              categoriesCopy.map(
+                                                                (
+                                                                  category,
+                                                                  index
+                                                                ) =>
+                                                                  index === idx
+                                                                    ? {
+                                                                        ...category,
+                                                                        subCategories:
+                                                                          category.subCategories.map(
+                                                                            (
+                                                                              subCategory2,
+                                                                              indexSubCategory2
+                                                                            ) =>
+                                                                              indexSubCategory2 ===
+                                                                              idxSub
+                                                                                ? {
+                                                                                    ...subCategory2,
+                                                                                    subs: subCategory2.subs.map(
+                                                                                      (
+                                                                                        sub2,
+                                                                                        idxSub3
+                                                                                      ) =>
+                                                                                        idxSub2 ===
+                                                                                        idxSub3
+                                                                                          ? {
+                                                                                              ...sub2,
+                                                                                              types:
+                                                                                                sub2.types.map(
+                                                                                                  (
+                                                                                                    innerType2,
+                                                                                                    idxInnerType2
+                                                                                                  ) =>
+                                                                                                    idxInnerType2 ===
+                                                                                                    idxTypeInner
+                                                                                                      ? {
+                                                                                                          ...innerType2,
+                                                                                                          productToAddName:
+                                                                                                            e
+                                                                                                              .target
+                                                                                                              .value,
+                                                                                                        }
+                                                                                                      : innerType2
+                                                                                                ),
+                                                                                            }
+                                                                                          : sub2
+                                                                                    ),
+                                                                                  }
+                                                                                : subCategory2
+                                                                          ),
+                                                                      }
+                                                                    : category
+                                                              )
+                                                            );
+                                                            console.log(
+                                                              typeInner
+                                                            );
+                                                          }}
+                                                        ></TextField>
+                                                      </Box>
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Τιμή
+                                                        </Typography>
+                                                        <TextField
+                                                          size="small"
+                                                          sx={{
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius: "4px",
+                                                            // border: ,
+                                                          }}
+                                                          type="number"
+                                                          onChange={(e) => {
+                                                            setCategoriesCopy(
+                                                              categoriesCopy.map(
+                                                                (
+                                                                  category,
+                                                                  index
+                                                                ) =>
+                                                                  index === idx
+                                                                    ? {
+                                                                        ...category,
+                                                                        subCategories:
+                                                                          category.subCategories.map(
+                                                                            (
+                                                                              subCategory2,
+                                                                              indexSubCategory2
+                                                                            ) =>
+                                                                              indexSubCategory2 ===
+                                                                              idxSub
+                                                                                ? {
+                                                                                    ...subCategory2,
+                                                                                    subs: subCategory2.subs.map(
+                                                                                      (
+                                                                                        sub2,
+                                                                                        idxSub3
+                                                                                      ) =>
+                                                                                        idxSub2 ===
+                                                                                        idxSub3
+                                                                                          ? {
+                                                                                              ...sub2,
+                                                                                              types:
+                                                                                                sub2.types.map(
+                                                                                                  (
+                                                                                                    innerType2,
+                                                                                                    idxInnerType2
+                                                                                                  ) =>
+                                                                                                    idxInnerType2 ===
+                                                                                                    idxTypeInner
+                                                                                                      ? {
+                                                                                                          ...innerType2,
+                                                                                                          productToAddPrice:
+                                                                                                            e
+                                                                                                              .target
+                                                                                                              .value,
+                                                                                                        }
+                                                                                                      : innerType2
+                                                                                                ),
+                                                                                            }
+                                                                                          : sub2
+                                                                                    ),
+                                                                                  }
+                                                                                : subCategory2
+                                                                          ),
+                                                                      }
+                                                                    : category
+                                                              )
+                                                            );
+                                                            console.log(
+                                                              typeInner
+                                                            );
+                                                          }}
+                                                        ></TextField>
+                                                      </Box>
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Τεμάχια
+                                                        </Typography>
+                                                        <TextField
+                                                          size="small"
+                                                          sx={{
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius: "4px",
+                                                          }}
+                                                          type="number"
+                                                          onChange={(e) => {
+                                                            setCategoriesCopy(
+                                                              categoriesCopy.map(
+                                                                (
+                                                                  category,
+                                                                  index
+                                                                ) =>
+                                                                  index === idx
+                                                                    ? {
+                                                                        ...category,
+                                                                        subCategories:
+                                                                          category.subCategories.map(
+                                                                            (
+                                                                              subCategory2,
+                                                                              indexSubCategory2
+                                                                            ) =>
+                                                                              indexSubCategory2 ===
+                                                                              idxSub
+                                                                                ? {
+                                                                                    ...subCategory2,
+                                                                                    subs: subCategory2.subs.map(
+                                                                                      (
+                                                                                        sub2,
+                                                                                        idxSub3
+                                                                                      ) =>
+                                                                                        idxSub2 ===
+                                                                                        idxSub3
+                                                                                          ? {
+                                                                                              ...sub2,
+                                                                                              types:
+                                                                                                sub2.types.map(
+                                                                                                  (
+                                                                                                    innerType2,
+                                                                                                    idxInnerType2
+                                                                                                  ) =>
+                                                                                                    idxInnerType2 ===
+                                                                                                    idxTypeInner
+                                                                                                      ? {
+                                                                                                          ...innerType2,
+                                                                                                          productToAddInStock:
+                                                                                                            e
+                                                                                                              .target
+                                                                                                              .value,
+                                                                                                        }
+                                                                                                      : innerType2
+                                                                                                ),
+                                                                                            }
+                                                                                          : sub2
+                                                                                    ),
+                                                                                  }
+                                                                                : subCategory2
+                                                                          ),
+                                                                      }
+                                                                    : category
+                                                              )
+                                                            );
+                                                            console.log(
+                                                              typeInner
+                                                            );
+                                                          }}
+                                                        ></TextField>
+                                                      </Box>
+                                                      <Box
+                                                        sx={{
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent:
+                                                            "space-between",
+                                                          width: "100%",
+                                                          marginBottom: "10px",
+                                                          // backgroundColor: "red",
+                                                          // minWidth: "50%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          sx={{
+                                                            marginRight: "20px",
+                                                          }}
+                                                        >
+                                                          Κατασκευαστής
+                                                        </Typography>
+                                                        <TextField
+                                                          size="small"
+                                                          sx={{
+                                                            backgroundColor:
+                                                              "white",
+                                                            borderRadius: "4px",
+                                                          }}
+                                                          onChange={(e) => {
+                                                            setCategoriesCopy(
+                                                              categoriesCopy.map(
+                                                                (
+                                                                  category,
+                                                                  index
+                                                                ) =>
+                                                                  index === idx
+                                                                    ? {
+                                                                        ...category,
+                                                                        subCategories:
+                                                                          category.subCategories.map(
+                                                                            (
+                                                                              subCategory2,
+                                                                              indexSubCategory2
+                                                                            ) =>
+                                                                              indexSubCategory2 ===
+                                                                              idxSub
+                                                                                ? {
+                                                                                    ...subCategory2,
+                                                                                    subs: subCategory2.subs.map(
+                                                                                      (
+                                                                                        sub2,
+                                                                                        idxSub3
+                                                                                      ) =>
+                                                                                        idxSub2 ===
+                                                                                        idxSub3
+                                                                                          ? {
+                                                                                              ...sub2,
+                                                                                              types:
+                                                                                                sub2.types.map(
+                                                                                                  (
+                                                                                                    innerType2,
+                                                                                                    idxInnerType2
+                                                                                                  ) =>
+                                                                                                    idxInnerType2 ===
+                                                                                                    idxTypeInner
+                                                                                                      ? {
+                                                                                                          ...innerType2,
+                                                                                                          productToAddManufacturer:
+                                                                                                            e
+                                                                                                              .target
+                                                                                                              .value,
+                                                                                                        }
+                                                                                                      : innerType2
+                                                                                                ),
+                                                                                            }
+                                                                                          : sub2
+                                                                                    ),
+                                                                                  }
+                                                                                : subCategory2
+                                                                          ),
+                                                                      }
+                                                                    : category
+                                                              )
+                                                            );
+                                                            console.log(
+                                                              typeInner
+                                                            );
+                                                          }}
+                                                        ></TextField>
+                                                      </Box>
+                                                      <Button
+                                                        type="button"
+                                                        variant="contained"
+                                                        sx={{
+                                                          marginTop: "10px",
+                                                        }}
+                                                        disabled={
+                                                          !typeInner.productToAddImages ||
+                                                          (typeInner.productToAddImages &&
+                                                            typeInner
+                                                              .productToAddImages
+                                                              .length === 0) ||
+                                                          !typeInner.productToAddCode ||
+                                                          !typeInner.productToAddName ||
+                                                          !typeInner.productToAddPrice ||
+                                                          !typeInner.productToAddInStock ||
+                                                          !typeInner.productToAddManufacturer
+                                                        }
+                                                        onClick={() => {
+                                                          dispatch(
+                                                            addProduct({
+                                                              images:
+                                                                typeInner.productToAddImages,
+                                                              code: typeInner.productToAddCode,
+                                                              name: typeInner.productToAddName,
+                                                              price:
+                                                                typeInner.productToAddPrice,
+                                                              inStock:
+                                                                typeInner.productToAddInStock,
+                                                              manufacturer:
+                                                                typeInner.productToAddManufacturer,
+                                                              categoryId:
+                                                                category._id,
+                                                              subCategoryId:
+                                                                subCategory._id,
+                                                              subId: sub._id,
+                                                              innerTypeId:
+                                                                typeInner._id,
+                                                            })
+                                                          );
+                                                        }}
+                                                      >
+                                                        ΠΡΟΣΘΗΚΗ
+                                                      </Button>
+                                                    </Box>
+                                                  </Box>
+                                                </Collapse>
+                                              </Box>
+                                            </Box>
+                                            <Box
+                                              sx={{
+                                                padding: "0 15px",
+                                                paddingBottom: "10px",
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                justifyContent: "space-between",
+                                              }}
+                                            >
+                                              {products?.map(
+                                                (product, idxProduct) =>
+                                                  product.innerTypeId ===
+                                                    typeInner._id && (
+                                                    <AdminProduct
+                                                      key={idxProduct}
+                                                      product={product}
+                                                    />
+                                                  )
+                                              )}
+                                            </Box>
+                                          </Collapse>
                                         </Box>
                                       )
                                     )}
