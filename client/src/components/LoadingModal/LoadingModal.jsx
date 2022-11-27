@@ -16,6 +16,7 @@ const LoadingModal = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            border: "none",
           }}
         >
           <LoadingGear width="150px" />

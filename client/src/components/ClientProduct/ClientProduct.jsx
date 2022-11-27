@@ -20,15 +20,8 @@ const ClientProduct = ({ product }) => {
         marginBottom: "30px",
       }}
     >
-      {/* <Box
-        sx={{
-          // backgroundColor: "yellow",
-          borderRadius: "10px",
-        }}
-      > */}
       <Box
         sx={{
-          //   backgroundColor: "green",
           height: "100%",
           display: "flex",
           flexDirection: "column",
@@ -64,7 +57,6 @@ const ClientProduct = ({ product }) => {
           </Typography>
         </Box>
       </Box>
-      {/* </Box> */}
     </Card>
   );
 };

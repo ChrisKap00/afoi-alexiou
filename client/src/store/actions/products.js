@@ -151,17 +151,36 @@ export const addSubCategory =
             categoryParam._id === categoryId
               ? {
                   ...categoryParam,
-                  subCategories: [
-                    ...categoryParam.subCategories,
-                    {
-                      name,
-                      types:
-                        item.subCategoryToAddType === "types" ? [] : undefined,
-                      subs:
-                        item.subCategoryToAddType === "subs" ? [] : undefined,
-                      _id: newId,
-                    },
-                  ],
+                  subCategories: !categoryParam.subCategories
+                    ? [
+                        {
+                          name,
+                          types:
+                            item.subCategoryToAddType === "types"
+                              ? []
+                              : undefined,
+                          subs:
+                            item.subCategoryToAddType === "subs"
+                              ? []
+                              : undefined,
+                          _id: newId,
+                        },
+                      ]
+                    : [
+                        ...categoryParam.subCategories,
+                        {
+                          name,
+                          types:
+                            item.subCategoryToAddType === "types"
+                              ? []
+                              : undefined,
+                          subs:
+                            item.subCategoryToAddType === "subs"
+                              ? []
+                              : undefined,
+                          _id: newId,
+                        },
+                      ],
                   subCategoryToAddType: undefined,
                 }
               : categoryParam
@@ -302,7 +321,7 @@ export const fetchClientProducts = (params) => async (dispatch) => {
 };
 
 export const deleteProduct = (id) => async (dispatch) => {
-  dispatch({ type: "START_LOADING_FETCH_CLIENT_PRODUCTS" });
+  dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
     const { data } = await api.deleteProduct(id);
     console.log(data);

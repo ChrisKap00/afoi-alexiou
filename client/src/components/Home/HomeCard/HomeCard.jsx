@@ -1,17 +1,18 @@
 import { Box, Button, Card, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import "./HomeCard.css";
 
-const HomeCard = ({ name, content, to }) => {
+const HomeCard = ({ name, content, id }) => {
+  const dispatch = useDispatch();
   return (
-    <Card
+    <Box
       sx={{
         position: "relative",
         borderRadius: "0",
         width: "100%",
-        height: "100%",
-        height: { xs: "300px", md: "100%" },
+        height: { xs: "300px", md: "445px" },
         aspectRatio: "1",
         // minWidth: "200px",
       }}
@@ -37,7 +38,15 @@ const HomeCard = ({ name, content, to }) => {
           {content}
         </Typography>
         <Link
-          to={`/products/${to}`}
+          onClick={() => {
+            console.log(id);
+            dispatch({ type: "REDIRECT" });
+            dispatch({
+              type: "CHANGE_FILTER",
+              payload: { ids: { categoryId: id }, type: "category-client" },
+            });
+          }}
+          to="/products"
           style={{ textDecoration: "none", color: "white" }}
         >
           <Button
@@ -59,7 +68,7 @@ const HomeCard = ({ name, content, to }) => {
           </Button>
         </Link>
       </Box>
-    </Card>
+    </Box>
   );
 };
 

@@ -427,12 +427,26 @@ const Admin = () => {
                           justifyContent: "space-between",
                         }}
                         onClick={() => {
+                          if (!category.firstTimeExpanded) {
+                            console.log(
+                              `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n}`
+                            );
+                            dispatch(
+                              fetchProducts({
+                                ids: {
+                                  categoryId: category._id,
+                                },
+                                type: "category",
+                              })
+                            );
+                          }
                           setCategoriesCopy(
                             categoriesCopy.map((category, index) =>
                               index === idx
                                 ? {
                                     ...category,
                                     expanded: !category.expanded,
+                                    firstTimeExpanded: true,
                                   }
                                 : category
                             )
@@ -460,7 +474,19 @@ const Admin = () => {
                           padding: "20px",
                         }}
                       >
-                        <Box sx={{ boxShadow: 5 }}>
+                        <Box
+                          sx={{
+                            boxShadow: 5,
+                            display:
+                              products?.filter(
+                                (product) =>
+                                  product.categoryId === category._id &&
+                                  !product.subCategory
+                              ).length > 0
+                                ? "none"
+                                : "block",
+                          }}
+                        >
                           <div
                             style={{
                               padding: "10px",
@@ -592,6 +618,11 @@ const Admin = () => {
                                       control={<Radio />}
                                       label="Υποκατηγορίες"
                                     />
+                                    <FormControlLabel
+                                      value="products"
+                                      control={<Radio />}
+                                      label="Προϊόντα"
+                                    />
                                   </RadioGroup>
                                 </FormControl>
                               </Box>
@@ -623,8 +654,443 @@ const Admin = () => {
                             </Box>
                           </Collapse>
                         </Box>
+                        <Box
+                          sx={{
+                            boxShadow: 5,
+                            marginTop: "15px",
+                            display: category.subCategories ? "none" : "block",
+                          }}
+                        >
+                          <div
+                            style={{
+                              padding: "10px",
+                              // borderRadius: "10px",
+                              // boxShadow: 5,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              backgroundColor: "#C8D3D6",
+                              zIndex: 100,
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setCategoriesCopy(
+                                categoriesCopy.map((category, index) =>
+                                  index === idx
+                                    ? {
+                                        ...category,
+                                        expandedAddProduct:
+                                          !category.expandedAddProduct,
+                                      }
+                                    : category
+                                )
+                              );
+                            }}
+                          >
+                            <Typography>
+                              Προσθήκη <b>προϊόντος</b> στην κατηγορία{" "}
+                              {`"${category.name}"`}
+                            </Typography>
+                            <IconButton>
+                              <ExpandMore />
+                            </IconButton>
+                          </div>
+                          <Collapse
+                            in={categoriesCopy[idx]?.expandedAddProduct}
+                            unmountOnExit
+                            sx={{
+                              padding: "10px",
+                              // borderRadius: "10px",
+                              // boxShadow: 5,
+                              backgroundColor: "#C8D3D6",
+                            }}
+                          >
+                            <hr
+                              style={{
+                                opacity: 0.2,
+                                marginInline: "auto",
+                                marginTop: "0",
+                              }}
+                            ></hr>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  // backgroundColor: "red",
+                                  width: "fit-content",
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Εικόνες
+                                  </Typography>
+                                  <Box
+                                    sx={{
+                                      maxWidth: "234px",
+                                    }}
+                                  >
+                                    <FileBase
+                                      multiple={false}
+                                      onDone={(data) => {
+                                        console.log(data);
+                                        if (
+                                          data.type.substring(
+                                            0,
+                                            data.type.indexOf("/")
+                                          ) !== "image"
+                                        ) {
+                                          console.log("INVALID");
+                                          return;
+                                        }
+                                        setCategoriesCopy(
+                                          categoriesCopy.map((cat, index) =>
+                                            index === idx
+                                              ? {
+                                                  ...cat,
+                                                  productToAddImages:
+                                                    !cat.productToAddImages
+                                                      ? [
+                                                          {
+                                                            name: data.name,
+                                                            data: data.base64,
+                                                          },
+                                                        ]
+                                                      : [
+                                                          ...cat.productToAddImages,
+                                                          {
+                                                            name: data.name,
+                                                            data: data.base64,
+                                                          },
+                                                        ],
+                                                }
+                                              : cat
+                                          )
+                                        );
+                                      }}
+                                    />
+                                    {category?.productToAddImages?.map(
+                                      (image, idxImage) => (
+                                        <Box
+                                          key={idxImage}
+                                          sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            marginTop: "5px",
+                                          }}
+                                        >
+                                          <Typography>{image.name}</Typography>
+                                          <button
+                                            style={{
+                                              backgroundColor: "red",
+                                              borderRadius: "50%",
+                                              border: "none",
+                                              color: "white",
+                                              aspectRatio: 1,
+                                              height: "1.5rem",
+                                              display: "flex",
+                                              alignItems: "center",
+                                              justifyContent: "center",
+                                              marginLeft: "10px",
+                                            }}
+                                            onClick={() => {
+                                              setCategoriesCopy(
+                                                categoriesCopy.map(
+                                                  (cat, index) =>
+                                                    index === idx
+                                                      ? {
+                                                          ...cat,
+                                                          productToAddImages:
+                                                            cat.productToAddImages.filter(
+                                                              (
+                                                                image2,
+                                                                idxImage2
+                                                              ) =>
+                                                                idxImage !==
+                                                                idxImage2
+                                                            ),
+                                                        }
+                                                      : cat
+                                                )
+                                              );
+                                            }}
+                                          >
+                                            <Delete
+                                              sx={{
+                                                height: "20px",
+                                              }}
+                                            />
+                                          </button>
+                                        </Box>
+                                      )
+                                    )}
+                                  </Box>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Κωδικός
+                                  </Typography>
+                                  <TextField
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: "white",
+                                      borderRadius: "4px",
+                                    }}
+                                    onChange={(e) => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((cat, index) =>
+                                          index === idx
+                                            ? {
+                                                ...cat,
+                                                productToAddCode:
+                                                  e.target.value,
+                                              }
+                                            : cat
+                                        )
+                                      );
+                                      console.log(category);
+                                    }}
+                                  ></TextField>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Όνομα
+                                  </Typography>
+                                  <TextField
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: "white",
+                                      borderRadius: "4px",
+                                    }}
+                                    onChange={(e) => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((cat, index) =>
+                                          index === idx
+                                            ? {
+                                                ...cat,
+                                                productToAddName:
+                                                  e.target.value,
+                                              }
+                                            : cat
+                                        )
+                                      );
+                                      console.log(category);
+                                    }}
+                                  ></TextField>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Τιμή
+                                  </Typography>
+                                  <TextField
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: "white",
+                                      borderRadius: "4px",
+                                      // border: ,
+                                    }}
+                                    type="number"
+                                    onChange={(e) => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((cat, index) =>
+                                          index === idx
+                                            ? {
+                                                ...cat,
+                                                productToAddPrice:
+                                                  e.target.value,
+                                              }
+                                            : cat
+                                        )
+                                      );
+                                      console.log(category);
+                                    }}
+                                  ></TextField>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Τεμάχια
+                                  </Typography>
+                                  <TextField
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: "white",
+                                      borderRadius: "4px",
+                                    }}
+                                    type="number"
+                                    onChange={(e) => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((cat, index) =>
+                                          index === idx
+                                            ? {
+                                                ...cat,
+                                                productToAddInStock:
+                                                  e.target.value,
+                                              }
+                                            : cat
+                                        )
+                                      );
+                                      console.log(category);
+                                    }}
+                                  ></TextField>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                    // backgroundColor: "red",
+                                    // minWidth: "50%",
+                                  }}
+                                >
+                                  <Typography sx={{ marginRight: "20px" }}>
+                                    Κατασκευαστής
+                                  </Typography>
+                                  <TextField
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: "white",
+                                      borderRadius: "4px",
+                                    }}
+                                    onChange={(e) => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((cat, index) =>
+                                          index === idx
+                                            ? {
+                                                ...cat,
+                                                productToAddManufacturer:
+                                                  e.target.value,
+                                              }
+                                            : cat
+                                        )
+                                      );
+                                      console.log(category);
+                                    }}
+                                  ></TextField>
+                                </Box>
+                                <Button
+                                  type="button"
+                                  variant="contained"
+                                  sx={{ marginTop: "10px" }}
+                                  disabled={
+                                    !category.productToAddImages ||
+                                    (category.productToAddImages &&
+                                      category.productToAddImages.length ===
+                                        0) ||
+                                    !category.productToAddCode ||
+                                    !category.productToAddName ||
+                                    !category.productToAddPrice ||
+                                    !category.productToAddInStock ||
+                                    !category.productToAddManufacturer
+                                  }
+                                  onClick={() => {
+                                    // console.log({
+                                    //   images: category.productToAddImages,
+                                    //   code: category.productToAddCode,
+                                    //   name: category.productToAddName,
+                                    //   price: category.productToAddPrice,
+                                    //   inStock: category.productToAddInStock,
+                                    //   manufacturer:
+                                    //     category.productToAddManufacturer,
+                                    //   categoryId: category._id,
+                                    // });
+                                    dispatch(
+                                      addProduct({
+                                        images: category.productToAddImages,
+                                        code: category.productToAddCode,
+                                        name: category.productToAddName,
+                                        price: category.productToAddPrice,
+                                        inStock: category.productToAddInStock,
+                                        manufacturer:
+                                          category.productToAddManufacturer,
+                                        categoryId: category._id,
+                                      })
+                                    );
+                                  }}
+                                >
+                                  ΠΡΟΣΘΗΚΗ
+                                </Button>
+                              </Box>
+                            </Box>
+                          </Collapse>
+                        </Box>
                       </Box>
-                      {category?.subCategories.map((subCategory, idxSub) => (
+                      <Box
+                        sx={{
+                          padding: "0 15px",
+                          paddingBottom: "10px",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {products?.map(
+                          (product, idxProduct) =>
+                            product.categoryId === category._id &&
+                            !product.subCategoryId && (
+                              <AdminProduct
+                                key={idxProduct}
+                                product={product}
+                              />
+                            )
+                        )}
+                      </Box>
+                      {category?.subCategories?.map((subCategory, idxSub) => (
                         <Box key={idxSub}>
                           <Box
                             sx={{
@@ -642,6 +1108,24 @@ const Admin = () => {
                                 justifyContent: "space-between",
                               }}
                               onClick={() => {
+                                if (
+                                  !subCategory.firstTimeExpanded &&
+                                  !subCategory.types &&
+                                  !subCategory.subs
+                                ) {
+                                  console.log(
+                                    `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n\tsubCategoryId: ${subCategory._id}\n}`
+                                  );
+                                  dispatch(
+                                    fetchProducts({
+                                      ids: {
+                                        categoryId: category._id,
+                                        subCategoryId: subCategory._id,
+                                      },
+                                      type: "subCategory",
+                                    })
+                                  );
+                                }
                                 setCategoriesCopy(
                                   categoriesCopy.map((category, index) =>
                                     index === idx
@@ -654,6 +1138,7 @@ const Admin = () => {
                                                   ? {
                                                       ...sub,
                                                       expanded: !sub.expanded,
+                                                      firstTimeExpanded: true,
                                                     }
                                                   : sub
                                             ),
@@ -718,7 +1203,194 @@ const Admin = () => {
                                 padding: "20px",
                               }}
                             >
-                              <Box sx={{ boxShadow: 5 }}>
+                              {(subCategory.types || subCategory.subs) && (
+                                <Box sx={{ boxShadow: 5 }}>
+                                  <div
+                                    style={{
+                                      padding: "10px",
+                                      // borderRadius: "10px",
+                                      // boxShadow: 5,
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                      backgroundColor: "#C8D3D6",
+                                      zIndex: 100,
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() => {
+                                      setCategoriesCopy(
+                                        categoriesCopy.map((category, index) =>
+                                          index === idx
+                                            ? {
+                                                ...category,
+                                                subCategories:
+                                                  category.subCategories.map(
+                                                    (
+                                                      subCategory2,
+                                                      indexSubCategory2
+                                                    ) =>
+                                                      indexSubCategory2 ===
+                                                      idxSub
+                                                        ? {
+                                                            ...subCategory2,
+                                                            expandedAddBelow:
+                                                              !subCategory2.expandedAddBelow,
+                                                          }
+                                                        : subCategory2
+                                                  ),
+                                              }
+                                            : category
+                                        )
+                                      );
+                                    }}
+                                  >
+                                    <Typography>
+                                      Προσθήκη στην υποκατηγορία{" "}
+                                      {`"${subCategory.name}"`}
+                                    </Typography>
+                                    <IconButton>
+                                      <ExpandMore />
+                                    </IconButton>
+                                  </div>
+                                  <Collapse
+                                    in={
+                                      categoriesCopy[idx]?.subCategories[idxSub]
+                                        ?.expandedAddBelow
+                                    }
+                                    unmountOnExit
+                                    sx={{
+                                      padding: "10px",
+                                      // borderRadius: "10px",
+                                      // boxShadow: 5,
+                                      backgroundColor: "#C8D3D6",
+                                    }}
+                                  >
+                                    <hr
+                                      style={{
+                                        opacity: 0.2,
+                                        marginInline: "auto",
+                                        marginTop: "0",
+                                      }}
+                                    ></hr>
+                                    <Box
+                                      sx={{
+                                        display: { xs: "block", sm: "flex" },
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                      }}
+                                    >
+                                      <Box
+                                        sx={{
+                                          display: { xs: "block", sm: "flex" },
+                                          alignItems: "center",
+                                          marginBottom: { xs: "10px", sm: "0" },
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Όνομα{" "}
+                                          {subCategory.types
+                                            ? "τύπου"
+                                            : subCategory.subs
+                                            ? "υποκατηγορίας"
+                                            : "--"}
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                          }}
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map(
+                                                (category, index) =>
+                                                  index === idx
+                                                    ? {
+                                                        ...category,
+                                                        subCategories:
+                                                          category.subCategories.map(
+                                                            (
+                                                              subCategory2,
+                                                              indexSubCategory2
+                                                            ) =>
+                                                              indexSubCategory2 ===
+                                                              idxSub
+                                                                ? {
+                                                                    ...subCategory2,
+                                                                    typeNameToAdd:
+                                                                      subCategory.types
+                                                                        ? e
+                                                                            .target
+                                                                            .value
+                                                                        : undefined,
+                                                                    subNameToAdd:
+                                                                      subCategory.subs
+                                                                        ? e
+                                                                            .target
+                                                                            .value
+                                                                        : undefined,
+                                                                  }
+                                                                : subCategory2
+                                                          ),
+                                                      }
+                                                    : category
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Button
+                                        disabled={
+                                          !(subCategory.types
+                                            ? categoriesCopy[idx]
+                                                ?.subCategories[idxSub]
+                                                ?.typeNameToAdd
+                                            : subCategory.subs
+                                            ? categoriesCopy[idx]
+                                                ?.subCategories[idxSub]
+                                                ?.subNameToAdd
+                                            : false)
+                                        }
+                                        variant="contained"
+                                        onClick={() => {
+                                          console.log(subCategory.subNameToAdd);
+                                          dispatch(
+                                            addSubCategory(
+                                              {
+                                                categoryId: category._id,
+                                                subCategoryId: subCategory._id,
+                                                name: subCategory.types
+                                                  ? subCategory.typeNameToAdd
+                                                  : subCategory.subNameToAdd,
+                                                type: subCategory.types
+                                                  ? "type"
+                                                  : "sub",
+                                              },
+                                              categoriesCopy,
+                                              setCategoriesCopy
+                                            )
+                                          );
+                                        }}
+                                      >
+                                        ΠΡΟΣΘΗΚΗ
+                                      </Button>
+                                    </Box>
+                                  </Collapse>
+                                </Box>
+                              )}
+                              <Box
+                                sx={{
+                                  boxShadow: 5,
+                                  marginTop: "15px",
+                                  display:
+                                    subCategory.types || subCategory.subs
+                                      ? "none"
+                                      : "block",
+                                }}
+                              >
                                 <div
                                   style={{
                                     padding: "10px",
@@ -733,32 +1405,33 @@ const Admin = () => {
                                   }}
                                   onClick={() => {
                                     setCategoriesCopy(
-                                      categoriesCopy.map((category, index) =>
-                                        index === idx
-                                          ? {
-                                              ...category,
-                                              subCategories:
-                                                category.subCategories.map(
-                                                  (
-                                                    subCategory2,
-                                                    indexSubCategory2
-                                                  ) =>
-                                                    indexSubCategory2 === idxSub
-                                                      ? {
-                                                          ...subCategory2,
-                                                          expandedAddBelow:
-                                                            !subCategory2.expandedAddBelow,
-                                                        }
-                                                      : subCategory2
-                                                ),
-                                            }
-                                          : category
+                                      categoriesCopy.map(
+                                        (categoryParam, index) =>
+                                          index === idx
+                                            ? {
+                                                ...categoryParam,
+                                                subCategories:
+                                                  categoryParam.subCategories.map(
+                                                    (
+                                                      subCategoryParam,
+                                                      idxSubParam
+                                                    ) =>
+                                                      idxSubParam === idxSub
+                                                        ? {
+                                                            ...subCategoryParam,
+                                                            expandedAddProduct:
+                                                              !subCategoryParam.expandedAddProduct,
+                                                          }
+                                                        : subCategoryParam
+                                                  ),
+                                              }
+                                            : categoryParam
                                       )
                                     );
                                   }}
                                 >
                                   <Typography>
-                                    Προσθήκη στην υποκατηγορία{" "}
+                                    Προσθήκη <b>προϊόντος</b> στην υποκατηγορία{" "}
                                     {`"${subCategory.name}"`}
                                   </Typography>
                                   <IconButton>
@@ -766,10 +1439,7 @@ const Admin = () => {
                                   </IconButton>
                                 </div>
                                 <Collapse
-                                  in={
-                                    categoriesCopy[idx]?.subCategories[idxSub]
-                                      ?.expandedAddBelow
-                                  }
+                                  in={subCategory?.expandedAddProduct}
                                   unmountOnExit
                                   sx={{
                                     padding: "10px",
@@ -787,108 +1457,477 @@ const Admin = () => {
                                   ></hr>
                                   <Box
                                     sx={{
-                                      display: { xs: "block", sm: "flex" },
+                                      display: "flex",
                                       alignItems: "center",
-                                      justifyContent: "space-between",
+                                      justifyContent: "flex-start",
                                     }}
                                   >
                                     <Box
                                       sx={{
-                                        display: { xs: "block", sm: "flex" },
-                                        alignItems: "center",
-                                        marginBottom: { xs: "10px", sm: "0" },
+                                        // backgroundColor: "red",
+                                        width: "fit-content",
                                       }}
                                     >
-                                      <Typography sx={{ marginRight: "20px" }}>
-                                        Όνομα{" "}
-                                        {subCategory.types
-                                          ? "τύπου"
-                                          : subCategory.subs
-                                          ? "υποκατηγορίας"
-                                          : "--"}
-                                      </Typography>
-                                      <TextField
-                                        size="small"
+                                      <Box
                                         sx={{
-                                          backgroundColor: "white",
-                                          borderRadius: "4px",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
                                         }}
-                                        onChange={(e) => {
-                                          setCategoriesCopy(
-                                            categoriesCopy.map(
-                                              (category, index) =>
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Εικόνες
+                                        </Typography>
+                                        <Box
+                                          sx={{
+                                            maxWidth: "234px",
+                                          }}
+                                        >
+                                          <FileBase
+                                            multiple={false}
+                                            onDone={(data) => {
+                                              console.log(data);
+                                              if (
+                                                data.type.substring(
+                                                  0,
+                                                  data.type.indexOf("/")
+                                                ) !== "image"
+                                              ) {
+                                                console.log("INVALID");
+                                                return;
+                                              }
+                                              setCategoriesCopy(
+                                                categoriesCopy.map(
+                                                  (cat, index) =>
+                                                    index === idx
+                                                      ? {
+                                                          ...cat,
+                                                          subCategories:
+                                                            cat.subCategories.map(
+                                                              (
+                                                                subCat,
+                                                                idxSubCat
+                                                              ) =>
+                                                                idxSubCat ===
+                                                                idxSub
+                                                                  ? {
+                                                                      ...subCat,
+                                                                      productToAddImages:
+                                                                        !subCat.productToAddImages
+                                                                          ? [
+                                                                              {
+                                                                                name: data.name,
+                                                                                data: data.base64,
+                                                                              },
+                                                                            ]
+                                                                          : [
+                                                                              ...subCat.productToAddImages,
+                                                                              {
+                                                                                name: data.name,
+                                                                                data: data.base64,
+                                                                              },
+                                                                            ],
+                                                                    }
+                                                                  : subCat
+                                                            ),
+                                                        }
+                                                      : cat
+                                                )
+                                              );
+                                            }}
+                                          />
+                                          {subCategory?.productToAddImages?.map(
+                                            (image, idxImage) => (
+                                              <Box
+                                                key={idxImage}
+                                                sx={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  marginTop: "5px",
+                                                }}
+                                              >
+                                                <Typography>
+                                                  {image.name}
+                                                </Typography>
+                                                <button
+                                                  style={{
+                                                    backgroundColor: "red",
+                                                    borderRadius: "50%",
+                                                    border: "none",
+                                                    color: "white",
+                                                    aspectRatio: 1,
+                                                    height: "1.5rem",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    marginLeft: "10px",
+                                                  }}
+                                                  onClick={() => {
+                                                    setCategoriesCopy(
+                                                      categoriesCopy.map(
+                                                        (cat, index) =>
+                                                          index === idx
+                                                            ? {
+                                                                ...cat,
+                                                                subCategories:
+                                                                  cat.subCategories.map(
+                                                                    (
+                                                                      subCat,
+                                                                      idxSubCat
+                                                                    ) =>
+                                                                      idxSubCat ===
+                                                                      idxSub
+                                                                        ? {
+                                                                            ...subCat,
+                                                                            productToAddImages:
+                                                                              subCat.productToAddImages.filter(
+                                                                                (
+                                                                                  image2,
+                                                                                  idxImage2
+                                                                                ) =>
+                                                                                  idxImage !==
+                                                                                  idxImage2
+                                                                              ),
+                                                                          }
+                                                                        : subCat
+                                                                  ),
+                                                              }
+                                                            : cat
+                                                      )
+                                                    );
+                                                  }}
+                                                >
+                                                  <Delete
+                                                    sx={{
+                                                      height: "20px",
+                                                    }}
+                                                  />
+                                                </button>
+                                              </Box>
+                                            )
+                                          )}
+                                        </Box>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Κωδικός
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                          }}
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map((cat, index) =>
                                                 index === idx
                                                   ? {
-                                                      ...category,
+                                                      ...cat,
                                                       subCategories:
-                                                        category.subCategories.map(
-                                                          (
-                                                            subCategory2,
-                                                            indexSubCategory2
-                                                          ) =>
-                                                            indexSubCategory2 ===
-                                                            idxSub
+                                                        cat.subCategories.map(
+                                                          (subCat, idxSubCat) =>
+                                                            idxSubCat === idxSub
                                                               ? {
-                                                                  ...subCategory2,
-                                                                  typeNameToAdd:
-                                                                    subCategory.types
-                                                                      ? e.target
-                                                                          .value
-                                                                      : undefined,
-                                                                  subNameToAdd:
-                                                                    subCategory.subs
-                                                                      ? e.target
-                                                                          .value
-                                                                      : undefined,
+                                                                  ...subCat,
+                                                                  productToAddCode:
+                                                                    e.target
+                                                                      .value,
                                                                 }
-                                                              : subCategory2
+                                                              : subCat
                                                         ),
                                                     }
-                                                  : category
-                                            )
-                                          );
-                                          console.log(subCategory);
+                                                  : cat
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
                                         }}
-                                      ></TextField>
-                                    </Box>
-                                    <Button
-                                      disabled={
-                                        !(subCategory.types
-                                          ? categoriesCopy[idx]?.subCategories[
-                                              idxSub
-                                            ]?.typeNameToAdd
-                                          : subCategory.subs
-                                          ? categoriesCopy[idx]?.subCategories[
-                                              idxSub
-                                            ]?.subNameToAdd
-                                          : false)
-                                      }
-                                      variant="contained"
-                                      onClick={() => {
-                                        console.log(subCategory.subNameToAdd);
-                                        dispatch(
-                                          addSubCategory(
-                                            {
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Όνομα
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                          }}
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map((cat, index) =>
+                                                index === idx
+                                                  ? {
+                                                      ...cat,
+                                                      subCategories:
+                                                        cat.subCategories.map(
+                                                          (subCat, idxSubCat) =>
+                                                            idxSubCat === idxSub
+                                                              ? {
+                                                                  ...subCat,
+                                                                  productToAddName:
+                                                                    e.target
+                                                                      .value,
+                                                                }
+                                                              : subCat
+                                                        ),
+                                                    }
+                                                  : cat
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Τιμή
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                            // border: ,
+                                          }}
+                                          type="number"
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map((cat, index) =>
+                                                index === idx
+                                                  ? {
+                                                      ...cat,
+                                                      subCategories:
+                                                        cat.subCategories.map(
+                                                          (subCat, idxSubCat) =>
+                                                            idxSubCat === idxSub
+                                                              ? {
+                                                                  ...subCat,
+                                                                  productToAddPrice:
+                                                                    e.target
+                                                                      .value,
+                                                                }
+                                                              : subCat
+                                                        ),
+                                                    }
+                                                  : cat
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Τεμάχια
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                          }}
+                                          type="number"
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map((cat, index) =>
+                                                index === idx
+                                                  ? {
+                                                      ...cat,
+                                                      subCategories:
+                                                        cat.subCategories.map(
+                                                          (subCat, idxSubCat) =>
+                                                            idxSubCat === idxSub
+                                                              ? {
+                                                                  ...subCat,
+                                                                  productToAddInStock:
+                                                                    e.target
+                                                                      .value,
+                                                                }
+                                                              : subCat
+                                                        ),
+                                                    }
+                                                  : cat
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          width: "100%",
+                                          marginBottom: "10px",
+                                          // backgroundColor: "red",
+                                          // minWidth: "50%",
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{ marginRight: "20px" }}
+                                        >
+                                          Κατασκευαστής
+                                        </Typography>
+                                        <TextField
+                                          size="small"
+                                          sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                          }}
+                                          onChange={(e) => {
+                                            setCategoriesCopy(
+                                              categoriesCopy.map((cat, index) =>
+                                                index === idx
+                                                  ? {
+                                                      ...cat,
+                                                      subCategories:
+                                                        cat.subCategories.map(
+                                                          (subCat, idxSubCat) =>
+                                                            idxSubCat === idxSub
+                                                              ? {
+                                                                  ...subCat,
+                                                                  productToAddManufacturer:
+                                                                    e.target
+                                                                      .value,
+                                                                }
+                                                              : subCat
+                                                        ),
+                                                    }
+                                                  : cat
+                                              )
+                                            );
+                                            console.log(subCategory);
+                                          }}
+                                        ></TextField>
+                                      </Box>
+                                      <Button
+                                        type="button"
+                                        variant="contained"
+                                        sx={{ marginTop: "10px" }}
+                                        disabled={
+                                          !subCategory.productToAddImages ||
+                                          (subCategory.productToAddImages &&
+                                            subCategory.productToAddImages
+                                              .length === 0) ||
+                                          !subCategory.productToAddCode ||
+                                          !subCategory.productToAddName ||
+                                          !subCategory.productToAddPrice ||
+                                          !subCategory.productToAddInStock ||
+                                          !subCategory.productToAddManufacturer
+                                        }
+                                        onClick={() => {
+                                          // console.log({
+                                          //   images: category.productToAddImages,
+                                          //   code: category.productToAddCode,
+                                          //   name: category.productToAddName,
+                                          //   price: category.productToAddPrice,
+                                          //   inStock: category.productToAddInStock,
+                                          //   manufacturer:
+                                          //     category.productToAddManufacturer,
+                                          //   categoryId: category._id,
+                                          // });
+                                          dispatch(
+                                            addProduct({
+                                              images:
+                                                subCategory.productToAddImages,
+                                              code: subCategory.productToAddCode,
+                                              name: subCategory.productToAddName,
+                                              price:
+                                                subCategory.productToAddPrice,
+                                              inStock:
+                                                subCategory.productToAddInStock,
+                                              manufacturer:
+                                                subCategory.productToAddManufacturer,
                                               categoryId: category._id,
                                               subCategoryId: subCategory._id,
-                                              name: subCategory.types
-                                                ? subCategory.typeNameToAdd
-                                                : subCategory.subNameToAdd,
-                                              type: subCategory.types
-                                                ? "type"
-                                                : "sub",
-                                            },
-                                            categoriesCopy,
-                                            setCategoriesCopy
-                                          )
-                                        );
-                                      }}
-                                    >
-                                      ΠΡΟΣΘΗΚΗ
-                                    </Button>
+                                            })
+                                          );
+                                        }}
+                                      >
+                                        ΠΡΟΣΘΗΚΗ
+                                      </Button>
+                                    </Box>
                                   </Box>
                                 </Collapse>
                               </Box>
+                            </Box>
+                            <Box
+                              sx={{
+                                padding: "0 15px",
+                                paddingBottom: "10px",
+                                display: "flex",
+                                flexWrap: "wrap",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              {products?.map(
+                                (product, idxProduct) =>
+                                  product.subCategoryId === subCategory._id &&
+                                  product.typeId === undefined &&
+                                  product.subId === undefined && (
+                                    <AdminProduct
+                                      key={idxProduct}
+                                      product={product}
+                                    />
+                                  )
+                              )}
                             </Box>
                             {subCategory?.types?.map((type, idxType) => (
                               <Box key={idxType}>

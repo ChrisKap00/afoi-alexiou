@@ -13,6 +13,7 @@ const LoadingGear = ({ width, opacity }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        border: "none",
       }}
     >
       <svg

@@ -9,11 +9,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import decode from "jwt-decode";
 import { fetchCategories } from "./store/actions/products";
+import LoadingModal from "./components/LoadingModal/LoadingModal";
 
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
   const { admin } = useSelector((state) => state.admin);
+  const { isLoadingCategories, categories } = useSelector(
+    (state) => state.categories
+  );
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -33,6 +37,18 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (isLoadingCategories || categories.length === 0) return;
+    console.log("HERE");
+    dispatch({
+      type: "CHANGE_FILTER",
+      payload: {
+        ids: { categoryId: categories[0]._id },
+        type: "category-client",
+      },
+    });
+  }, [categories]);
+
+  useEffect(() => {
     const token = admin?.token;
 
     if (token) {
@@ -45,30 +61,36 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<Product />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-      <Box
-        sx={{
-          backgroundColor: "#153E8B",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "40px",
-          position: "absolute",
-          // bottom: "0",
-          marginBlock: "auto",
-        }}
-      >
-        <Typography sx={{ color: "white", fontSize: "0.9rem" }}>
-          © 2022 Αφοί Αλεξίου. All Rights Reserved.
-        </Typography>
-      </Box>
+      {isLoadingCategories ? (
+        <LoadingModal />
+      ) : (
+        <>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<Product />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+          <Box
+            sx={{
+              backgroundColor: "#153E8B",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "40px",
+              position: "absolute",
+              // bottom: "0",
+              marginBlock: "auto",
+            }}
+          >
+            <Typography sx={{ color: "white", fontSize: "0.9rem" }}>
+              © 2022 Αφοί Αλεξίου. All Rights Reserved.
+            </Typography>
+          </Box>
+        </>
+      )}
     </ThemeProvider>
   );
 }

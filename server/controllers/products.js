@@ -74,11 +74,21 @@ export const addSubCategory = async (req, res) => {
     const category = await Categories.findById(categoryId);
     // console.log(category);
     if (type === "subCategory") {
-      category.subCategories.push({
-        name,
-        types: subCategoryToAddType === "types" ? [] : undefined,
-        subs: subCategoryToAddType === "subs" ? [] : undefined,
-      });
+      if (category.subCategories) {
+        category.subCategories.push({
+          name,
+          types: subCategoryToAddType === "types" ? [] : undefined,
+          subs: subCategoryToAddType === "subs" ? [] : undefined,
+        });
+      } else {
+        category.subCategories = [
+          {
+            name,
+            types: subCategoryToAddType === "types" ? [] : undefined,
+            subs: subCategoryToAddType === "subs" ? [] : undefined,
+          },
+        ];
+      }
     } else if (type === "type") {
       for (let subCategory of category.subCategories) {
         if (String(subCategory._id) === subCategoryId) {
@@ -148,6 +158,28 @@ export const fetchProducts = async (req, res) => {
 
       const products = await Product.find({
         categoryId,
+        subCategoryId: undefined,
+      });
+      console.log(products);
+      res.status(200).json({ products });
+    } else if (type === "category-client") {
+      console.log("client");
+      if (!mongoose.Types.ObjectId.isValid(categoryId))
+        return res.status(404).send("Invalid category");
+
+      const products = await Product.find({
+        categoryId,
+      });
+      console.log(products);
+      res.status(200).json({ products });
+    } else if (type === "subCategory") {
+      if (!mongoose.Types.ObjectId.isValid(categoryId))
+        return res.status(404).send("Invalid category");
+      if (!mongoose.Types.ObjectId.isValid(subCategoryId))
+        return res.status(404).send("Invalid sub-category");
+      const products = await Product.find({
+        categoryId,
+        subCategoryId,
       });
       console.log(products);
       res.status(200).json({ products });
@@ -166,8 +198,22 @@ export const fetchProducts = async (req, res) => {
       });
       console.log(products);
       res.status(200).json({ products });
-    }
-    if (type === "innerType") {
+    } else if (type === "sub") {
+      if (!mongoose.Types.ObjectId.isValid(categoryId))
+        return res.status(404).send("Invalid category");
+      if (!mongoose.Types.ObjectId.isValid(subCategoryId))
+        return res.status(404).send("Invalid sub-category");
+      if (!mongoose.Types.ObjectId.isValid(subId))
+        return res.status(404).send("Invalid sub-category");
+
+      const products = await Product.find({
+        categoryId,
+        subCategoryId,
+        subId,
+      });
+      console.log(products);
+      res.status(200).json({ products });
+    } else if (type === "innerType") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
       if (!mongoose.Types.ObjectId.isValid(subCategoryId))

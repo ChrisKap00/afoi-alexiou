@@ -273,7 +273,7 @@ const NavBar = () => {
               width="552"
               height="256"
               id="gmap_canvas"
-              src="https://maps.google.com/maps?q=afoi%20alexiou&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=Larisis%20196,%20Volos%20383%2034&t=&z=13&ie=UTF8&iwloc=&output=embed"
               frameBorder="0"
               scrolling="no"
               marginHeight="0"

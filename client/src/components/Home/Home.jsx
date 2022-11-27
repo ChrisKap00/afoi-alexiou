@@ -1,11 +1,4 @@
-import {
-  Box,
-  Container,
-  Typography,
-  InputBase,
-  Card,
-  Divider,
-} from "@mui/material";
+import { Box, Container, Typography, InputBase, Card } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
@@ -15,8 +8,9 @@ import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import HomeCard from "./HomeCard/HomeCard";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TypeCard from "./TypeCard/TypeCard";
+import PopularCard from "./TypeCard/PopularCard";
 import "./Home.css";
+import { useSelector } from "react-redux";
 
 const Search = styled("form")(({ theme }) => ({
   position: "relative",
@@ -70,6 +64,8 @@ const Home = () => {
   const handleSelectType = (selectedIndex, e) => {
     setTypeCarouselIndex(selectedIndex);
   };
+
+  const { categories } = useSelector((state) => state.categories);
 
   return (
     <Box
@@ -282,66 +278,83 @@ const Home = () => {
           }}
         >
           <Card
-            sx={{ width: { xs: "100%", md: "68.5%" }, borderRadius: "10px" }}
+            sx={{
+              width: { xs: "100%", md: "68.5%" },
+              borderRadius: "10px",
+              height: { xs: "300px", md: "445px" },
+              marginBottom: { xs: "20px", md: 0 },
+            }}
           >
             <Carousel
               style={{
                 width: "100%",
+                height: { xs: "300px", md: "445px" },
               }}
               activeIndex={typeCarouselIndex}
               onSelect={handleSelectType}
             >
-              <Carousel.Item>
-                <TypeCard
+              <Carousel.Item style={{ height: "100%" }}>
+                <PopularCard
                   className="d-bock w-100"
-                  name="plato"
-                  content="ΠΛΑΤΩ"
-                  to="antallaktika/metadosi-kinisis/plato"
-                ></TypeCard>
+                  name="intercooler"
+                  content="Κολάρα INTERCOOLER"
+                  type="type"
+                  nameInObject="INTERCOOLER"
+                  categoryIdx={0}
+                ></PopularCard>
               </Carousel.Item>
             </Carousel>
           </Card>
-          <Card sx={{ width: { xs: "100%", md: "30%" }, borderRadius: "10px" }}>
-            <Carousel
-              style={{
-                width: "100%",
-              }}
-              activeIndex={categoryCarouselIndex}
-              onSelect={handleSelectCategory}
-            >
-              <Carousel.Item>
-                <HomeCard
-                  className="d-block w-100"
-                  name="antallaktika"
-                  content="ΑΝΤΑΛΛΑΚΤΙΚΑ"
-                  to="antallaktika"
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <HomeCard
-                  className="d-block w-100"
-                  name="biomixanika"
-                  content="ΒΙΟΜΗΧΑΝΙΚΑ"
-                  to="biomixanika"
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <HomeCard
-                  className="d-block w-100"
-                  name="lipantika"
-                  content="ΧΗΜΙΚΑ - ΛΥΠΑΝΤΙΚΑ"
-                  to="ximika-lipantika"
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <HomeCard
-                  className="d-block w-100"
-                  name="universal"
-                  content="UNIVERSAL"
-                  to="diafora-universal"
-                />
-              </Carousel.Item>
-            </Carousel>
+          <Card
+            sx={{
+              width: { xs: "100%", md: "30%" },
+              height: { xs: "300px", md: "445px" },
+              borderRadius: "10px",
+            }}
+          >
+            {categories.length > 0 && (
+              <Carousel
+                style={{
+                  width: "100%",
+                  height: { xs: "300px", md: "445px" },
+                }}
+                activeIndex={categoryCarouselIndex}
+                onSelect={handleSelectCategory}
+              >
+                <Carousel.Item style={{ height: { xs: "300px", md: "445px" } }}>
+                  <HomeCard
+                    className="d-block w-100"
+                    name="antallaktika"
+                    content="ΑΝΤΑΛΛΑΚΤΙΚΑ"
+                    id={categories[0]?._id}
+                  />
+                </Carousel.Item>
+                <Carousel.Item>
+                  <HomeCard
+                    className="d-block w-100"
+                    name="biomixanika"
+                    content="ΒΙΟΜΗΧΑΝΙΚΑ"
+                    id={categories[1]?._id}
+                  />
+                </Carousel.Item>
+                <Carousel.Item>
+                  <HomeCard
+                    className="d-block w-100"
+                    name="lipantika"
+                    content="ΧΗΜΙΚΑ - ΛΥΠΑΝΤΙΚΑ"
+                    id={categories[2]?._id}
+                  />
+                </Carousel.Item>
+                <Carousel.Item>
+                  <HomeCard
+                    className="d-block w-100"
+                    name="universal"
+                    content="UNIVERSAL"
+                    id={categories[3]?._id}
+                  />
+                </Carousel.Item>
+              </Carousel>
+            )}
           </Card>
         </Box>
       </Container>

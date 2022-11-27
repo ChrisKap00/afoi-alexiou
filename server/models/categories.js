@@ -39,7 +39,8 @@ const categoriesSchema = mongoose.Schema({
         },
       },
     ],
-    required: true,
+    required: false,
+    default: undefined,
   },
 });
 
