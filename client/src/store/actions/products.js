@@ -320,6 +320,31 @@ export const fetchClientProducts = (params) => async (dispatch) => {
   dispatch({ type: "STOP_LOADING_FETCH_CLIENT_PRODUCTS" });
 };
 
+export const fetchProduct = (id, setProduct) => async (dispatch) => {
+  dispatch({ type: "START_LOADING_FETCH_ONE" });
+  try {
+    const { data } = await api.fetchProduct(id);
+    console.log(data);
+    setProduct(data);
+  } catch (error) {
+    console.log(error);
+  }
+  dispatch({ type: "STOP_LOADING_FETCH_ONE" });
+};
+
+export const fetchRecommendedProducts =
+  (ids, setRecommendedProducts) => async (dispatch) => {
+    dispatch({ type: "START_LOADING_FETCH_RECOMMENDED" });
+    try {
+      const { data } = await api.fetchRecommendedProducts(ids);
+      console.log(data);
+      setRecommendedProducts(data);
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch({ type: "STOP_LOADING_FETCH_RECOMMENDED" });
+  };
+
 export const deleteProduct = (id) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
@@ -343,3 +368,20 @@ export const editProduct = (productData) => async (dispatch) => {
   }
   dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
 };
+
+export const searchProducts =
+  ({ query, page }, setPages, setResults) =>
+  async (dispatch) => {
+    dispatch({ type: "START_LOADING_FETCH_RESULTS" });
+    try {
+      const {
+        data: { products, pages },
+      } = await api.searchProducts({ query, page });
+      console.log(products, pages);
+      setResults(products);
+      setPages(pages);
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch({ type: "STOP_LOADING_FETCH_RESULTS" });
+  };

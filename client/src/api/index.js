@@ -30,3 +30,15 @@ export const fetchProducts = (params) =>
   });
 export const deleteProduct = (id) => API.patch("/products/deleteProduct", id);
 export const editProduct = (data) => API.patch("/products/editProduct", data);
+export const fetchProduct = (id) =>
+  API.get("/products/fetchOne", {
+    params: id,
+  });
+export const fetchRecommendedProducts = (ids) =>
+  API.get("/products/fetchRecommended", {
+    params: ids,
+  });
+export const searchProducts = (query) =>
+  API.get("/products/search", {
+    params: query,
+  });

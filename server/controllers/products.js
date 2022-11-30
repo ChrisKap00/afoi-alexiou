@@ -237,6 +237,70 @@ export const fetchProducts = async (req, res) => {
   }
 };
 
+export const fetchProduct = async (req, res) => {
+  console.log(req.query);
+  try {
+    const { id } = req.query;
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send("Invalid product id");
+
+    const result = await Product.findById(id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const fetchRecommendedProducts = async (req, res) => {
+  console.log(req.query);
+  try {
+    const { id, categoryId, subCategoryId, typeId, subId, innerTypeId } =
+      req.query;
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send("Invalid product id");
+
+    const result = await Product.find({
+      categoryId,
+      subCategoryId,
+      typeId,
+      subId,
+      innerTypeId,
+    });
+    res
+      .status(200)
+      .json(
+        result.filter((product) => String(product._id) !== id).splice(0, 4)
+      );
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const searchProducts = async (req, res) => {
+  console.log(req.query);
+  try {
+    const { query, page } = req.query;
+    const productsPerPage = 2;
+    const startIndex = (Number(page) - 1) * productsPerPage;
+
+    const name = new RegExp(query, "i");
+
+    const result = await Product.find({
+      name,
+    })
+      .limit(productsPerPage)
+      .skip(startIndex);
+    res.status(200).json({
+      products: result,
+      pages: Math.ceil(
+        (await Product.countDocuments({ name })) / productsPerPage
+      ),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteProduct = async (req, res) => {
   console.log(req.body);
   try {

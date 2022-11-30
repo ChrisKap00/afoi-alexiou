@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import {
   Card,
@@ -87,27 +87,19 @@ const NavBar = () => {
       ? 1
       : 2
   );
-  const [contactDropdown, setContactDropdown] = useState(false);
 
   const { categories } = useSelector((state) => state.categories);
   const { admin } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
-  const onMouseEnterContact = () => {
-    if (window.innerWidth < 960) {
-      setContactDropdown(false);
-    } else {
-      console.log("enter");
-      setContactDropdown(true);
-    }
-  };
-
-  const onMouseLeaveContact = () => {
-    if (window.innerWidth < 960) {
-      setContactDropdown(false);
-    } else {
-      console.log("leave");
-      setContactDropdown(false);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(search);
+    if (search.trim()) {
+      // dispatch(searchPeople(search));
+      navigate(`/search?query=${search || "none"}`);
     }
   };
 
@@ -226,8 +218,6 @@ const NavBar = () => {
             </div>
           </Link>
           <div
-            onMouseEnter={onMouseEnterContact}
-            onMouseLeave={onMouseLeaveContact}
             data-tip
             data-for="tooltip"
             style={{
@@ -420,8 +410,8 @@ const NavBar = () => {
         </Box>
         <Box sx={{ flexGrow: 1 }}></Box>
         <Search
-          //   onSubmit={handleSearch}
-          //   onChange={(e) => setSearch(e.target.value)}
+          onSubmit={handleSearch}
+          onChange={(e) => setSearch(e.target.value)}
           sx={{ display: { xs: "none", md: "block" } }}
         >
           <SearchIconWrapper>

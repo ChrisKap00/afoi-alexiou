@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import decode from "jwt-decode";
 import { fetchCategories } from "./store/actions/products";
 import LoadingModal from "./components/LoadingModal/LoadingModal";
+import SearchResults from "./components/SearchResults/SearchResults";
 
 function App() {
   const dispatch = useDispatch();
@@ -71,6 +72,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<Product />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="search" element={<SearchResults />} />
           </Routes>
           <Box
             sx={{

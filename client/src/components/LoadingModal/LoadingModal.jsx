@@ -2,7 +2,7 @@ import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import React from "react";
 import LoadingGear from "../LoadingGear/LoadingGear";
 
-const LoadingModal = () => {
+const LoadingModal = ({ backgroundColor }) => {
   return (
     <Modal
       open={true}
@@ -19,7 +19,7 @@ const LoadingModal = () => {
             border: "none",
           }}
         >
-          <LoadingGear width="150px" />
+          <LoadingGear width="150px" backgroundColor={backgroundColor} />
         </Box>
       </Fade>
     </Modal>

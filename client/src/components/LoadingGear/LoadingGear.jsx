@@ -1,7 +1,7 @@
 import React from "react";
 import "./LoadingGear.css";
 
-const LoadingGear = ({ width, opacity }) => {
+const LoadingGear = ({ width, opacity, backgroundColor }) => {
   return (
     <div
       style={{
@@ -14,7 +14,10 @@ const LoadingGear = ({ width, opacity }) => {
         justifyContent: "center",
         alignItems: "center",
         border: "none",
+        stroke: "transparent",
+        strokeWidth: "0px",
       }}
+      tabIndex="-1"
     >
       <svg
         className="machine"
@@ -22,6 +25,13 @@ const LoadingGear = ({ width, opacity }) => {
         x="0px"
         y="0px"
         viewBox="0 0 645 526"
+        style={{
+          width: "100%",
+          fill: backgroundColor || "#153E8B",
+          border: "none",
+          stroke: "transparent",
+          strokeWidth: "0px",
+        }}
       >
         <defs />
         <g>
