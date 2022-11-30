@@ -305,20 +305,23 @@ export const fetchProducts = (params) => async (dispatch) => {
   dispatch({ type: "STOP_LOADING_FETCH_PRODUCTS" });
 };
 
-export const fetchClientProducts = (params) => async (dispatch) => {
-  console.log(params);
-  dispatch({ type: "START_LOADING_FETCH_CLIENT_PRODUCTS" });
-  try {
-    const {
-      data: { products },
-    } = await api.fetchProducts(params);
-    console.log(products);
-    dispatch({ type: "FETCH_CLIENT_PRODUCTS", payload: products });
-  } catch (error) {
-    console.log(error);
-  }
-  dispatch({ type: "STOP_LOADING_FETCH_CLIENT_PRODUCTS" });
-};
+export const fetchClientProducts =
+  ({ ids, type }, setPages, setClientProducts, page) =>
+  async (dispatch) => {
+    dispatch({ type: "START_LOADING_FETCH_CLIENT_PRODUCTS" });
+    try {
+      const {
+        data: { products, pages },
+      } = await api.fetchProducts({ ids, type, page });
+      console.log(products, pages);
+      setPages(pages);
+      setClientProducts(products);
+      dispatch({ type: "FETCH_CLIENT_PRODUCTS", payload: products });
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch({ type: "STOP_LOADING_FETCH_CLIENT_PRODUCTS" });
+  };
 
 export const fetchProduct = (id, setProduct) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_ONE" });
@@ -378,8 +381,8 @@ export const searchProducts =
         data: { products, pages },
       } = await api.searchProducts({ query, page });
       console.log(products, pages);
-      setResults(products);
       setPages(pages);
+      setResults(products);
     } catch (error) {
       console.log(error);
     }

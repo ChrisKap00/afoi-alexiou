@@ -150,7 +150,10 @@ export const fetchProducts = async (req, res) => {
   const {
     ids: { categoryId, subCategoryId, typeId, subId, innerTypeId },
     type,
+    page,
   } = req.query;
+  const productsPerPage = 2;
+  const startIndex = (Number(page) - 1) * productsPerPage;
   try {
     if (type === "category") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
@@ -159,19 +162,35 @@ export const fetchProducts = async (req, res) => {
       const products = await Product.find({
         categoryId,
         subCategoryId: undefined,
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+            subCategoryId: undefined,
+          })) / productsPerPage
+        ),
       });
-      console.log(products);
-      res.status(200).json({ products });
     } else if (type === "category-client") {
-      console.log("client");
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
 
       const products = await Product.find({
         categoryId,
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+          })) / productsPerPage
+        ),
       });
-      console.log(products);
-      res.status(200).json({ products });
     } else if (type === "subCategory") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
@@ -180,9 +199,18 @@ export const fetchProducts = async (req, res) => {
       const products = await Product.find({
         categoryId,
         subCategoryId,
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+            subCategoryId,
+          })) / productsPerPage
+        ),
       });
-      console.log(products);
-      res.status(200).json({ products });
     } else if (type === "type") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
@@ -195,9 +223,19 @@ export const fetchProducts = async (req, res) => {
         categoryId,
         subCategoryId,
         typeId,
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+            subCategoryId,
+            typeId,
+          })) / productsPerPage
+        ),
       });
-      console.log(products);
-      res.status(200).json({ products });
     } else if (type === "sub") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
@@ -210,9 +248,20 @@ export const fetchProducts = async (req, res) => {
         categoryId,
         subCategoryId,
         subId,
-      });
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
       console.log(products);
-      res.status(200).json({ products });
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+            subCategoryId,
+            subId,
+          })) / productsPerPage
+        ),
+      });
     } else if (type === "innerType") {
       if (!mongoose.Types.ObjectId.isValid(categoryId))
         return res.status(404).send("Invalid category");
@@ -228,9 +277,21 @@ export const fetchProducts = async (req, res) => {
         subCategoryId,
         subId,
         innerTypeId,
-      });
+      })
+        .limit(productsPerPage)
+        .skip(startIndex);
       console.log(products);
-      res.status(200).json({ products });
+      res.status(200).json({
+        products,
+        pages: Math.ceil(
+          (await Product.countDocuments({
+            categoryId,
+            subCategoryId,
+            subId,
+            innerTypeId,
+          })) / productsPerPage
+        ),
+      });
     }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

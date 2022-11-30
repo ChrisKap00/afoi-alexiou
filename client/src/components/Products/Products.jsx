@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Pagination, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Products.css";
@@ -11,7 +11,7 @@ const Products = () => {
   const { isLoadingCategories, categories } = useSelector(
     (state) => state.categories
   );
-  const { isLoadingClientProducts, clientProducts } = useSelector(
+  const { isLoadingClientProducts } = useSelector(
     (state) => state.clientProducts
   );
   const { isLoadingFilterChange, filter, redirected } = useSelector(
@@ -20,6 +20,9 @@ const Products = () => {
   const [manufacturerIndex, setManufacturerIndex] = useState(0);
   const [manufacturers, setManufacturers] = useState([]);
   const dispatch = useDispatch();
+  const [clientProducts, setClientProducts] = useState(null);
+  const [pages, setPages] = useState(1);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (redirected) {
@@ -41,13 +44,14 @@ const Products = () => {
   useEffect(() => {
     if (isLoadingCategories || categories.length === 0 || filter === null)
       return;
+    setPage(1);
     setManufacturerIndex(0);
     console.log(filter);
-    dispatch(fetchClientProducts(filter));
+    dispatch(fetchClientProducts(filter, setPages, setClientProducts, page));
   }, [filter]);
 
   useEffect(() => {
-    if (filter === null || clientProducts.length === 0) return;
+    if (filter === null || clientProducts === null) return;
     setManufacturers([]);
     if (filter.type === "category-client") {
       setManufacturers([
@@ -88,6 +92,12 @@ const Products = () => {
       ]);
     }
   }, [clientProducts, filter]);
+
+  useEffect(() => {
+    if (isLoadingFilterChange || filter === null) return;
+    setManufacturerIndex(0);
+    dispatch(fetchClientProducts(filter, setPages, setClientProducts, page));
+  }, [page]);
 
   return (
     <Box
@@ -377,6 +387,23 @@ const Products = () => {
                   setModeIndex={setManufacturerIndex}
                 />
               </Box>
+              <Box
+                sx={{
+                  marginBlock: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Pagination
+                  count={pages}
+                  shape="rounded"
+                  page={page}
+                  onChange={(e, v) => {
+                    setPage(Number(v));
+                  }}
+                />
+              </Box>
               <ul
                 style={{
                   display: "flex",
@@ -385,9 +412,9 @@ const Products = () => {
                   padding: 0,
                 }}
               >
-                {filter?.type === "category-client"
+                {filter?.type === "category-client" && clientProducts !== null
                   ? clientProducts
-                      .map(
+                      ?.map(
                         (product, idxProduct) =>
                           product.categoryId === filter?.ids.categoryId && (
                             <ClientProduct product={product} key={idxProduct} />
@@ -402,9 +429,9 @@ const Products = () => {
                           : e?.props.product.manufacturer ===
                             manufacturers[manufacturerIndex]
                       )
-                  : filter?.type === "subCategory"
+                  : filter?.type === "subCategory" && clientProducts !== null
                   ? clientProducts
-                      .map(
+                      ?.map(
                         (product, idxProduct) =>
                           product.subCategoryId ===
                             filter?.ids.subCategoryId && (
@@ -419,9 +446,9 @@ const Products = () => {
                           : e?.props.product.manufacturer ===
                             manufacturers[manufacturerIndex]
                       )
-                  : filter?.type === "type"
+                  : filter?.type === "type" && clientProducts !== null
                   ? clientProducts
-                      .map(
+                      ?.map(
                         (product, idxProduct) =>
                           product.typeId === filter?.ids.typeId && (
                             <ClientProduct product={product} key={idxProduct} />
@@ -435,9 +462,9 @@ const Products = () => {
                           : e?.props.product.manufacturer ===
                             manufacturers[manufacturerIndex]
                       )
-                  : filter?.type === "sub"
+                  : filter?.type === "sub" && clientProducts !== null
                   ? clientProducts
-                      .map(
+                      ?.map(
                         (product, idxProduct) =>
                           product.subId === filter?.ids.subId && (
                             <ClientProduct product={product} key={idxProduct} />
@@ -451,9 +478,9 @@ const Products = () => {
                           : e?.props.product.manufacturer ===
                             manufacturers[manufacturerIndex]
                       )
-                  : filter?.type === "innerType"
+                  : filter?.type === "innerType" && clientProducts !== null
                   ? clientProducts
-                      .map(
+                      ?.map(
                         (product, idxProduct) =>
                           product.innerTypeId === filter?.ids.innerTypeId && (
                             <ClientProduct product={product} key={idxProduct} />

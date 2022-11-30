@@ -26,7 +26,12 @@ export const addSubCategory = (item) =>
 export const addProduct = (item) => API.post("/products/addProduct", item);
 export const fetchProducts = (params) =>
   API.get("/products/fetch", {
-    params: { ids: params.ids, type: params.type },
+    params: {
+      ids: params.ids,
+      type: params.type,
+      manufacturer: params.manufacturer,
+      page: params.page,
+    },
   });
 export const deleteProduct = (id) => API.patch("/products/deleteProduct", id);
 export const editProduct = (data) => API.patch("/products/editProduct", data);
