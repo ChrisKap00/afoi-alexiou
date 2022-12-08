@@ -16,7 +16,7 @@ const ClientProduct = ({ product }) => {
           xl: "22%",
         },
         backgroundColor: "white",
-        marginRight: "30px",
+        marginRight: { xs: 0, xssm: "30px" },
         borderRadius: "10px",
         marginBottom: "30px",
       }}
@@ -24,7 +24,7 @@ const ClientProduct = ({ product }) => {
       <Link
         style={{
           width: "fit-content",
-          backgroundColor: "red",
+          // backgroundColor: "red",
           textDecoration: "none",
           color: "black",
         }}
@@ -37,6 +37,7 @@ const ClientProduct = ({ product }) => {
             flexDirection: "column",
             justifyContent: "space-between",
             paddingBottom: "10px",
+            // backgroundColor: "red",
           }}
         >
           <Box sx={{ paddingBottom: "15px" }}>

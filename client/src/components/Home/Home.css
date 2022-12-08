@@ -14,5 +14,16 @@ body {
 }
 
 ::selection {
-  background: #153E8B;
+  background: #153e8b;
+}
+
+#codeSearchBtn:hover {
+  background-color: #ff4116;
+  /* transition: 0s; */
+  color: white;
+}
+
+#codeSearchBtn:active {
+  background-color: #ff2f00;
+  color: white;
 }

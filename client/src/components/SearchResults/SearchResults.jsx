@@ -20,7 +20,11 @@ const SearchResults = () => {
   useEffect(() => {
     dispatch(
       searchProducts(
-        { query: searchQuery.get("query"), page },
+        {
+          query: searchQuery.get("query"),
+          code: searchQuery.get("code"),
+          page,
+        },
         setPages,
         setResults
       )
@@ -29,9 +33,7 @@ const SearchResults = () => {
 
   return (
     <Container sx={{ minHeight: "calc(100vh - 100px)" }}>
-      <Box
-        sx={{ height: "100%", minHeight: "inherit", backgroundColor: "red" }}
-      >
+      <Box sx={{ height: "100%", minHeight: "inherit" }}>
         <Box>
           <Typography
             sx={{
@@ -49,7 +51,11 @@ const SearchResults = () => {
                 textTransform: "uppercase",
               }}
             >
-              "{searchQuery.get("query")}"
+              "
+              {searchQuery.get("query")
+                ? searchQuery.get("query")
+                : searchQuery.get("code")}
+              "
             </label>
           </Typography>
         </Box>
@@ -77,7 +83,7 @@ const SearchResults = () => {
               isLoadingResults || results === null ? "center" : "flex-start",
             justifyContent:
               isLoadingResults || results === null ? "center" : "flex-start",
-            backgroundColor: "yellow",
+            // backgroundColor: "yellow",
             transform:
               isLoadingResults || results === null
                 ? { xs: "translate(0, 260%)", sm: "translate(0, 400%)" }
@@ -93,7 +99,7 @@ const SearchResults = () => {
                 flexWrap: "wrap",
                 listStyle: "none",
                 padding: 0,
-                backgroundColor: "blue",
+                // backgroundColor: "blue",
                 width: "100%",
               }}
             >
@@ -117,7 +123,11 @@ const SearchResults = () => {
                   textTransform: "uppercase",
                 }}
               >
-                "{searchQuery.get("query")}"
+                "
+                {searchQuery.get("query")
+                  ? searchQuery.get("query")
+                  : searchQuery.get("code")}
+                "
               </label>
             </Typography>
           )}

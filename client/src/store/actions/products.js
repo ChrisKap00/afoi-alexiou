@@ -373,13 +373,13 @@ export const editProduct = (productData) => async (dispatch) => {
 };
 
 export const searchProducts =
-  ({ query, page }, setPages, setResults) =>
+  ({ query, code, page }, setPages, setResults) =>
   async (dispatch) => {
     dispatch({ type: "START_LOADING_FETCH_RESULTS" });
     try {
       const {
         data: { products, pages },
-      } = await api.searchProducts({ query, page });
+      } = await api.searchProducts({ query, code, page });
       console.log(products, pages);
       setPages(pages);
       setResults(products);

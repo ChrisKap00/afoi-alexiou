@@ -33,7 +33,6 @@ import {
   sendCategories,
 } from "../../store/actions/products";
 import AdminProduct from "../AdminProduct/AdminProduct";
-import LoadingModal from "../LoadingModal/LoadingModal";
 
 const style = {
   position: "absolute",
@@ -4110,7 +4109,25 @@ const Admin = () => {
               </Box>
             </Fade>
           </Modal>
-          {(isLoadingDelete || isLoadingProducts) && <LoadingModal />}
+          {(isLoadingDelete || isLoadingProducts) && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.3)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <LoadingGear width="100px" />
+            </div>
+          )}
         </Box>
       )}
     </Container>

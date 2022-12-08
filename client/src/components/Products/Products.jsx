@@ -1,4 +1,4 @@
-import { Box, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Drawer, Fab, Pagination, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Products.css";
@@ -6,6 +6,7 @@ import LoadingGear from "../LoadingGear/LoadingGear";
 import { fetchClientProducts } from "../../store/actions/products";
 import ClientProduct from "../ClientProduct/ClientProduct";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
+import { Add, Tune } from "@mui/icons-material";
 
 const Products = () => {
   const { isLoadingCategories, categories } = useSelector(
@@ -23,6 +24,8 @@ const Products = () => {
   const [clientProducts, setClientProducts] = useState(null);
   const [pages, setPages] = useState(1);
   const [page, setPage] = useState(1);
+
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (redirected) {
@@ -100,171 +103,134 @@ const Products = () => {
   }, [page]);
 
   return (
-    <Box
-      sx={{
-        // backgroundColor: "black",
-        minHeight: "calc(100vh - 100px)",
-        width: "100%",
-        maxWidth: "1600px",
-        marginInline: "auto",
-        paddingTop: "30px",
-        paddingInline: { xs: 0, md: "10px" },
-      }}
-    >
-      <Stack direction="row" justifyContent="space-between">
-        <Box
-          flex={1}
-          p={2}
-          sx={{
-            backgroundColor: "#1D2C5E",
-            borderRadius: "10px",
-            height: "calc(100vh - 160px)",
-            minWidth: "300px",
-            position: "sticky",
-            top: "90px",
-            display: { xs: "none", md: "block" },
-            overflow: "auto",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: "700",
-              color: "white",
-              fontSize: "1.7rem",
-              textAlign: "center",
-            }}
-          >
-            Κατηγορίες
-          </Typography>
-          <hr
-            style={{
-              width: "90%",
-              marginInline: "auto",
-              color: "white",
-              opacity: 0.2,
-            }}
-          ></hr>
+    <>
+      <Box
+        sx={{
+          // backgroundColor: "black",
+          minHeight: "calc(100vh - 100px)",
+          width: "100%",
+          maxWidth: "1600px",
+          marginInline: "auto",
+          paddingTop: "30px",
+          paddingInline: { xs: 0, md: "10px" },
+        }}
+      >
+        <Stack direction="row" justifyContent="space-between">
           <Box
+            flex={1}
+            p={2}
             sx={{
-              height: isLoadingCategories ? "100%" : "fit-content",
-              display: isLoadingCategories ? "flex" : "block",
-              alignItems: "center",
-              justifyContent: "center",
+              backgroundColor: "#1D2C5E",
+              borderRadius: "10px",
+              height: "calc(100vh - 160px)",
+              minWidth: "300px",
+              position: "sticky",
+              top: "90px",
+              display: { xs: "none", md: "block" },
+              overflow: "auto",
             }}
           >
-            {isLoadingCategories ? (
-              <LoadingGear width="150px" />
-            ) : (
-              <>
-                {categories?.map((category, idx) => (
-                  <Box key={idx}>
-                    <div
-                      style={{ width: "fit-content" }}
-                      onClick={() => {
-                        dispatch({
-                          type: "CHANGE_FILTER",
-                          payload: {
-                            ids: { categoryId: category._id },
-                            type: "category-client",
-                          },
-                        });
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          color:
-                            filter?.type === "category-client" &&
-                            filter?.ids.categoryId === category._id
-                              ? "#FC5A34"
-                              : "white",
-                          textDecoration: "underline",
-                          fontWeight: "bold",
-                          cursor: "pointer",
+            <Typography
+              sx={{
+                fontWeight: "700",
+                color: "white",
+                fontSize: "1.7rem",
+                textAlign: "center",
+              }}
+            >
+              Κατηγορίες
+            </Typography>
+            <hr
+              style={{
+                width: "90%",
+                marginInline: "auto",
+                color: "white",
+                opacity: 0.2,
+              }}
+            ></hr>
+            <Box
+              sx={{
+                height: isLoadingCategories ? "100%" : "fit-content",
+                display: isLoadingCategories ? "flex" : "block",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isLoadingCategories ? (
+                <LoadingGear width="150px" />
+              ) : (
+                <>
+                  {categories?.map((category, idx) => (
+                    <Box key={idx}>
+                      <div
+                        style={{ width: "fit-content" }}
+                        onClick={() => {
+                          dispatch({
+                            type: "CHANGE_FILTER",
+                            payload: {
+                              ids: { categoryId: category._id },
+                              type: "category-client",
+                            },
+                          });
                         }}
                       >
-                        {category.name}
-                      </Typography>
-                    </div>
-                    {
-                      <ul style={{ color: "white" }}>
-                        {category?.subCategories?.map(
-                          (subCategory, idxSubCategory) => (
-                            <Box key={idxSubCategory}>
-                              <li>
-                                <div
-                                  style={{ width: "fit-content" }}
-                                  onClick={() => {
-                                    dispatch({
-                                      type: "CHANGE_FILTER",
-                                      payload: {
-                                        ids: {
-                                          categoryId: category._id,
-                                          subCategoryId: subCategory._id,
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            color:
+                              filter?.type === "category-client" &&
+                              filter?.ids.categoryId === category._id
+                                ? "#FC5A34"
+                                : "white",
+                            textDecoration: "underline",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {category.name}
+                        </Typography>
+                      </div>
+                      {
+                        <ul style={{ color: "white" }}>
+                          {category?.subCategories?.map(
+                            (subCategory, idxSubCategory) => (
+                              <Box key={idxSubCategory}>
+                                <li>
+                                  <div
+                                    style={{ width: "fit-content" }}
+                                    onClick={() => {
+                                      dispatch({
+                                        type: "CHANGE_FILTER",
+                                        payload: {
+                                          ids: {
+                                            categoryId: category._id,
+                                            subCategoryId: subCategory._id,
+                                          },
+                                          type: "subCategory",
                                         },
-                                        type: "subCategory",
-                                      },
-                                    });
-                                  }}
-                                >
-                                  <Typography
-                                    sx={{
-                                      color:
-                                        filter?.type === "subCategory" &&
-                                        filter?.ids.subCategoryId ===
-                                          subCategory._id
-                                          ? "#FC5A34"
-                                          : "white",
-                                      fontWeight: "bold",
-                                      cursor: "pointer",
+                                      });
                                     }}
                                   >
-                                    {subCategory.name}
-                                  </Typography>
-                                </div>
-                              </li>
-                              {subCategory.types ? (
-                                <ul>
-                                  {subCategory.types.map((type, idxType) => (
-                                    <li key={idxType}>
-                                      <div
-                                        style={{ width: "fit-content" }}
-                                        onClick={() => {
-                                          dispatch({
-                                            type: "CHANGE_FILTER",
-                                            payload: {
-                                              ids: {
-                                                categoryId: category._id,
-                                                subCategoryId: subCategory._id,
-                                                typeId: type._id,
-                                              },
-                                              type: "type",
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <Typography
-                                          sx={{
-                                            color:
-                                              filter?.type === "type" &&
-                                              filter?.ids.typeId === type._id
-                                                ? "#FC5A34"
-                                                : "white",
-                                            fontWeight: "bold",
-                                            cursor: "pointer",
-                                          }}
-                                        >
-                                          {type.name}
-                                        </Typography>
-                                      </div>
-                                    </li>
-                                  ))}
-                                </ul>
-                              ) : (
-                                <ul>
-                                  {subCategory?.subs?.map((sub, idxSub) => (
-                                    <Box key={idxSub}>
-                                      <li>
+                                    <Typography
+                                      sx={{
+                                        color:
+                                          filter?.type === "subCategory" &&
+                                          filter?.ids.subCategoryId ===
+                                            subCategory._id
+                                            ? "#FC5A34"
+                                            : "white",
+                                        fontWeight: "bold",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {subCategory.name}
+                                    </Typography>
+                                  </div>
+                                </li>
+                                {subCategory.types ? (
+                                  <ul>
+                                    {subCategory.types.map((type, idxType) => (
+                                      <li key={idxType}>
                                         <div
                                           style={{ width: "fit-content" }}
                                           onClick={() => {
@@ -275,9 +241,9 @@ const Products = () => {
                                                   categoryId: category._id,
                                                   subCategoryId:
                                                     subCategory._id,
-                                                  subId: sub._id,
+                                                  typeId: type._id,
                                                 },
-                                                type: "sub",
+                                                type: "type",
                                               },
                                             });
                                           }}
@@ -285,222 +251,554 @@ const Products = () => {
                                           <Typography
                                             sx={{
                                               color:
-                                                filter?.type === "sub" &&
-                                                filter?.ids.subId === sub._id
+                                                filter?.type === "type" &&
+                                                filter?.ids.typeId === type._id
                                                   ? "#FC5A34"
                                                   : "white",
                                               fontWeight: "bold",
                                               cursor: "pointer",
                                             }}
                                           >
-                                            {sub.name}
+                                            {type.name}
                                           </Typography>
                                         </div>
                                       </li>
-                                      <ul>
-                                        {sub.types.map(
-                                          (typeInner, idxTypeInner) => (
-                                            <li key={idxTypeInner}>
-                                              <div
-                                                style={{ width: "fit-content" }}
-                                                onClick={() => {
-                                                  dispatch({
-                                                    type: "CHANGE_FILTER",
-                                                    payload: {
-                                                      ids: {
-                                                        categoryId:
-                                                          category._id,
-                                                        subCategoryId:
-                                                          subCategory._id,
-                                                        subId: sub._id,
-                                                        innerTypeId:
-                                                          typeInner._id,
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <ul>
+                                    {subCategory?.subs?.map((sub, idxSub) => (
+                                      <Box key={idxSub}>
+                                        <li>
+                                          <div
+                                            style={{ width: "fit-content" }}
+                                            onClick={() => {
+                                              dispatch({
+                                                type: "CHANGE_FILTER",
+                                                payload: {
+                                                  ids: {
+                                                    categoryId: category._id,
+                                                    subCategoryId:
+                                                      subCategory._id,
+                                                    subId: sub._id,
+                                                  },
+                                                  type: "sub",
+                                                },
+                                              });
+                                            }}
+                                          >
+                                            <Typography
+                                              sx={{
+                                                color:
+                                                  filter?.type === "sub" &&
+                                                  filter?.ids.subId === sub._id
+                                                    ? "#FC5A34"
+                                                    : "white",
+                                                fontWeight: "bold",
+                                                cursor: "pointer",
+                                              }}
+                                            >
+                                              {sub.name}
+                                            </Typography>
+                                          </div>
+                                        </li>
+                                        <ul>
+                                          {sub.types.map(
+                                            (typeInner, idxTypeInner) => (
+                                              <li key={idxTypeInner}>
+                                                <div
+                                                  style={{
+                                                    width: "fit-content",
+                                                  }}
+                                                  onClick={() => {
+                                                    dispatch({
+                                                      type: "CHANGE_FILTER",
+                                                      payload: {
+                                                        ids: {
+                                                          categoryId:
+                                                            category._id,
+                                                          subCategoryId:
+                                                            subCategory._id,
+                                                          subId: sub._id,
+                                                          innerTypeId:
+                                                            typeInner._id,
+                                                        },
+                                                        type: "innerType",
                                                       },
-                                                      type: "innerType",
-                                                    },
-                                                  });
-                                                }}
-                                              >
-                                                <Typography
-                                                  sx={{
-                                                    color:
-                                                      filter?.type ===
-                                                        "innerType" &&
-                                                      filter?.ids
-                                                        .innerTypeId ===
-                                                        typeInner._id
-                                                        ? "#FC5A34"
-                                                        : "white",
-                                                    fontWeight: "bold",
-                                                    cursor: "pointer",
+                                                    });
                                                   }}
                                                 >
-                                                  {typeInner.name}
-                                                </Typography>
-                                              </div>
-                                            </li>
-                                          )
-                                        )}
-                                      </ul>
-                                    </Box>
-                                  ))}
-                                </ul>
-                              )}
-                            </Box>
-                          )
-                        )}
-                      </ul>
-                    }
-                  </Box>
-                ))}
+                                                  <Typography
+                                                    sx={{
+                                                      color:
+                                                        filter?.type ===
+                                                          "innerType" &&
+                                                        filter?.ids
+                                                          .innerTypeId ===
+                                                          typeInner._id
+                                                          ? "#FC5A34"
+                                                          : "white",
+                                                      fontWeight: "bold",
+                                                      cursor: "pointer",
+                                                    }}
+                                                  >
+                                                    {typeInner.name}
+                                                  </Typography>
+                                                </div>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </Box>
+                                    ))}
+                                  </ul>
+                                )}
+                              </Box>
+                            )
+                          )}
+                        </ul>
+                      }
+                    </Box>
+                  ))}
+                </>
+              )}
+            </Box>
+          </Box>
+          <Box
+            flex={4.5}
+            // p={2}
+            sx={{
+              display: isLoadingClientProducts ? "flex" : "block",
+              alignItems: isLoadingClientProducts ? "center" : "flex-start",
+              justifyContent: isLoadingClientProducts ? "center" : "flex-start",
+              paddingInline: "30px",
+            }}
+          >
+            {isLoadingClientProducts || isLoadingFilterChange ? (
+              <LoadingGear width="100px" />
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    marginBottom: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography sx={{ marginRight: "15px" }}>
+                    Κατασκευαστής:{" "}
+                  </Typography>
+                  <DropdownMenu
+                    choices={manufacturers}
+                    modeIndex={manufacturerIndex}
+                    setModeIndex={setManufacturerIndex}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    marginBlock: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Pagination
+                    count={pages}
+                    shape="rounded"
+                    page={page}
+                    onChange={(e, v) => {
+                      setPage(Number(v));
+                    }}
+                  />
+                </Box>
+                <ul
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    listStyle: "none",
+                    padding: 0,
+                    // backgroundColor: "blue",
+                  }}
+                >
+                  {filter?.type === "category-client" && clientProducts !== null
+                    ? clientProducts
+                        ?.map(
+                          (product, idxProduct) =>
+                            product.categoryId === filter?.ids.categoryId && (
+                              <ClientProduct
+                                product={product}
+                                key={idxProduct}
+                              />
+                            )
+                          // </Link>
+                        )
+                        .filter((e) =>
+                          manufacturerIndex === 0
+                            ? true
+                            : e === false
+                            ? false
+                            : e?.props.product.manufacturer ===
+                              manufacturers[manufacturerIndex]
+                        )
+                    : filter?.type === "subCategory" && clientProducts !== null
+                    ? clientProducts
+                        ?.map(
+                          (product, idxProduct) =>
+                            product.subCategoryId ===
+                              filter?.ids.subCategoryId && (
+                              <ClientProduct
+                                product={product}
+                                key={idxProduct}
+                              />
+                            )
+                        )
+                        .filter((e) =>
+                          manufacturerIndex === 0
+                            ? true
+                            : e === false
+                            ? false
+                            : e?.props.product.manufacturer ===
+                              manufacturers[manufacturerIndex]
+                        )
+                    : filter?.type === "type" && clientProducts !== null
+                    ? clientProducts
+                        ?.map(
+                          (product, idxProduct) =>
+                            product.typeId === filter?.ids.typeId && (
+                              <ClientProduct
+                                product={product}
+                                key={idxProduct}
+                              />
+                            )
+                        )
+                        .filter((e) =>
+                          manufacturerIndex === 0
+                            ? true
+                            : e === false
+                            ? false
+                            : e?.props.product.manufacturer ===
+                              manufacturers[manufacturerIndex]
+                        )
+                    : filter?.type === "sub" && clientProducts !== null
+                    ? clientProducts
+                        ?.map(
+                          (product, idxProduct) =>
+                            product.subId === filter?.ids.subId && (
+                              <ClientProduct
+                                product={product}
+                                key={idxProduct}
+                              />
+                            )
+                        )
+                        .filter((e) =>
+                          manufacturerIndex === 0
+                            ? true
+                            : e === false
+                            ? false
+                            : e?.props.product.manufacturer ===
+                              manufacturers[manufacturerIndex]
+                        )
+                    : filter?.type === "innerType" && clientProducts !== null
+                    ? clientProducts
+                        ?.map(
+                          (product, idxProduct) =>
+                            product.innerTypeId === filter?.ids.innerTypeId && (
+                              <ClientProduct
+                                product={product}
+                                key={idxProduct}
+                              />
+                            )
+                        )
+                        .filter((e) =>
+                          manufacturerIndex === 0
+                            ? true
+                            : e === false
+                            ? false
+                            : e?.props.product.manufacturer ===
+                              manufacturers[manufacturerIndex]
+                        )
+                    : null}
+                </ul>
               </>
             )}
           </Box>
-        </Box>
-        <Box
-          flex={4.5}
-          // p={2}
-          sx={{
-            display: isLoadingClientProducts ? "flex" : "block",
-            alignItems: isLoadingClientProducts ? "center" : "flex-start",
-            justifyContent: isLoadingClientProducts ? "center" : "flex-start",
-            paddingInline: "30px",
+          <Fab
+            onClick={() => {
+              setIsFilterDrawerOpen(!isFilterDrawerOpen);
+            }}
+            disabled={false}
+            color="primary"
+            sx={{
+              position: "fixed",
+              bottom: "70px",
+              right: "30px",
+              backgroundColor: "#153E8B",
+              color: "white",
+              display: { xs: "block", md: "none" },
+            }}
+          >
+            <Tune />
+          </Fab>
+        </Stack>
+        <Drawer
+          anchor="left"
+          open={isFilterDrawerOpen}
+          onClose={() => {
+            setIsFilterDrawerOpen(false);
           }}
         >
-          {isLoadingClientProducts || isLoadingFilterChange ? (
-            <LoadingGear width="100px" />
-          ) : (
-            <>
-              <Box
-                sx={{
-                  marginBottom: "30px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ marginRight: "15px" }}>
-                  Κατασκευαστής:{" "}
-                </Typography>
-                <DropdownMenu
-                  choices={manufacturers}
-                  modeIndex={manufacturerIndex}
-                  setModeIndex={setManufacturerIndex}
-                />
-              </Box>
-              <Box
-                sx={{
-                  marginBlock: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Pagination
-                  count={pages}
-                  shape="rounded"
-                  page={page}
-                  onChange={(e, v) => {
-                    setPage(Number(v));
-                  }}
-                />
-              </Box>
-              <ul
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  listStyle: "none",
-                  padding: 0,
-                }}
-              >
-                {filter?.type === "category-client" && clientProducts !== null
-                  ? clientProducts
-                      ?.map(
-                        (product, idxProduct) =>
-                          product.categoryId === filter?.ids.categoryId && (
-                            <ClientProduct product={product} key={idxProduct} />
-                          )
-                        // </Link>
-                      )
-                      .filter((e) =>
-                        manufacturerIndex === 0
-                          ? true
-                          : e === false
-                          ? false
-                          : e?.props.product.manufacturer ===
-                            manufacturers[manufacturerIndex]
-                      )
-                  : filter?.type === "subCategory" && clientProducts !== null
-                  ? clientProducts
-                      ?.map(
-                        (product, idxProduct) =>
-                          product.subCategoryId ===
-                            filter?.ids.subCategoryId && (
-                            <ClientProduct product={product} key={idxProduct} />
-                          )
-                      )
-                      .filter((e) =>
-                        manufacturerIndex === 0
-                          ? true
-                          : e === false
-                          ? false
-                          : e?.props.product.manufacturer ===
-                            manufacturers[manufacturerIndex]
-                      )
-                  : filter?.type === "type" && clientProducts !== null
-                  ? clientProducts
-                      ?.map(
-                        (product, idxProduct) =>
-                          product.typeId === filter?.ids.typeId && (
-                            <ClientProduct product={product} key={idxProduct} />
-                          )
-                      )
-                      .filter((e) =>
-                        manufacturerIndex === 0
-                          ? true
-                          : e === false
-                          ? false
-                          : e?.props.product.manufacturer ===
-                            manufacturers[manufacturerIndex]
-                      )
-                  : filter?.type === "sub" && clientProducts !== null
-                  ? clientProducts
-                      ?.map(
-                        (product, idxProduct) =>
-                          product.subId === filter?.ids.subId && (
-                            <ClientProduct product={product} key={idxProduct} />
-                          )
-                      )
-                      .filter((e) =>
-                        manufacturerIndex === 0
-                          ? true
-                          : e === false
-                          ? false
-                          : e?.props.product.manufacturer ===
-                            manufacturers[manufacturerIndex]
-                      )
-                  : filter?.type === "innerType" && clientProducts !== null
-                  ? clientProducts
-                      ?.map(
-                        (product, idxProduct) =>
-                          product.innerTypeId === filter?.ids.innerTypeId && (
-                            <ClientProduct product={product} key={idxProduct} />
-                          )
-                      )
-                      .filter((e) =>
-                        manufacturerIndex === 0
-                          ? true
-                          : e === false
-                          ? false
-                          : e?.props.product.manufacturer ===
-                            manufacturers[manufacturerIndex]
-                      )
-                  : null}
-              </ul>
-            </>
-          )}
-        </Box>
-      </Stack>
-    </Box>
+          <Box
+            flex={1}
+            p={2}
+            sx={{
+              backgroundColor: "#1D2C5E",
+              minWidth: "300px",
+              overflow: "auto",
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: "700",
+                color: "white",
+                fontSize: "1.7rem",
+                textAlign: "center",
+              }}
+            >
+              Κατηγορίες
+            </Typography>
+            <hr
+              style={{
+                width: "90%",
+                marginInline: "auto",
+                color: "white",
+                opacity: 0.2,
+              }}
+            ></hr>
+            <Box
+              sx={{
+                height: isLoadingCategories ? "100%" : "fit-content",
+                display: isLoadingCategories ? "flex" : "block",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isLoadingCategories ? (
+                <LoadingGear width="150px" />
+              ) : (
+                <>
+                  {categories?.map((category, idx) => (
+                    <Box key={idx}>
+                      <div
+                        style={{ width: "fit-content" }}
+                        onClick={() => {
+                          dispatch({
+                            type: "CHANGE_FILTER",
+                            payload: {
+                              ids: { categoryId: category._id },
+                              type: "category-client",
+                            },
+                          });
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            color:
+                              filter?.type === "category-client" &&
+                              filter?.ids.categoryId === category._id
+                                ? "#FC5A34"
+                                : "white",
+                            textDecoration: "underline",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {category.name}
+                        </Typography>
+                      </div>
+                      {
+                        <ul style={{ color: "white" }}>
+                          {category?.subCategories?.map(
+                            (subCategory, idxSubCategory) => (
+                              <Box key={idxSubCategory}>
+                                <li>
+                                  <div
+                                    style={{ width: "fit-content" }}
+                                    onClick={() => {
+                                      setIsFilterDrawerOpen(false);
+                                      dispatch({
+                                        type: "CHANGE_FILTER",
+                                        payload: {
+                                          ids: {
+                                            categoryId: category._id,
+                                            subCategoryId: subCategory._id,
+                                          },
+                                          type: "subCategory",
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        color:
+                                          filter?.type === "subCategory" &&
+                                          filter?.ids.subCategoryId ===
+                                            subCategory._id
+                                            ? "#FC5A34"
+                                            : "white",
+                                        fontWeight: "bold",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {subCategory.name}
+                                    </Typography>
+                                  </div>
+                                </li>
+                                {subCategory.types ? (
+                                  <ul>
+                                    {subCategory.types.map((type, idxType) => (
+                                      <li key={idxType}>
+                                        <div
+                                          style={{ width: "fit-content" }}
+                                          onClick={() => {
+                                            setIsFilterDrawerOpen(false);
+                                            dispatch({
+                                              type: "CHANGE_FILTER",
+                                              payload: {
+                                                ids: {
+                                                  categoryId: category._id,
+                                                  subCategoryId:
+                                                    subCategory._id,
+                                                  typeId: type._id,
+                                                },
+                                                type: "type",
+                                              },
+                                            });
+                                          }}
+                                        >
+                                          <Typography
+                                            sx={{
+                                              color:
+                                                filter?.type === "type" &&
+                                                filter?.ids.typeId === type._id
+                                                  ? "#FC5A34"
+                                                  : "white",
+                                              fontWeight: "bold",
+                                              cursor: "pointer",
+                                            }}
+                                          >
+                                            {type.name}
+                                          </Typography>
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <ul>
+                                    {subCategory?.subs?.map((sub, idxSub) => (
+                                      <Box key={idxSub}>
+                                        <li>
+                                          <div
+                                            style={{ width: "fit-content" }}
+                                            onClick={() => {
+                                              setIsFilterDrawerOpen(false);
+                                              dispatch({
+                                                type: "CHANGE_FILTER",
+                                                payload: {
+                                                  ids: {
+                                                    categoryId: category._id,
+                                                    subCategoryId:
+                                                      subCategory._id,
+                                                    subId: sub._id,
+                                                  },
+                                                  type: "sub",
+                                                },
+                                              });
+                                            }}
+                                          >
+                                            <Typography
+                                              sx={{
+                                                color:
+                                                  filter?.type === "sub" &&
+                                                  filter?.ids.subId === sub._id
+                                                    ? "#FC5A34"
+                                                    : "white",
+                                                fontWeight: "bold",
+                                                cursor: "pointer",
+                                              }}
+                                            >
+                                              {sub.name}
+                                            </Typography>
+                                          </div>
+                                        </li>
+                                        <ul>
+                                          {sub.types.map(
+                                            (typeInner, idxTypeInner) => (
+                                              <li key={idxTypeInner}>
+                                                <div
+                                                  style={{
+                                                    width: "fit-content",
+                                                  }}
+                                                  onClick={() => {
+                                                    setIsFilterDrawerOpen(
+                                                      false
+                                                    );
+                                                    dispatch({
+                                                      type: "CHANGE_FILTER",
+                                                      payload: {
+                                                        ids: {
+                                                          categoryId:
+                                                            category._id,
+                                                          subCategoryId:
+                                                            subCategory._id,
+                                                          subId: sub._id,
+                                                          innerTypeId:
+                                                            typeInner._id,
+                                                        },
+                                                        type: "innerType",
+                                                      },
+                                                    });
+                                                  }}
+                                                >
+                                                  <Typography
+                                                    sx={{
+                                                      color:
+                                                        filter?.type ===
+                                                          "innerType" &&
+                                                        filter?.ids
+                                                          .innerTypeId ===
+                                                          typeInner._id
+                                                          ? "#FC5A34"
+                                                          : "white",
+                                                      fontWeight: "bold",
+                                                      cursor: "pointer",
+                                                    }}
+                                                  >
+                                                    {typeInner.name}
+                                                  </Typography>
+                                                </div>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </Box>
+                                    ))}
+                                  </ul>
+                                )}
+                              </Box>
+                            )
+                          )}
+                        </ul>
+                      }
+                    </Box>
+                  ))}
+                </>
+              )}
+            </Box>
+          </Box>
+        </Drawer>
+      </Box>
+    </>
   );
 };
 

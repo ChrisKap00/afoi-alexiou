@@ -133,6 +133,7 @@ const EditProductModal = ({ setEditModalOpen, product }) => {
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "10px",
+                display: productData.images.length < 4 ? "flex" : "none",
               }}
             >
               <IconButton

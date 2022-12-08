@@ -63,13 +63,29 @@ const Product = () => {
   }, [product]);
 
   return isLoadingFetchOne || product === null ? (
-    <LoadingModal />
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <LoadingGear width="100px" />
+    </div>
   ) : (
     <Container
       maxWidth="xl"
       sx={{
         minHeight: "calc(100vh - 100px)",
-        backgroundColor: "white",
+        // backgroundColor: "white",
         paddingTop: { xs: "20px", sm: "50px" },
       }}
     >
@@ -77,9 +93,15 @@ const Product = () => {
         sx={{
           display: { xs: "block", sm: "flex" },
           justifyContent: "center",
+          // marginTop: { xs: "10px", sm: "0" },
         }}
       >
-        <Box sx={{ width: { xs: "100%", sm: "40%", } }}>
+        <Box
+          sx={{
+            width: { xs: "100%", sm: "40%" },
+            marginRight: "10px",
+          }}
+        >
           <Box
             sx={{
               width: "100%",
@@ -87,40 +109,55 @@ const Product = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
+              borderRadius: "15px",
+              boxShadow: 3,
+              backgroundColor: "white",
             }}
           >
             <img
               src={product?.images[imageIndex]}
-              style={{ width: "100%", objectFit: "contain" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                borderRadius: "15px",
+              }}
             ></img>
           </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: { xs: "flex", sm: "none" },
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "10px",
+              marginBottom: "10px",
+              padding: "5px",
+              marginRight: "10px",
+              borderRadius: "15px",
+              boxShadow: 3,
+              backgroundColor: "white",
+            }}
+          >
+            {product?.images.map((image, idx) => (
+              <Box key={idx} sx={{ marginLeft: idx !== 0 ? "6px" : 0 }}>
+                <img
+                  src={image}
+                  style={{
+                    width: "100px",
+                    border: idx === imageIndex ? "1px solid #153E8B" : "none",
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setImageIndex(idx);
+                  }}
+                ></img>
+              </Box>
+            ))}
+          </Box>
         </Box>
-        <Box
-          sx={{
-            width: { xs: "100%", sm: "40%" },
-            display: { xs: "flex", sm: "none" },
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          {product?.images.map((image, idx) => (
-            <Box key={idx} sx={{ marginLeft: idx !== 0 ? "6px" : 0 }}>
-              <img
-                src={image}
-                style={{
-                  width: "100px",
-                  border: idx === imageIndex ? "1px solid #153E8B" : "none",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setImageIndex(idx);
-                }}
-              ></img>
-            </Box>
-          ))}
-        </Box>
+
         <Box
           sx={{
             width: {
@@ -132,12 +169,14 @@ const Product = () => {
         >
           <Box
             sx={{
-              paddingLeft: { xs: 0, sm: "30px" },
-              paddingBlock: "30px",
+              padding: "30px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
               height: "100%",
+              borderRadius: "15px",
+              boxShadow: 3,
+              backgroundColor: "white",
             }}
           >
             <Box>
@@ -180,7 +219,12 @@ const Product = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: "20px",
+            marginTop: "10px",
+            padding: "5px",
+            marginRight: "10px",
+            borderRadius: "15px",
+            boxShadow: 3,
+            backgroundColor: "white",
           }}
         >
           {product?.images.map((image, idx) => (
@@ -207,7 +251,7 @@ const Product = () => {
           width: { xs: "100%", sm: "80%" },
           backgroundColor: "#153E8B",
           marginInline: "auto",
-          marginTop: { xs: "40px", sm: "150px" },
+          marginTop: { xs: "40px", sm: "50px" },
           padding: "10px 30px",
           borderRadius: "15px",
           color: "white",

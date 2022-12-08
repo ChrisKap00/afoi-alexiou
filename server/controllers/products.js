@@ -340,21 +340,39 @@ export const fetchRecommendedProducts = async (req, res) => {
 export const searchProducts = async (req, res) => {
   console.log(req.query);
   try {
-    const { query, page } = req.query;
+    const { query, code, page } = req.query;
     const productsPerPage = 2;
     const startIndex = (Number(page) - 1) * productsPerPage;
 
     const name = new RegExp(query, "i");
 
-    const result = await Product.find({
-      name,
-    })
-      .limit(productsPerPage)
-      .skip(startIndex);
+    console.log(Number.isInteger(Number(code)));
+
+    const result = code
+      ? await Product.find({
+          code,
+        })
+          .limit(productsPerPage)
+          .skip(startIndex)
+      : Number.isInteger(Number(query))
+      ? await Product.find({
+          code: query,
+        })
+          .limit(productsPerPage)
+          .skip(startIndex)
+      : await Product.find({
+          name,
+        })
+          .limit(productsPerPage)
+          .skip(startIndex);
     res.status(200).json({
       products: result,
       pages: Math.ceil(
-        (await Product.countDocuments({ name })) / productsPerPage
+        code
+          ? (await Product.countDocuments({ code })) / productsPerPage
+          : (Number.isInteger(Number(query))
+              ? await Product.countDocuments({ code: query })
+              : await Product.countDocuments({ name })) / productsPerPage
       ),
     });
   } catch (error) {

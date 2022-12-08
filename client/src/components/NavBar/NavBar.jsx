@@ -6,25 +6,22 @@ import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import EmailIcon from "@mui/icons-material/Email";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
-  Card,
-  CardActions,
   CardContent,
   Collapse,
   IconButton,
   InputBase,
-  requirePropFactory,
   Typography,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useEffect } from "react";
-import Dropdown from "../Dropdown/Dropdown";
 import "./NavBar.css";
 import { useDispatch, useSelector } from "react-redux";
-import ContactDropdown from "../ContactDropdown/ContactDropdown";
 import ReactTooltip from "react-tooltip";
-
-const pages = ["Αρχική", "Προϊόντα", "Επικοινωνία"];
+import ContactMobileModal from "../ContactMobileModal/ContactMobileModal";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -47,8 +44,9 @@ const Search = styled("form")(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
+  minWidth: "fit-content",
+  [theme.breakpoints.up("xs")]: {
+    // marginLeft: theme.spacing(3),
     width: "auto",
   },
 }));
@@ -71,9 +69,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "30ch",
-    },
   },
 }));
 
@@ -93,6 +88,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [contactMobileOpen, setContactMobileOpen] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -104,6 +100,7 @@ const NavBar = () => {
   };
 
   useEffect(() => {
+    setExpanded(false);
     setCurrentPage(
       location.pathname === "/"
         ? 0
@@ -159,7 +156,7 @@ const NavBar = () => {
         <Box
           sx={{
             flexGrow: 1,
-            display: { xs: "none", md: "flex" },
+            display: { xs: "none", sm: "flex" },
             alignItems: "center",
             // backgroundColor: "green",
             height: "100%",
@@ -243,6 +240,7 @@ const NavBar = () => {
                   cursor: "pointer",
                   borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
                   color: "white",
+                  fontSize: "1.07rem",
                 }}
               >
                 Επικοινωνία
@@ -276,7 +274,11 @@ const NavBar = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Box sx={{ width: "50%" }}>
+              <Box
+                sx={{
+                  width: "50%",
+                }}
+              >
                 <Typography
                   sx={{
                     textAlign: "center",
@@ -284,7 +286,14 @@ const NavBar = () => {
                 >
                   Ωράριο
                 </Typography>
-                <hr style={{ marginBlock: "5px", color: "orange" }}></hr>
+                <hr
+                  style={{
+                    marginBlock: "5px",
+                    color: "orange",
+                    width: "90%",
+                    marginInline: "auto",
+                  }}
+                ></hr>
                 <Box sx={{ display: "flex" }}>
                   <Box sx={{ width: "50%" }}>
                     <Typography
@@ -404,7 +413,105 @@ const NavBar = () => {
                   </Box>
                 </Box>
               </Box>
-              <Box sx={{ width: "50%" }}>hi</Box>
+              <Box sx={{ width: "50%" }}>
+                {/* <Box
+                  sx={{
+                    width: "100%",
+                    height: "40px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    backgroundColor: "red",
+                    paddingTop: "10px",
+                  }}
+                >
+              </Box> */}
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  Στοιχεία επικοινωνίας
+                </Typography>
+                <hr
+                  style={{
+                    marginBlock: "5px",
+                    color: "orange",
+                    width: "90%",
+                    marginInline: "auto",
+                  }}
+                ></hr>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    paddingLeft: "30px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      color: "white",
+                      marginBlock: "16px",
+                    }}
+                  >
+                    <LocalPhoneIcon
+                      sx={{
+                        color: "#FC5A34",
+                        fontSize: "1.5rem",
+
+                        marginRight: "5px",
+                      }}
+                    />
+                    2421063118
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      color: "white",
+                      marginBlock: "16px",
+                    }}
+                  >
+                    <EmailIcon
+                      sx={{
+                        color: "#FC5A34",
+                        fontSize: "1.5rem",
+
+                        marginRight: "5px",
+                      }}
+                    />
+                    chrkap7@gmail.com
+                  </Typography>
+                  <a
+                    target="blank"
+                    href="https://www.google.com/maps/place/%CE%91%CE%A6%CE%9F%CE%99+%CE%91%CE%9B%CE%95%CE%9E%CE%99%CE%9F%CE%A5+%CE%9F%CE%95/@39.3673859,22.9221365,20z/data=!4m5!3m4!1s0x14a76c113fc567fd:0x4f587a465dd3e5c8!8m2!3d39.3674513!4d22.9220633"
+                  >
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        color: "white",
+                        marginBlock: "16px",
+
+                        textDecoration: "underline",
+                        textDecorationColor: "white",
+                      }}
+                    >
+                      <LocationOnIcon
+                        sx={{
+                          color: "#FC5A34",
+                          fontSize: "1.5rem",
+
+                          marginRight: "5px",
+                        }}
+                      />
+                      Βρείτε μας στον χάρτη
+                    </Typography>
+                  </a>
+                </Box>
+              </Box>
             </Box>
           </ReactTooltip>
         </Box>
@@ -412,7 +519,13 @@ const NavBar = () => {
         <Search
           onSubmit={handleSearch}
           onChange={(e) => setSearch(e.target.value)}
-          sx={{ display: { xs: "none", md: "block" } }}
+          sx={{
+            display: {
+              xs: "none",
+              xssm: location.pathname.split("/")[1] === "" ? "none" : "block",
+              md: "block",
+            },
+          }}
         >
           <SearchIconWrapper>
             <SearchIcon sx={{ color: "white" }} />
@@ -437,7 +550,7 @@ const NavBar = () => {
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
-          sx={{ display: { xs: "block", md: "none" }, color: "white" }}
+          sx={{ display: { xs: "block", sm: "none" }, color: "white" }}
         >
           <ExpandMoreIcon />
         </ExpandMore>
@@ -447,7 +560,7 @@ const NavBar = () => {
         in={expanded}
         // timeout="auto"
         unmountOnExit
-        // sx={{ position: "relative" }}
+        sx={{ display: { xs: expanded && "block", sm: "none" } }}
       >
         <hr
           style={{
@@ -469,29 +582,148 @@ const NavBar = () => {
               justifyContent: "center",
             }}
           >
-            {pages.map((page, idx) => (
+            <Search
+              onSubmit={handleSearch}
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                display: {
+                  xs: location.pathname.split("/")[1] === "" ? "none" : "block",
+                  xssm: "none",
+                },
+              }}
+            >
+              <SearchIconWrapper>
+                <SearchIcon sx={{ color: "white" }} />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Αναζητήστε προϊόντα..."
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          </Container>
+          <Box
+            sx={{
+              display: {
+                xs: location.pathname.split("/")[1] === "" ? "none" : "block",
+                xssm: "none",
+              },
+            }}
+          >
+            <hr
+              style={{
+                height: "1px",
+                border: 0,
+                borderTop: "1px solid white",
+                // margin: "1em 0",
+                marginInline: "auto",
+                padding: 0,
+                opacity: "50%",
+                width: "90%",
+              }}
+            ></hr>
+          </Box>
+          <Container
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Link
+              style={{
+                textDecoration: "none",
+                // color: "white"
+                color: currentPage === 0 ? "#FC5A34" : "white",
+              }}
+              to="/"
+            >
               <div
-                key={idx}
+                id="page"
                 style={{
                   // paddingBlock: "5px",
-                  paddingInline: "25px",
-                  // marginBlock: "5px",
-                  marginTop: "5px",
-                  color: "white",
-                  display: "block",
+                  paddingInline: "20px",
+                  // marginBlock: "20px",
+                  // color: "white",
+                  // display: "block",
+                  display: "flex",
+                  alignItems: "center",
                   borderRadius: 0,
-                  borderLeft:
-                    idx !== 0 ? "1px solid rgba(255, 255, 255, 0.3)" : "none",
+                  fontSize: "1.1rem",
+                  borderRight: "1px solid rgba(255, 255, 255, 0.3)",
                 }}
-                data-tip
-                data-for="tooltip"
               >
-                {page}
+                Αρχική
               </div>
-            ))}
+            </Link>
+            <Link
+              style={{
+                textDecoration: "none",
+                // color: "white"
+                color: currentPage === 1 ? "#FC5A34" : "white",
+              }}
+              to="/products"
+            >
+              <div
+                id="page"
+                style={{
+                  // paddingBlock: "5px",
+                  paddingInline: "20px",
+                  // marginBlock: "20px",
+                  // color: "white",
+                  // display: "block",
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: 0,
+                  fontSize: "1.1rem",
+                  borderRight: "1px solid rgba(255, 255, 255, 0.3)",
+                }}
+              >
+                Προϊόντα
+              </div>
+            </Link>
+            <div
+              data-tip
+              data-for="tooltip"
+              style={{
+                position: "relative",
+                // backgroundColor: "blue",
+                height: "100%",
+              }}
+              onClick={() => {
+                setContactMobileOpen(!contactMobileOpen);
+              }}
+            >
+              <div
+                id="contact"
+                style={{
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: 0,
+                  // backgroundColor: "red",
+                  height: "100%",
+                }}
+              >
+                <label
+                  style={{
+                    paddingInline: "20px",
+                    cursor: "pointer",
+                    borderLeft: "1px solid rgba(255, 255, 255, 0.3)",
+                    color: "white",
+                    fontSize: "1.07rem",
+                  }}
+                >
+                  Επικοινωνία
+                </label>
+              </div>
+              {/* {contactDropdown && <ContactDropdown />} */}
+            </div>
           </Container>
         </CardContent>
       </Collapse>
+      {contactMobileOpen && (
+        <ContactMobileModal setContactMobileOpen={setContactMobileOpen} />
+      )}
     </Box>
   );
 };

@@ -1,4 +1,12 @@
-import { Box, Container, Typography, InputBase, Card } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  InputBase,
+  Card,
+  TextField,
+  Button,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
@@ -10,7 +18,9 @@ import HomeCard from "./HomeCard/HomeCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PopularCard from "./TypeCard/PopularCard";
 import "./Home.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("form")(({ theme }) => ({
   position: "relative",
@@ -66,6 +76,29 @@ const Home = () => {
   };
 
   const { categories } = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+  const [searchCode, setSearchCode] = useState("");
+
+  const handleSearchWithCode = (e) => {
+    e.preventDefault();
+    console.log(searchCode);
+    if (searchCode.trim()) {
+      // dispatch(searchPeople(search));
+      navigate(`/search?code=${searchCode || "none"}`);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(search);
+    if (search.trim()) {
+      // dispatch(searchPeople(search));
+      navigate(`/search?query=${search || "none"}`);
+    }
+  };
 
   return (
     <Box
@@ -165,8 +198,8 @@ const Home = () => {
               }}
             >
               <Search
-              //   onSubmit={handleSearch}
-              //   onChange={(e) => setSearch(e.target.value)}
+                onSubmit={handleSearch}
+                onChange={(e) => setSearch(e.target.value)}
               >
                 <SearchIconWrapper>
                   <SearchIcon sx={{ color: "white" }} />
@@ -357,8 +390,82 @@ const Home = () => {
             )}
           </Card>
         </Box>
+        <Box
+          sx={{
+            width: "100%",
+            backgroundColor: "#153E8B",
+            marginInline: "auto",
+            marginTop: { xs: "40px", sm: "50px" },
+            padding: "10px 30px",
+            borderRadius: "15px",
+            color: "white",
+            marginBottom: "50px",
+            paddingBlock: "20px",
+          }}
+        >
+          <Typography sx={{ fontSize: "1.6rem", fontWeight: "500" }}>
+            Αναζήτηση κωδικού
+          </Typography>
+          <hr style={{ backgroundColor: "white" }}></hr>
+          <form
+            style={{
+              display: { xs: "block", xssm: "flex" },
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 0,
+              width: "100%",
+              // backgroundColor: "red",
+            }}
+            onSubmit={handleSearchWithCode}
+          >
+            <Box
+              sx={{
+                display: { xs: "block", xssm: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                // size="small"
+                sx={{
+                  backgroundColor: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  width: { xs: "100%", xssm: "80%" },
+                  marginRight: { xs: 0, xssm: "10px" },
+                  marginBottom: { xs: "10px", xssm: 0 },
+                }}
+                placeholder="Κωδικός..."
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setSearchCode(e.target.value);
+                }}
+              />
+              {/* <Box
+              sx={{
+                backgroundColor: "yellow",
+                height: "100%",
+                width: { xs: "100%", sm: "20%" },
+              }}
+            >
+            </Box> */}
+              <Button
+                id="codeSearchBtn"
+                type="submit"
+                variant="contained"
+                sx={{
+                  height: "56px",
+                  backgroundColor: "#FC5A34",
+                  width: { xs: "100%", xssm: "20%" },
+                }}
+              >
+                Αναζήτηση
+              </Button>
+            </Box>
+          </form>
+        </Box>
       </Container>
-      <hr style={{ width: "90%", marginInline: "auto" }}></hr>
+      {/* <hr style={{ width: "90%", marginInline: "auto" }}></hr> */}
     </Box>
   );
 };
