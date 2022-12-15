@@ -4,7 +4,6 @@ export const fetchCategories = () => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_CATEGORIES" });
   try {
     const { data } = await api.fetchCategories();
-    console.log(data);
     dispatch({ type: "FETCH_CATEGORIES", payload: data.categories });
   } catch (error) {
     console.log(error);
@@ -12,38 +11,17 @@ export const fetchCategories = () => async (dispatch) => {
   dispatch({ type: "STOP_LOADING_FETCH_CATEGORIES" });
 };
 
-export const sendCategories = (categories) => async (dispatch) => {
-  try {
-    const { data } = await api.sendCategories(categories);
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const deleteAllCategories = () => async (dispatch) => {
-  try {
-    const { data } = await api.deleteAllCategories();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const deleteById =
   (item, categoriesCopy, setCategoriesCopy) => async (dispatch) => {
-    // console.log("hi");
     dispatch({ type: "START_LOADING_UPDATE" });
     try {
       const { data } = await api.deleteById(item);
       const { id, categoryId, subCategoryId, subId, type } = data;
-      console.log(data);
 
       let category = {};
       for (let categoryTemp of categoriesCopy) {
         if (categoryTemp._id === categoryId) {
           category = { ...categoryTemp };
-          console.log(category);
         }
       }
       if (type === "subCategory") {
@@ -95,7 +73,6 @@ export const addSubCategory =
     try {
       const { data } = await api.addSubCategory(item);
       const { categoryId, subCategoryId, subId, name, type } = data;
-      console.log(data);
       let newId;
       if (type === "subCategory") {
         for (let subCategory of data.updatedCategory.subCategories) {
@@ -141,11 +118,9 @@ export const addSubCategory =
       for (let categoryTemp of categoriesCopy) {
         if (categoryTemp._id === categoryId) {
           category = { ...categoryTemp };
-          console.log(category);
         }
       }
       if (type === "subCategory") {
-        // category.subCategories.push({ name, _id: newId });
         setCategoriesCopy(
           categoriesCopy.map((categoryParam, idx) =>
             categoryParam._id === categoryId
@@ -272,10 +247,8 @@ export const addSubCategory =
 
 export const addProduct = (item) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
-  console.log(item);
   try {
     const { data } = await api.addProduct(item);
-    console.log(data);
     dispatch({
       type: "ADD_PRODUCT",
       payload: {
@@ -291,13 +264,11 @@ export const addProduct = (item) => async (dispatch) => {
 };
 
 export const fetchProducts = (params) => async (dispatch) => {
-  console.log(params);
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
     const {
       data: { products },
     } = await api.fetchProducts(params);
-    console.log(products);
     dispatch({ type: "FETCH_PRODUCTS", payload: products });
   } catch (error) {
     console.log(error);
@@ -313,7 +284,6 @@ export const fetchClientProducts =
       const {
         data: { products, pages },
       } = await api.fetchProducts({ ids, type, page });
-      console.log(products, pages);
       setPages(pages);
       setClientProducts(products);
       dispatch({ type: "FETCH_CLIENT_PRODUCTS", payload: products });
@@ -327,7 +297,6 @@ export const fetchProduct = (id, setProduct) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_ONE" });
   try {
     const { data } = await api.fetchProduct(id);
-    console.log(data);
     setProduct(data);
   } catch (error) {
     console.log(error);
@@ -340,7 +309,6 @@ export const fetchRecommendedProducts =
     dispatch({ type: "START_LOADING_FETCH_RECOMMENDED" });
     try {
       const { data } = await api.fetchRecommendedProducts(ids);
-      console.log(data);
       setRecommendedProducts(data);
     } catch (error) {
       console.log(error);
@@ -352,7 +320,6 @@ export const deleteProduct = (id) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
     const { data } = await api.deleteProduct(id);
-    console.log(data);
     dispatch({ type: "DELETE_PRODUCT", payload: data.id });
   } catch (error) {
     console.log(error);
@@ -364,7 +331,6 @@ export const editProduct = (productData) => async (dispatch) => {
   dispatch({ type: "START_LOADING_FETCH_PRODUCTS" });
   try {
     const { data } = await api.editProduct(productData);
-    console.log(data);
     dispatch({ type: "EDIT_PRODUCT", payload: { id: data.id, productData } });
   } catch (error) {
     console.log(error);
@@ -380,7 +346,6 @@ export const searchProducts =
       const {
         data: { products, pages },
       } = await api.searchProducts({ query, code, page });
-      console.log(products, pages);
       setPages(pages);
       setResults(products);
     } catch (error) {

@@ -39,7 +39,6 @@ const HomeCard = ({ name, content, id }) => {
         </Typography>
         <Link
           onClick={() => {
-            console.log(id);
             dispatch({ type: "REDIRECT" });
             dispatch({
               type: "CHANGE_FILTER",

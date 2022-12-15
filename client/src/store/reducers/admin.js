@@ -4,7 +4,6 @@ export default (
   ) => {
     switch (action.type) {
       case "ADMIN_AUTH":
-        console.log(action?.data);
         localStorage.setItem("admin", JSON.stringify({ ...action?.payload }));
         return { ...state, admin: action?.payload };
       case "ADMIN_LOGOUT":

@@ -10,7 +10,6 @@ import EditProductModal from "../EditProductModal/EditProductModal";
 const AdminProduct = ({ product }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  console.log(product.name);
   return (
     <Card
       elevation={5}

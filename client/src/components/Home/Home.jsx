@@ -84,26 +84,20 @@ const Home = () => {
 
   const handleSearchWithCode = (e) => {
     e.preventDefault();
-    console.log(searchCode);
     if (searchCode.trim()) {
-      // dispatch(searchPeople(search));
       navigate(`/search?code=${searchCode || "none"}`);
     }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(search);
     if (search.trim()) {
-      // dispatch(searchPeople(search));
       navigate(`/search?query=${search || "none"}`);
     }
   };
 
   return (
-    <Box
-    // sx={{ backgroundColor: "#ecf0f1" }}
-    >
+    <Box>
       <Box
         // id="container"
         sx={{
@@ -467,18 +461,9 @@ const Home = () => {
                 }}
                 placeholder="Κωδικός..."
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setSearchCode(e.target.value);
                 }}
               />
-              {/* <Box
-              sx={{
-                backgroundColor: "yellow",
-                height: "100%",
-                width: { xs: "100%", sm: "20%" },
-              }}
-            >
-            </Box> */}
               <Button
                 id="codeSearchBtn"
                 type="submit"

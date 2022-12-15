@@ -25,12 +25,6 @@ const Product = () => {
   useEffect(() => {
     setProduct(null);
     setImageIndex(0);
-    console.log(
-      location.pathname.substring(
-        location.pathname.lastIndexOf("/") + 1,
-        location.pathname.length
-      )
-    );
     dispatch(
       fetchProduct(
         {
@@ -45,7 +39,6 @@ const Product = () => {
   }, [location]);
 
   useEffect(() => {
-    console.log(product);
     if (product === null) return;
     dispatch(
       fetchRecommendedProducts(
@@ -280,13 +273,9 @@ const Product = () => {
                 padding: 0,
               }}
             >
-              {recommendedProducts?.map(
-                (product, idxProduct) => {
-                  console.log(product);
-                  return <ClientProduct product={product} key={idxProduct} />;
-                }
-                // </Link>
-              )}
+              {recommendedProducts?.map((product, idxProduct) => {
+                return <ClientProduct product={product} key={idxProduct} />;
+              })}
             </ul>
           )}
         </Box>

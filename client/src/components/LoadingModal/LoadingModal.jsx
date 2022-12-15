@@ -6,7 +6,6 @@ const LoadingModal = ({ backgroundColor }) => {
   return (
     <Modal
       open={true}
-      // closeAfterTransition
       BackdropComponent={Backdrop}
     >
       <Fade in={true}>

@@ -14,9 +14,7 @@ const PopularCard = ({ name, content, type, nameInObject, categoryIdx }) => {
 
   useEffect(() => {
     if (isLoadingCategories || categories.length === 0) return;
-    console.log(categories);
     for (const subCategory of categories[categoryIdx]?.subCategories) {
-      console.log(subCategory);
       if (type === "type" && subCategory.types) {
         for (const type of subCategory.types) {
           if (nameInObject === type.name) {

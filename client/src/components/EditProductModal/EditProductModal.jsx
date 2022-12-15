@@ -160,11 +160,9 @@ const EditProductModal = ({ setEditModalOpen, product }) => {
                         data.type.substring(0, data.type.indexOf("/")) !==
                         "image"
                       ) {
-                        console.log("INVALID");
                         return;
                       }
                       if (productData.images.includes(data.base64)) {
-                        console.log("ALREADY IN");
                         return;
                       }
                       setProductData({
@@ -304,7 +302,6 @@ const EditProductModal = ({ setEditModalOpen, product }) => {
               color="primary"
               onClick={() => {
                 setEditModalOpen(false);
-                console.log(productData);
                 dispatch(editProduct(productData));
               }}
             >

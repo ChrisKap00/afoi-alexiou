@@ -34,7 +34,6 @@ const Products = () => {
     }
     if (isLoadingCategories || categories.length === 0 || filter === null)
       return;
-    console.log("HERE");
     dispatch({
       type: "CHANGE_FILTER",
       payload: {
@@ -49,7 +48,6 @@ const Products = () => {
       return;
     setPage(1);
     setManufacturerIndex(0);
-    console.log(filter);
     dispatch(fetchClientProducts(filter, setPages, setClientProducts, page));
   }, [filter]);
 

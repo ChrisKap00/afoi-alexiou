@@ -9,17 +9,6 @@ const DropdownMenu = ({ choices, modeIndex, setModeIndex }) => {
     <div className="j">
       <div
         className="box"
-        // style={{
-        //   backgroundColor: "white",
-        //   width: "fit-content",
-        //   padding: "5px 7px",
-        //   borderRadius: "7px",
-        //   display: "flex",
-        //   alignItems: "center",
-        //   justifyContent: "center",
-        //   cursor: "pointer",
-        //   marginBottom: "3px",
-        // }}
         onClick={() => setActive(!active)}
       >
         {choices[modeIndex]}

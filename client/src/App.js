@@ -40,7 +40,6 @@ function App() {
 
   useEffect(() => {
     if (isLoadingCategories || categories.length === 0) return;
-    console.log("HERE");
     dispatch({
       type: "CHANGE_FILTER",
       payload: {

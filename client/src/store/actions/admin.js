@@ -4,12 +4,7 @@ export const signin = (formData, navigate) => async (dispatch) => {
   dispatch({ type: "START_LOADING_ADMIN_AUTH" });
   try {
     const { data } = await api.signIn(formData);
-    console.log(data);
-
-      dispatch({ type: "ADMIN_AUTH", payload: data });
-
-    //   // navigate("/posts");
-    //   navigate(0);
+    dispatch({ type: "ADMIN_AUTH", payload: data });
   } catch (error) {
     console.log(error);
   }
@@ -20,11 +15,7 @@ export const signup = (formData, navigate) => async (dispatch) => {
   dispatch({ type: "START_LOADING_ADMIN_AUTH" });
   try {
     const { data } = await api.signUp(formData);
-    console.log(data);
-
     dispatch({ type: "ADMIN_AUTH", payload: data });
-
-    // navigate("/posts");
     navigate(0);
   } catch (error) {
     console.log(error);

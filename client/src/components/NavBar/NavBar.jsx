@@ -92,9 +92,7 @@ const NavBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log(search);
     if (search.trim()) {
-      // dispatch(searchPeople(search));
       navigate(`/search?query=${search || "none"}`);
     }
   };

@@ -5,7 +5,6 @@ import "./Dropdown.css";
 
 function Dropdown({ categories }) {
   const [click, setClick] = React.useState(false);
-  console.log("DROPDOWN");
 
   const handleClick = () => setClick(!click);
 

@@ -27,10 +27,8 @@ import FileBase from "react-file-base64";
 import {
   addProduct,
   addSubCategory,
-  deleteAllCategories,
   deleteById,
   fetchProducts,
-  sendCategories,
 } from "../../store/actions/products";
 import AdminProduct from "../AdminProduct/AdminProduct";
 
@@ -281,7 +279,6 @@ const Admin = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
 
   const handleShowPassword = () =>
@@ -371,20 +368,6 @@ const Admin = () => {
           >
             ΕΠΕΞΕΡΓΑΣΙΑ ΒΑΣΗΣ
           </Typography>
-          <button
-            onClick={() => {
-              dispatch(sendCategories(categoriesObj));
-            }}
-          >
-            send categories
-          </button>
-          <button
-            onClick={() => {
-              dispatch(deleteAllCategories());
-            }}
-          >
-            delete categories
-          </button>
           {isLoadingCategories ? (
             <Box
               sx={{
@@ -427,9 +410,6 @@ const Admin = () => {
                         }}
                         onClick={() => {
                           if (!category.firstTimeExpanded) {
-                            console.log(
-                              `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n}`
-                            );
                             dispatch(
                               fetchProducts({
                                 ids: {
@@ -593,7 +573,6 @@ const Admin = () => {
                                         : "types"
                                     }
                                     onChange={(e) => {
-                                      console.log(e.target.value);
                                       setCategoriesCopy(
                                         categoriesCopy.map((category, index) =>
                                           index === idx
@@ -746,14 +725,12 @@ const Admin = () => {
                                     <FileBase
                                       multiple={false}
                                       onDone={(data) => {
-                                        console.log(data);
                                         if (
                                           data.type.substring(
                                             0,
                                             data.type.indexOf("/")
                                           ) !== "image"
                                         ) {
-                                          console.log("INVALID");
                                           return;
                                         }
                                         setCategoriesCopy(
@@ -871,7 +848,6 @@ const Admin = () => {
                                             : cat
                                         )
                                       );
-                                      console.log(category);
                                     }}
                                   ></TextField>
                                 </Box>
@@ -907,7 +883,6 @@ const Admin = () => {
                                             : cat
                                         )
                                       );
-                                      console.log(category);
                                     }}
                                   ></TextField>
                                 </Box>
@@ -945,7 +920,6 @@ const Admin = () => {
                                             : cat
                                         )
                                       );
-                                      console.log(category);
                                     }}
                                   ></TextField>
                                 </Box>
@@ -982,7 +956,6 @@ const Admin = () => {
                                             : cat
                                         )
                                       );
-                                      console.log(category);
                                     }}
                                   ></TextField>
                                 </Box>
@@ -1018,7 +991,6 @@ const Admin = () => {
                                             : cat
                                         )
                                       );
-                                      console.log(category);
                                     }}
                                   ></TextField>
                                 </Box>
@@ -1038,16 +1010,6 @@ const Admin = () => {
                                     !category.productToAddManufacturer
                                   }
                                   onClick={() => {
-                                    // console.log({
-                                    //   images: category.productToAddImages,
-                                    //   code: category.productToAddCode,
-                                    //   name: category.productToAddName,
-                                    //   price: category.productToAddPrice,
-                                    //   inStock: category.productToAddInStock,
-                                    //   manufacturer:
-                                    //     category.productToAddManufacturer,
-                                    //   categoryId: category._id,
-                                    // });
                                     dispatch(
                                       addProduct({
                                         images: category.productToAddImages,
@@ -1112,9 +1074,6 @@ const Admin = () => {
                                   !subCategory.types &&
                                   !subCategory.subs
                                 ) {
-                                  console.log(
-                                    `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n\tsubCategoryId: ${subCategory._id}\n}`
-                                  );
                                   dispatch(
                                     fetchProducts({
                                       ids: {
@@ -1337,7 +1296,6 @@ const Admin = () => {
                                                     : category
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1355,7 +1313,6 @@ const Admin = () => {
                                         }
                                         variant="contained"
                                         onClick={() => {
-                                          console.log(subCategory.subNameToAdd);
                                           dispatch(
                                             addSubCategory(
                                               {
@@ -1491,14 +1448,12 @@ const Admin = () => {
                                           <FileBase
                                             multiple={false}
                                             onDone={(data) => {
-                                              console.log(data);
                                               if (
                                                 data.type.substring(
                                                   0,
                                                   data.type.indexOf("/")
                                                 ) !== "image"
                                               ) {
-                                                console.log("INVALID");
                                                 return;
                                               }
                                               setCategoriesCopy(
@@ -1657,7 +1612,6 @@ const Admin = () => {
                                                   : cat
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1705,7 +1659,6 @@ const Admin = () => {
                                                   : cat
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1755,7 +1708,6 @@ const Admin = () => {
                                                   : cat
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1804,7 +1756,6 @@ const Admin = () => {
                                                   : cat
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1852,7 +1803,6 @@ const Admin = () => {
                                                   : cat
                                               )
                                             );
-                                            console.log(subCategory);
                                           }}
                                         ></TextField>
                                       </Box>
@@ -1872,16 +1822,6 @@ const Admin = () => {
                                           !subCategory.productToAddManufacturer
                                         }
                                         onClick={() => {
-                                          // console.log({
-                                          //   images: category.productToAddImages,
-                                          //   code: category.productToAddCode,
-                                          //   name: category.productToAddName,
-                                          //   price: category.productToAddPrice,
-                                          //   inStock: category.productToAddInStock,
-                                          //   manufacturer:
-                                          //     category.productToAddManufacturer,
-                                          //   categoryId: category._id,
-                                          // });
                                           dispatch(
                                             addProduct({
                                               images:
@@ -1951,9 +1891,6 @@ const Admin = () => {
                                     }}
                                     onClick={() => {
                                       if (!type.firstTimeExpanded) {
-                                        console.log(
-                                          `FETCHING PRODUCTS FOR:\n{\n\tcategoryId: ${category._id},\n\tsubCategoryId: ${subCategory._id},\n\ttypeId: ${type._id}\n}`
-                                        );
                                         dispatch(
                                           fetchProducts({
                                             ids: {
@@ -2166,14 +2103,12 @@ const Admin = () => {
                                                 <FileBase
                                                   multiple={false}
                                                   onDone={(data) => {
-                                                    console.log(data);
                                                     if (
                                                       data.type.substring(
                                                         0,
                                                         data.type.indexOf("/")
                                                       ) !== "image"
                                                     ) {
-                                                      console.log("INVALID");
                                                       return;
                                                     }
                                                     setCategoriesCopy(
@@ -2382,7 +2317,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(type);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2449,7 +2383,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(type);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2518,12 +2451,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(
-                                                    Number(
-                                                      type.productToAddPrice
-                                                    )
-                                                  );
-                                                  console.log(type);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2591,7 +2518,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(type);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2658,7 +2584,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(type);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2783,7 +2708,6 @@ const Admin = () => {
                                                 : category
                                           )
                                         );
-                                        console.log(sub);
                                       }}
                                     >
                                       {sub.name}
@@ -2887,7 +2811,6 @@ const Admin = () => {
                                                     : category
                                               )
                                             );
-                                            console.log(sub);
                                           }}
                                         >
                                           <Typography>
@@ -2989,7 +2912,6 @@ const Admin = () => {
                                                           : category
                                                     )
                                                   );
-                                                  console.log(sub);
                                                 }}
                                               ></TextField>
                                             </Box>
@@ -2997,9 +2919,6 @@ const Admin = () => {
                                               disabled={!sub.typeNameToAdd}
                                               variant="contained"
                                               onClick={() => {
-                                                console.log(
-                                                  subCategory.subNameToAdd
-                                                );
                                                 dispatch(
                                                   addSubCategory(
                                                     {
@@ -3304,7 +3223,6 @@ const Admin = () => {
                                                           <FileBase
                                                             multiple={false}
                                                             onDone={(data) => {
-                                                              console.log(data);
                                                               if (
                                                                 data.type.substring(
                                                                   0,
@@ -3313,9 +3231,6 @@ const Admin = () => {
                                                                   )
                                                                 ) !== "image"
                                                               ) {
-                                                                console.log(
-                                                                  "INVALID"
-                                                                );
                                                                 return;
                                                               }
                                                               setCategoriesCopy(
@@ -3586,9 +3501,6 @@ const Admin = () => {
                                                                     : category
                                                               )
                                                             );
-                                                            console.log(
-                                                              typeInner
-                                                            );
                                                           }}
                                                         ></TextField>
                                                       </Box>
@@ -3673,9 +3585,6 @@ const Admin = () => {
                                                                       }
                                                                     : category
                                                               )
-                                                            );
-                                                            console.log(
-                                                              typeInner
                                                             );
                                                           }}
                                                         ></TextField>
@@ -3764,9 +3673,6 @@ const Admin = () => {
                                                                     : category
                                                               )
                                                             );
-                                                            console.log(
-                                                              typeInner
-                                                            );
                                                           }}
                                                         ></TextField>
                                                       </Box>
@@ -3853,9 +3759,6 @@ const Admin = () => {
                                                                     : category
                                                               )
                                                             );
-                                                            console.log(
-                                                              typeInner
-                                                            );
                                                           }}
                                                         ></TextField>
                                                       </Box>
@@ -3940,9 +3843,6 @@ const Admin = () => {
                                                                       }
                                                                     : category
                                                               )
-                                                            );
-                                                            console.log(
-                                                              typeInner
                                                             );
                                                           }}
                                                         ></TextField>
