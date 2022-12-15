@@ -41,12 +41,7 @@ const PopularCard = ({ name, content, type, nameInObject, categoryIdx }) => {
         borderRadius: "0",
         width: "100%",
         height: { xs: "300px", md: "445px" },
-        // maxHeight: "350px",
-        // aspectRatio: "1",
-        // minWidth: "200px",
       }}
-      // className="cardContainer"
-      // elevation={5}
     >
       <img
         src={require(`../../../assets/images/home-${name}.jpg`)}
@@ -71,33 +66,22 @@ const PopularCard = ({ name, content, type, nameInObject, categoryIdx }) => {
       >
         <Box
           sx={{
-            // backgroundColor: "blue",
             paddingInline: { xs: "20px", md: "50px" },
             height: "100%",
             display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "center",
-            // alignItems: "center",
           }}
         >
           <Box
             className="cardInner2"
             sx={{
               margin: "auto",
-              // backgroundColor: "yellow",
               width: "100%",
-              // display: { xs: "flex", sm: "block" },
-              // flexDirection: "column",
-              // alignItems: "center",
             }}
           >
             <Typography
               sx={{
                 color: "white",
                 fontWeight: "600",
-                // backgroundColor: "red",
-                // display: { xs: "flex", sm: "block" },
-                // justifyContent: "center",
                 fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
                 marginBottom: { xs: "1.5rem", md: "3rem" },
               }}
@@ -108,9 +92,6 @@ const PopularCard = ({ name, content, type, nameInObject, categoryIdx }) => {
               sx={{
                 color: "white",
                 fontWeight: "500",
-                // backgroundColor: "red",
-                // display: { xs: "flex", sm: "block" },
-                // justifyContent: "center",
                 fontSize: { xs: "1.4rem", sm: "1.6rem", md: "1.8rem" },
               }}
             >
@@ -129,7 +110,6 @@ const PopularCard = ({ name, content, type, nameInObject, categoryIdx }) => {
                 to={`/products`}
               >
                 <Button
-                  // className="btn"
                   variant="contained"
                   sx={{
                     cursor: "pointer",

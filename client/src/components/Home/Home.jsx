@@ -261,7 +261,7 @@ const Home = () => {
                     marginRight: "5px",
                   }}
                 />
-                chrkap7@gmail.com
+                afoi_alexiou@yahoo.gr
               </Typography>
               <a
                 target="blank"
@@ -333,6 +333,36 @@ const Home = () => {
                   content="Κολάρα INTERCOOLER"
                   type="type"
                   nameInObject="INTERCOOLER"
+                  categoryIdx={0}
+                ></PopularCard>
+              </Carousel.Item>
+              <Carousel.Item style={{ height: "100%" }}>
+                <PopularCard
+                  className="d-bock w-100"
+                  name="plato"
+                  content="Δίσκοι πλατώ"
+                  type="type"
+                  nameInObject="Πλατώ"
+                  categoryIdx={0}
+                ></PopularCard>
+              </Carousel.Item>
+              <Carousel.Item style={{ height: "100%" }}>
+                <PopularCard
+                  className="d-bock w-100"
+                  name="amortiser"
+                  content="Αμορτισέρ"
+                  type="type"
+                  nameInObject="Αμορτισέρ"
+                  categoryIdx={0}
+                ></PopularCard>
+              </Carousel.Item>
+              <Carousel.Item style={{ height: "100%" }}>
+                <PopularCard
+                  className="d-bock w-100"
+                  name="aerofouskes"
+                  content="Αερόφουσκες"
+                  type="type"
+                  nameInObject="Αερόφουσκες"
                   categoryIdx={0}
                 ></PopularCard>
               </Carousel.Item>

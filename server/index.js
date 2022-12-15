@@ -19,9 +19,8 @@ app.get("/", (req, res) => {
 });
 
 const PORT = 5000;
-
 mongoose.connect(
-  "mongodb+srv://chriskap:chriskap123@cluster0.spfqlkk.mongodb.net/?retryWrites=true&w=majority",
+  "mongodb+srv://access_user:7PAyWlVuMaDUEXKf@cluster0.e7tulf8.mongodb.net/?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

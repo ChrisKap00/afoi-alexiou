@@ -152,7 +152,7 @@ export const fetchProducts = async (req, res) => {
     type,
     page,
   } = req.query;
-  const productsPerPage = 2;
+  const productsPerPage = 24;
   const startIndex = (Number(page) - 1) * productsPerPage;
   try {
     if (type === "category") {

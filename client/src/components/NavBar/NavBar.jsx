@@ -482,7 +482,7 @@ const NavBar = () => {
                         marginRight: "5px",
                       }}
                     />
-                    chrkap7@gmail.com
+                    afoi_alexiou@yahoo.gr
                   </Typography>
                   <a
                     target="blank"
