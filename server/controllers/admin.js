@@ -7,7 +7,6 @@ import Categories from "../models/categories.js";
 export const signin = async (req, res) => {
   const { username, password } = req.body;
 
-  console.log(req.body);
 
   try {
     const existingUser = await Admin.findOne({ username });
@@ -20,7 +19,6 @@ export const signin = async (req, res) => {
     );
 
     if (!isPasswordCorrect) {
-      console.log(bcrypt.decodeBase64(existingUser.password));
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
@@ -37,7 +35,6 @@ export const signin = async (req, res) => {
 };
 
 export const postCategories = async (req, res) => {
-  // console.log(req.body);
   const { categories } = req.body;
   const result = [];
   try {
@@ -45,7 +42,6 @@ export const postCategories = async (req, res) => {
     for (let category of categories) {
       const res = await Categories.create(category);
       result.push(res);
-      console.log(category);
     }
     res.status(200).json({ result });
   } catch (error) {
@@ -56,7 +52,6 @@ export const postCategories = async (req, res) => {
 export const deleteAllCategories = async (req, res) => {
   try {
     const categories = await Categories.find();
-    console.log(categories);
     for (let category of categories) {
       await Categories.findByIdAndDelete(category._id);
     }
@@ -65,25 +60,3 @@ export const deleteAllCategories = async (req, res) => {
     res.status(500).json({ message: "Something went wrong." });
   }
 };
-
-// export const signup = async (req, res) => {
-//   console.log(req.body);
-//   const { username, password } = req.body;
-
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, 12);
-
-//     const result = await Admin.create({
-//       username,
-//       password: hashedPassword,
-//     });
-
-//     const token = jwt.sign({ id: result._id }, "test", {
-//       expiresIn: "1h",
-//     });
-//     res.status(200).json({ result: result, token: token });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Something went wrong." });
-//   }
-// };

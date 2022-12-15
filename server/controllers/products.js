@@ -3,10 +3,8 @@ import Categories from "../models/categories.js";
 import Product from "../models/product.js";
 
 export const fetchCategories = async (req, res) => {
-  console.log("FETCHING CATEGORIES");
   try {
     const categories = await Categories.find();
-    console.log(categories);
     res.status(200).json({ categories });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
@@ -14,13 +12,12 @@ export const fetchCategories = async (req, res) => {
 };
 
 export const deleteById = async (req, res) => {
-  console.log(req.body);
   const { id, categoryId, subCategoryId, subId, type } = req.body;
   try {
-    if (!mongoose.Types.ObjectId.isValid(categoryId)) console.log("INVALID ID");
+    if (!mongoose.Types.ObjectId.isValid(categoryId))
+      return res.status(404).send("Invalid category id");
 
     const category = await Categories.findById(categoryId);
-    // console.log(category);
     if (type === "subCategory") {
       category.subCategories = category.subCategories.filter(
         (subCategory) => String(subCategory._id) !== id
@@ -52,7 +49,6 @@ export const deleteById = async (req, res) => {
         }
       }
     }
-    // console.log(category);
     const updatedCategory = await Categories.findByIdAndUpdate(
       categoryId,
       category,
@@ -67,12 +63,10 @@ export const deleteById = async (req, res) => {
 };
 
 export const addSubCategory = async (req, res) => {
-  console.log(req.body);
   const { categoryId, subCategoryId, subId, name, type, subCategoryToAddType } =
     req.body;
   try {
     const category = await Categories.findById(categoryId);
-    // console.log(category);
     if (type === "subCategory") {
       if (category.subCategories) {
         category.subCategories.push({
@@ -133,7 +127,6 @@ export const addSubCategory = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    console.log(req.body);
     const productToAdd = req.body;
     const result = await Product.create({
       ...productToAdd,
@@ -146,7 +139,6 @@ export const addProduct = async (req, res) => {
 };
 
 export const fetchProducts = async (req, res) => {
-  console.log(req.query);
   const {
     ids: { categoryId, subCategoryId, typeId, subId, innerTypeId },
     type,
@@ -251,7 +243,6 @@ export const fetchProducts = async (req, res) => {
       })
         .limit(productsPerPage)
         .skip(startIndex);
-      console.log(products);
       res.status(200).json({
         products,
         pages: Math.ceil(
@@ -280,7 +271,6 @@ export const fetchProducts = async (req, res) => {
       })
         .limit(productsPerPage)
         .skip(startIndex);
-      console.log(products);
       res.status(200).json({
         products,
         pages: Math.ceil(
@@ -299,7 +289,6 @@ export const fetchProducts = async (req, res) => {
 };
 
 export const fetchProduct = async (req, res) => {
-  console.log(req.query);
   try {
     const { id } = req.query;
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -313,7 +302,6 @@ export const fetchProduct = async (req, res) => {
 };
 
 export const fetchRecommendedProducts = async (req, res) => {
-  console.log(req.query);
   try {
     const { id, categoryId, subCategoryId, typeId, subId, innerTypeId } =
       req.query;
@@ -338,15 +326,12 @@ export const fetchRecommendedProducts = async (req, res) => {
 };
 
 export const searchProducts = async (req, res) => {
-  console.log(req.query);
   try {
     const { query, code, page } = req.query;
     const productsPerPage = 2;
     const startIndex = (Number(page) - 1) * productsPerPage;
 
     const name = new RegExp(query, "i");
-
-    console.log(Number.isInteger(Number(code)));
 
     const result = code
       ? await Product.find({
@@ -381,7 +366,6 @@ export const searchProducts = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-  console.log(req.body);
   try {
     const { id } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -395,7 +379,6 @@ export const deleteProduct = async (req, res) => {
 };
 
 export const editProduct = async (req, res) => {
-  console.log(req.body);
   try {
     const data = req.body;
     if (!mongoose.Types.ObjectId.isValid(data._id))
@@ -404,8 +387,6 @@ export const editProduct = async (req, res) => {
     const result = await Product.findByIdAndUpdate(data._id, data, {
       new: true,
     });
-    console.log(data);
-    console.log(result);
     res.status(200).json({ id: data._id });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
